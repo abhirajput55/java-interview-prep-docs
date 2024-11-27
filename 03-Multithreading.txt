@@ -1,0 +1,94 @@
+
+Multithreading
+---
+
+### 1. **What is a thread in Java, and how is it created?**
+
+   - A **thread** is a lightweight process that can run concurrently with other threads in a Java application. It allows for multitasking, enabling the execution of multiple parts of a program simultaneously.
+   - **Creating a Thread**:
+     - **By extending the `Thread` class**:
+       ```java
+       class MyThread extends Thread {
+           public void run() {
+               // Code to execute in the thread
+           }
+       }
+       MyThread thread = new MyThread();
+       thread.start(); // Starts the thread
+       ```
+     - **By implementing the `Runnable` interface**:
+       ```java
+       class MyRunnable implements Runnable {
+           public void run() {
+               // Code to execute in the thread
+           }
+       }
+       Thread thread = new Thread(new MyRunnable());
+       thread.start(); // Starts the thread
+       ```
+
+### 2. **What is the difference between Runnable and Thread?**
+
+   - **Runnable** is an interface that represents a task that can be executed by a thread. It defines a single method, `run()`, which contains the code to be executed.
+   - **Thread** is a class that represents a thread of execution. It can be created by extending the `Thread` class or by using the `Runnable` interface.
+   - **Key Differences**:
+     - **Extensibility**: You can extend only one class in Java, so using `Runnable` allows you to extend another class as well.
+     - **Resource Sharing**: Runnable instances can be shared between multiple threads, while each thread created from the `Thread` class is independent.
+
+### 3. **Explain the difference between sleep() and wait().**
+
+   - **sleep()**:
+     - Belongs to the `Thread` class.
+     - Puts the thread to sleep for a specified time (in milliseconds).
+     - Does not release any locks or monitors.
+     - Example: `Thread.sleep(1000);` pauses the thread for 1 second.
+   
+   - **wait()**:
+     - Belongs to the `Object` class.
+     - Causes the current thread to wait until another thread invokes `notify()` or `notifyAll()` on the same object.
+     - Releases the lock on the object it is called on, allowing other threads to access the synchronized block.
+     - Must be called from a synchronized context.
+
+### 4. **What is thread synchronization, and why is it important?**
+
+   - **Thread synchronization** is a technique used to control the access of multiple threads to shared resources, preventing data inconsistency and race conditions.
+   - It is important because when multiple threads try to read and write shared data at the same time, it can lead to unpredictable behavior and data corruption.
+   - **Example**: Using the `synchronized` keyword on methods or blocks ensures that only one thread can execute that code at a time.
+
+### 5. **What is a deadlock, and how can you avoid it?**
+
+   - A **deadlock** occurs when two or more threads are waiting for each other to release resources, causing all of them to be stuck indefinitely.
+   - **Example**: Thread A holds Resource 1 and waits for Resource 2, while Thread B holds Resource 2 and waits for Resource 1.
+   - **How to Avoid Deadlocks**:
+     - **Lock ordering**: Always acquire locks in a consistent order.
+     - **Timeouts**: Use timeouts when trying to acquire locks to avoid waiting indefinitely.
+     - **Using a single lock**: If possible, design your application to use a single lock to control access to resources.
+
+### 6. **Explain ExecutorService and Callable in Java.**
+
+   - **ExecutorService**:
+     - An interface that provides a higher-level replacement for managing threads. It allows you to create a thread pool, manage task execution, and handle results more efficiently.
+     - You can submit tasks (Runnable or Callable) and manage their execution.
+     - Example:
+       ```java
+       ExecutorService executor = Executors.newFixedThreadPool(5);
+       executor.submit(() -> {
+           // Task code here
+       });
+       executor.shutdown(); // Stops accepting new tasks
+       ```
+
+   - **Callable**:
+     - An interface similar to `Runnable`, but it can return a result and throw checked exceptions.
+     - The `call()` method is used to define the task to be executed, and it can return a value.
+     - Example:
+       ```java
+       Callable<Integer> task = () -> {
+           // Task code
+           return 42; // Return a result
+       };
+       Future<Integer> future = executor.submit(task);
+       Integer result = future.get(); // Retrieves the result
+       ```
+
+---

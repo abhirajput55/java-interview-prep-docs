@@ -1,0 +1,629 @@
+
+### 1. Java Basics and Object-Oriented Programming ###
+---
+
+### 1. **Four Main Principles of Object-Oriented Programming (OOP)**
+   - **Encapsulation**: It is the process of wrapping up variables and methods into a single unit. 
+						It helps to achieve security and improves maintainability of the application.
+   - **Abstraction**: Hide internal implementation and just highlight the set of services, is called abstraction.
+					  By using abstract classes and interfaces we can implement abstraction.
+					  Enhancement will become very easy. It improves maintainability of the application.
+   - **Inheritance**: Inheritance is when a child class derives from an existing parent class to reuse the functionality of parent class.
+   - **Polymorphism**: Same name with different forms is the concept of polymorphism. 
+					   We can achieve polymorphism by using Method Overloading and Method Overriding.
+
+---
+
+### 2. **Difference Between `==` and `equals()` in Java**
+   - **`==`**: == operator applicable for both primitives and object references.
+			   In the case of primitives == meant for content compression, 
+			   but in the case of object references == operator meant for reference compression.
+			   
+   - **`equals()`**: equals() method applicable only for object references but not for primitives.
+					 equals() method present in object class is also meant for reference compression.
+					 We can override equals() method for content compression like in String class.
+
+---
+
+### 3. **Inheritance in Java**
+   - **What**: Inheritance is when a child class derives from an existing parent class to reuse the functionality of parent class.
+   - **How**: Implemented using the `extends` keyword. 
+			  For example, `class Dog extends Animal {}` makes `Dog` a subclass of `Animal`, so it inherits all the properties and methods of `Animal`.
+
+---
+
+### 4. **Method Overloading and Method Overriding**
+   - **Method Overloading**: Having multiple methods with the same name but different type of parameters. 
+							 It allows a method to perform a similar function with various input types. 
+							 In method overloading compiler is responsible for method resolution based on reference type.
+							 Hence it is also known as compile time polymorphism.
+  
+   - **Method Overriding**: When a child class redefines a method of its parent class with the same method signature and return type. 
+							It allows the subclass to provide a specific implementation. 
+							In method overriding JVM is responsible for method resolution based on runtime object.
+							Hence it is also known as runtime polymorphism.
+
+---
+
+### 5. **Constructors in Java**
+   - A constructor is a special method used to initialize objects when they are created. 
+     It has the same name as the class and no return type.
+   - There are two types of constructors in Java.
+     - **Default Constructor**: It is no argument constructor provided by the compiler.
+     - **Parameterized Constructor**: Defined by the programmer to initialize objects with specific values, taking parameters.
+
+---
+
+### 6. **The `super` and `this` Keyword in Java**
+   - `super` refers to the imediate parent class current object.
+	  It is used to access Parent class Methods and Variables.
+	  
+   - `this` refers to the current class object.
+	  It is used to access current class Methods and Variables.
+	  
+	  We can use anywhere except static area.
+
+---
+
+### 7. **super() vs this()**
+   - `super()` is used to call parent class constructor.
+	 `this()` is used to call current class constructor.
+	 
+	 We should use only inside constructors.
+
+---
+
+### 8. **What is the purpose of the final keyword, and how can it be applied to variables, methods, and classes?**
+   - We cannot reassign a value to the final variables.
+   - We cannot override the final method.
+   - We cannot inherit the final class.
+
+---
+
+
+### 2. Data Types and Variables ###
+---
+
+### 1. **Different Data Types in Java**
+   - **Primitive Data Types**: Basic types built into Java, such as:
+     - **byte** (1 byte), **short** (2 bytes), **int** (4 bytes), **long** (8 bytes): For whole numbers.
+     - **float** (4 bytes), **double** (8 bytes): For decimal numbers.
+     - **char** (2 bytes): For a single character.
+     - **boolean** (1 bit): For `true` or `false` values.
+   - **Non-Primitive Data Types** (or Reference Types): Includes classes, arrays, and interfaces. These are objects and can store more complex data like strings, arrays, or custom objects.
+
+---
+
+### 2. **Autoboxing and Unboxing in Java**
+   - **Autoboxing**: Automatic conversion of primitive type into its corresponding wrapper class object by compiler. 
+     int a = 5;
+     Integer boxed = a; // Autoboxing
+
+   - **Unboxing**: Automatic conversion of wrapper class object into its corresponding primitive type by compiler. 
+     Integer boxed = 5;
+     int unboxed = boxed; // Unboxing
+	 
+	 This feature came in 1.5 version.
+
+---
+
+### 3. **Static Variable and Instance Variable**
+   - **Static Variable**: Static variable belongs to the class only. 
+						  Only one copy of static variable will be created and shared across all instances of the class and it is accessed using the class name. 
+						  Crated at the time of class loading and destroyed at the time of class unloading 
+						  hence the scope of the static variable is exactly same as the scope of the .class file.
+						  Static variables will be stored in method area.
+						  JVM will always provide default values to uninitialized static variable.
+						  
+   - **Instance Variable**: If the value of a variable is varied from object to object such type of variables are called instance variables.
+							For every object a separate copy of instance variables will be created.
+							Created at the time of object creation and destroyed at the time of object destruction 
+							hence the scope of instance variables is exactly same as scope of objects.
+							Instance variables will be stored on the heap as the part of object.
+							JVM will always provide default values to uninitialized instance variable.
+							
+---
+
+### 4. **Wrapper Classes and Why We Use Them**
+   - Wrapper classes are used to wrap primitive data types into objects. 
+	 All wrapper classes are final classes and also immutable in Java.
+	 
+	In all wrapper classes toString() method is overridden to return its content.
+	In all wrapper classes .equals() method is overridden for content compression.
+	
+	Utility methods:
+	1) valueOf() method  - to create wrapper object for the given primitive or String.
+	2) XXXValue() method - to convert wrapper object to primitive.
+	3) parseXxx() method - to convert String to corresponding primitive. For every wrapper class except Character class
+
+---
+
+
+### 3. Control Flow ###
+---
+
+### 1. **if-else, switch, for, while, and do-while Statements**
+   - **if-else**: Used to make decisions based on a condition. If the condition is true, the `if` block executes; if false, the `else` block executes.
+     
+   - **switch**: Used to select one of many code blocks to run, based on the value of an expression (like a variable). The `case` keyword defines possible matches, and `break` exits the switch after a match.
+     
+   - **for**: Loops a specific number of times, based on initialization, condition, and iteration steps.
+    
+   - **while**: Repeats code as long as a condition is true. Checks the condition before running each loop.
+    
+   - **do-while**: Similar to `while`, but it always runs the code at least once since the condition is checked after the code block.
+   
+---
+
+### 2. **Enhanced for Loop in Java**
+   - The enhanced `for` loop (or “for-each” loop) is used to iterate over collections like arrays or lists. 
+     It’s simpler than a traditional `for` loop because it doesn’t need an index variable.
+   - It’s best used when you want to access every element in a collection without needing the index.
+
+---
+
+### 3. **break and continue Statements**
+   - **break**: Exits the nearest loop (or switch statement) entirely when reached. 
+                Useful when you want to stop the loop based on a specific condition.
+     
+   - **continue**: Skips the current loop iteration and moves to the next one, but does not stop the loop entirely.
+
+---
+
+
+### 4. Exception Handling ###
+---
+
+### 1. **What is an Exception in Java?**
+   - An exception is an unexpected event or error that occurs during program execution, disrupting the normal flow of the program. 
+     In Java, exceptions are represented as objects and are handled to prevent program crashes and manage errors effectively.
+
+---
+
+### 2. **Difference Between Checked and Unchecked Exceptions**
+   - **Checked Exceptions**: The exceptions which are checked by the compiler for smooth execution of the program at runtime are called checked exceptions. 
+							 They must be either caught using a `try-catch` block or declared in the method signature with `throws`. 
+							 Examples: `IOException`, `SQLException`, `FileNotFoundException`
+							 
+   - **Unchecked Exceptions**: The exceptions which are not checked by the compiler are called unchecked exceptions.
+							   They don’t need to be explicitly handled, but handling them is good practice. 
+							   Examples: `ArithmeticException`, `NullPointerException`.
+							   
+	Note: RuntimeException and its child classes, Error and its child classes are unchecked and all
+		  the remaining are considered as checked exceptions.
+	Note: Whether exception is checked or unchecked compulsory it should occur at runtime only
+		  there is no chance of occurring any exception at compile time.
+
+---
+
+### 3. **Purpose of try, catch, finally, and throw**
+   - **try**: In try we can take code that might throw an exception. If an exception occurs, it’s passed to the corresponding `catch` block.
+   - **catch**: Catches and handles specific exceptions thrown in the `try` block. Each `catch` block can handle a different type of exception.
+   - **finally**: A block that always executes after `try` and `catch`, whether an exception raised or not raised and whether handled or not handled. 
+				  The main objective of finally block is to close the opened resources in try block.
+   - **throw**: Used to explicitly throw an exception. You can use it to create a specific error message or to rethrow an existing exception.
+
+---
+
+### 4. **Difference between final, finally, and finalize**
+   Final:
+		Final is the modifier applicable for class, methods and variables.
+		If a class declared as the final then child class creation is not possible.
+		If a method declared as the final then overriding of that method is not possible.
+		If a variable declared as the final then reassignment is not possible.
+   Finally:
+		It is the block always associated with try catch to maintain clean up code which should
+		be executed always irrespective of whether exception raised or not raised and whether
+		handled or not handled.
+   Finalize:
+		It is a method which should be called by garbage collector always just before destroying
+		an object to perform cleanup activities.
+---
+
+### 5. **Exception Propagation**
+   - Exception propagation is the process of passing exceptions up the method call stack. 
+     If an exception is not caught in the current method, it moves to the caller method and continues until it’s caught 
+	 or reaches the main method, potentially crashing the program if unhandled.
+	 
+---
+
+### 5. String Handling ###
+---
+
+### 1. **Difference Between String, StringBuilder, and StringBuffer**
+   - **String**: Immutable, i.e. its value cannot be changed after creation. 
+				 Every time you modify a `String`, a new object is created in memory.
+
+   - **StringBuilder**: Mutable, i.e. its value can be changed without creating a new object. 
+						It's faster than `String` for concatenation or modification operations and 
+						It is **not thread-safe**.
+
+   - **StringBuffer**: Mutable, meaning its value can be changed without creating a new object.  
+					   It is **thread-safe**.
+					   This thread safety makes `StringBuffer` slower than `StringBuilder`.
+
+---
+
+### 2. **Why Are Strings Immutable in Java?**
+    In String Constant Pool as several references pointing to the same object, by using one
+	reference if we are allowed perform the change the remaining references will be
+	impacted. To prevent this once we created a String object we can’t perform any change
+	in the existing object that is immutability is only due to SCP.
+
+---
+
+### 3. **How substring() Works and Why It’s Memory Efficient**
+   - **How It Works**: `substring()` returns a new `String` object that references a specific part of the original string, rather than creating a completely new one.
+   - **Memory Efficiency**: If you call `substring()` on a large string, it references the original string in memory. 
+						    Only when you make changes to the substring does Java allocate new memory, which saves space when dealing with large texts.
+
+---
+
+### 4. **String Pooling in Java**
+   - **What**: The **string pool** is a special memory area where Java stores `String` literals. 
+			   When you create a new `String` literal, Java checks the pool first if the same string already exists. 
+			   If it does, Java reuses the existing object instead of creating a new one.
+   - **Why It’s Useful**: String pooling saves memory by preventing duplicate `String` objects with the same value. For example:
+   
+---
+
+
+### 7. Java Collections Framework ###
+---
+
+### Basics of Collection Framework
+1. **Java Collection Framework**: It’s a set of classes and interfaces for storing and managing groups of objects. 
+								  It provides common data structures like `List`, `Set`, and `Map`. 
+								  The main hierarchy starts with the `Collection` interface, which includes `List`, `Set`, and `Queue`. 
+								  `Map` is a separate interface that handles key-value pairs.
+
+2. **List vs Set vs Map**:
+   - **List**: Allows duplicates, maintains insertion order (e.g., `ArrayList`, `LinkedList`).
+   - **Set**: Doesn’t allow duplicates, no guaranteed order (e.g., `HashSet`, `TreeSet`).
+   - **Map**: Stores key-value pairs, keys must be unique (e.g., `HashMap`, `TreeMap`).
+
+3. **Collections Not Synchronized**: By default, Java Collections are not synchronized to improve performance 
+									 since synchronization is generally expensive and needed only in multi-threaded scenarios.
+									 
+	By using Collection class synchronizedCollection(Collection<T> c) static method we can synchronize the collections.
+
+---
+
+### List Interface
+4. **ArrayList vs LinkedList**: `ArrayList` is an indexed collection of objects where duplicate objects are allowed and insertion order preserved. 
+								It is faster for random access but slower for adding/removing in the middle.
+								
+								`LinkedList` is a collection of objects where each element has address of previous and next element. 
+								`LinkedList` is faster for adding/removing in the middle but slower for random access due to sequential access.
+
+5. **Time Complexity**:
+   - **ArrayList**: Searching is `O(1)`, while inserting/deleting in the middle is `O(n)`.
+   - **LinkedList**: Searching is `O(n)`, but inserting/deleting from the start or end is `O(1)`.
+
+6. **Vector vs ArrayList**: `Vector` is synchronized, meaning it’s thread-safe but slower than `ArrayList` for single-threaded cases.
+
+8. **CopyOnWriteArrayList**: This thread-safe list creates a copy of the list for each modification, suitable for cases where reads are more frequent than writes.
+
+---
+
+### Set Interface
+9. **HashSet vs LinkedHashSet vs TreeSet**:
+   - **HashSet**: Unordered, fastest access. Duplicate objects are not allowed. Null insertion is possible. Based on Hashtable.
+   - **LinkedHashSet**: Ordered by insertion. Duplicate objects are not allowed. Null insertion is possible. Based on LinkedList and Hashtable.
+   - **TreeSet**: Ordered in natural or custom sorting order. Duplicate objects are not allowed. Null insertion is not possible. Based on Balanced tree.
+
+10. **How HashSet Handles Duplicates**: By using a `Hashtable` internally where the value is set to a constant object for each key (element), preventing duplicates.
+
+11. **TreeSet Sorting**: Uses a `Comparator` or `Comparable` interface to keep elements sorted.
+
+12. **LinkedHashSet Use**: When you need to retain insertion order without duplicates.
+
+---
+
+### Map Interface
+13. **HashMap Internal Working**: Uses hashing to store key-value pairs. The key’s hash code determines the bucket in which it will be stored.
+
+14. **HashMap vs LinkedHashMap vs TreeMap**:
+    - **HashMap**: Unordered. Duplicate keys are not allowed but values can be duplicated.
+				   Null is allowed for keys(only once) and for values(any number). Based on Hashtable.
+    - **LinkedHashMap**: Maintains insertion order. Duplicate keys are not allowed but values can be duplicated. 
+	                     Null is allowed for keys(only once) and for values(any number). Based on Hashtable + LinkedList.
+    - **TreeMap**: Maintains insertion by sorting order of keys. Duplicate keys are not allowed but values can be duplicated.
+				   Null is not allowed for keys and for values(any number). Based on Hashtable + LinkedList.
+
+15. **HashMap Collisions**: Handles collisions by chaining (linked list of entries) or, from Java 8 onwards, by using balanced trees for large buckets.
+
+16. **ConcurrentHashMap**: Thread-safe version of `HashMap`, splits the map into segments to allow concurrent access.
+
+17. **Hashtable Drawbacks**: Synchronized and slower; `HashMap` is generally preferred unless thread safety is required.
+
+---
+
+### Sorting and Searching
+18. **Sorting a List**: Use `Collections.sort(list)` for natural order or `Collections.sort(list, Comparator)` for custom order.
+
+19. **Collections.sort()**: Internally uses a variation of merge sort or TimSort, which is stable and efficient.
+
+20. **Removing Duplicates from List**: Convert the `List` to a `Set` to remove duplicates, then back to a `List`.
+
+21. **Collections Utility Methods**: Useful methods like `sort`, `reverse`, `shuffle`, `binarySearch`, and `min/max` for manipulating collections.
+
+---
+
+### Stream API and Collection Manipulation (Java 8+)
+22. **List to Set with Streams**: Use `List.stream().collect(Collectors.toSet())` to eliminate duplicates from a list.
+
+23. **Filtering in Streams**: Use `.filter(condition)` to select elements based on a condition, e.g., `list.stream().filter(x -> x > 10)`.
+
+24. **Collectors.toMap()**: Converts a stream into a `Map`, useful when you want to collect data as key-value pairs.
+
+25. **Common Stream Operations**:
+    - **map**: Transforms elements.
+    - **filter**: Selects based on condition.
+    - **collect**: Gathers elements into a collection.
+    - **forEach**: Applies a function to each element.
+
+---
+
+### Advanced Topics
+26. **Fail-Fast vs Fail-Safe Iterators**:
+    - **Fail-Fast**: Throws `ConcurrentModificationException` if the collection is modified.
+    - **Fail-Safe**: Works on a copy of the collection, so no exception is thrown (e.g., `CopyOnWriteArrayList`).
+
+27. **Iterator vs ListIterator**:
+    - **Iterator**: Can traverse in one direction.
+    - **ListIterator**: Can traverse in both directions, available only for `List`.
+
+28. **Synchronizing HashMap**: Use `Collections.synchronizedMap(new HashMap<>())` to make it thread-safe.
+
+29. **WeakHashMap Purpose**: Uses weak references for keys, allowing them to be garbage collected when not referenced elsewhere.
+
+30. **Making ArrayList Read-Only**: Use `Collections.unmodifiableList(arrayList)` to create a read-only version of `ArrayList`.
+
+---
+
+### Performance and Optimization
+31. **Optimizing HashMap Capacity**: Set initial capacity if you know the approximate size, avoiding costly rehashing.
+
+32. **HashMap Load Factor**: Default is 0.75, meaning it resizes when 75% full, balancing memory usage and performance.
+
+33. **Avoiding ConcurrentModificationException**: Use `Iterator`’s `remove` method or a concurrent collection like `CopyOnWriteArrayList`.
+
+34. **removeIf Method**: Removes elements based on a condition in a single operation, reducing complexity and improving readability.
+
+---
+
+8. Java 8 Features
+---
+
+### 1. **What is a Lambda Expression in Java 8, and When Would You Use It?**
+
+   - A lambda expression is a way to write short, anonymous functions to write cleaner and more concise code.
+   - Useful when we want to pass function as an argument, like sorting a list or running a thread.
+     - **Example**: Instead of using an anonymous inner class for a `Runnable`, you can write:
+       ```java
+       Runnable r = () -> System.out.println("Hello, Lambda!");
+       ```
+   - Commonly used in functional programming with collections, event handling, and multithreading.
+
+---
+
+### 2. **What Are Functional Interfaces? Explain with Examples.**
+
+   - An interface with only **one abstract method**. 
+     Java 8 introduced `@FunctionalInterface` to indicate that an interface is meant to be used as a functional interface.
+   - **Examples**:
+     - `Runnable`: Has only `run()` method.
+     - `Callable`: Has only `call()` method.
+---
+
+### 3. **Explain Stream API and Common Operations Such as filter, map, reduce.**
+
+   - Java 8 introduced the Stream API to make processing collections easier by providing a **declarative approach**. 
+     A stream represents a sequence of elements and supports various operations to filter, map, and reduce data.
+
+---
+
+### 4. **What is the Purpose of Optional in Java 8?**
+
+   - Optional is a class to represent the **presence or absence of a value** (like null checks) in a safe way. It helps avoid `NullPointerException`.
+   - **Usage**:
+     - To check if a value is present, use `isPresent()` or `ifPresent()` methods.
+     - To provide a default value, use `orElse()`.
+   - **Example**:
+     ```java
+     Optional<String> name = Optional.ofNullable(getName());
+     System.out.println(name.orElse("Default Name"));
+     ```
+   - **When to Use**: Use `Optional` when a method might return `null` to make code safer and more readable.
+
+---
+
+### 5. **What Are Default and Static Methods in Interfaces, Introduced in Java 8?**
+
+   - Allow interfaces to have **methods with a default implementation**. 
+     This was introduced to allow adding new methods to existing interfaces without breaking backward compatibility.
+     - **Syntax**: `default void methodName() { ... }`
+     - **Example**:
+       ```java
+       interface Vehicle {
+           default void start() {
+               System.out.println("Vehicle started");
+           }
+       }
+       ```
+   - Without creating an object we can call static methods. That's why Java 8 introduced static method in interface to call.
+     - **Syntax**: `static void methodName() { ... }`
+     - **Example**:
+       ```java
+       interface Utility {
+           static void display() {
+               System.out.println("Utility method");
+           }
+       }
+       ```
+---
+
+10. Input/Output (I/O)
+What are the main classes in the java.io package?
+Explain the difference between byte streams and character streams.
+How do you read and write to a file in Java?
+What is serialization in Java?
+
+11. Miscellaneous Concepts
+
+### 1. **What is the difference between an abstract class and an interface?**
+
+**Abstract Class**:
+- An abstract class is a class that cannot be instantiated on its own and can have both abstract methods (without a body) and concrete methods (with a body).
+- It can have member variables and constructors.
+- It can provide default behavior that subclasses can inherit or override.
+- A class can extend only one abstract class (single inheritance).
+- Example:
+  ```java
+  abstract class Animal {
+      String name;
+      abstract void sound(); // Abstract method
+      void eat() { // Concrete method
+          System.out.println(name + " is eating.");
+      }
+  }
+  ```
+
+**Interface**:
+- An interface is a reference type in Java that can contain only abstract methods (until Java 8, after which default and static methods are allowed) and constants.
+- It cannot have instance variables or constructors.
+- A class can implement multiple interfaces (multiple inheritance).
+- It is used to define a contract that classes must follow.
+- Example:
+  ```java
+  interface Animal {
+      void sound(); // Abstract method
+      default void eat() { // Default method
+          System.out.println("Animal is eating.");
+      }
+  }
+  ```
+
+### Key Differences:
+| Feature                       | Abstract Class                         | Interface                                    |
+|-------------------------------|----------------------------------------|-----------------------------------------------|
+| Instantiation                 | Cannot be instantiated directly        | Cannot be instantiated                        |
+| Methods                       | Can have abstract and concrete methods | Can have only abstract methods (until Java 8) |
+| Member Variables              | Can have member variables              | Cannot have instance variables                |
+| Constructors                  | Can have constructors                  | Cannot have constructors                      |
+| Inheritance                   | Single inheritance                     | Multiple inheritance                          |
+| Use Case                      | Used when classes share common behavior| Used to define a contract or capability       |
+
+---
+
+### 2. **Explain type casting and its types in Java.**
+
+**Type Casting**:
+
+- **Implicit Casting**: Smaller type to larger type (automatic).
+- **Explicit Casting**: Larger type to smaller type (manual and can lose data).
+- **Object Casting**: Upcasting and downcasting in inheritance hierarchies.
+
+What is Upcasting and downcasting
+
+	Process of converting a subclass reference to a superclass reference. 
+	
+	Process of converting a superclass reference back to a subclass reference. 
+	
+	This type of casting requires explicit casting and should be done with caution because 
+	it can lead to a ClassCastException if the object being cast is not an instance of the subclass.
+
+---
+
+### 12. Inner Classes ###
+
+   - **Inner Classes**: Classes defined inside other classes. Useful to logically group classes that will only be used in one place.
+   - **Anonymous Inner Class**: A class without a name, usually used to make an instance of a class for one time use.
+   - **Static Nested vs. Inner Class**: Static nested classes don’t need an instance of the outer class, while inner classes do.
+
+### 14. Object Cloning ###
+
+   - **Cloning**: Creating a copy of an object by using clone() method. Clonable interface must be implemented.
+   - **Shallow Copy vs. Deep Copy**: Shallow copy duplicates only the object’s fields, while deep copy duplicates all nested objects too.
+   - **Deep Cloning**: Can be achieved by manually cloning all referenced objects.
+
+### 15. Serialization ###
+
+   - **Serialization**: Converts an object into a byte stream for storage or transmission.
+   - **Serializable Interface**: Implements serializability; doesn’t have methods, just marks a class for serialization.
+   - **Transient Keyword**: Fields marked as `transient` won’t be serialized.
+   - **Preventing Serialization**: Define `writeObject()` and `readObject()` methods or mark fields as `transient`.
+
+### 17. Comparable vs. Comparator ###
+
+   - **Comparable**: Used to define a natural sorting order; implement `compareTo` within the class itself.
+   - **Comparator**: Defines custom sorting order; implemented outside of the class.
+   - **Usage**: Use `Comparator` when you need different sorting orders without modifying the class.
+
+### 18. Enums ###
+
+   - **Enums**: Is a apecial Java class where we can use fixed sets of constants.
+   - **Constructors and Methods**: Can have constructors and methods.
+   - **Difference from Classes**: Enums are type-safe and have predefined constants.
+
+### 19. Thread Safety and Synchronization ###
+
+   - **Thread Safety**: Ensures data consistency across threads.
+   - **`synchronized` Keyword**: Prevents multiple threads from accessing code blocks or methods simultaneously.
+   - **Limitations**: Can slow down performance due to locking.
+   - **Atomic Classes**: For lock-free, thread-safe operations (like `AtomicInteger`).
+
+### 20. Java Time API ###
+
+   - **`java.time` Package**: Modern date and time API introduced in Java 8.
+   - **Classes**:
+     - `LocalDate`: Only date.
+     - `LocalTime`: Only time.
+     - `LocalDateTime`: Date and time.
+   - **Improvement over `Date` and `Calendar`**: More readable, immutable, and thread-safe.
+
+---
+
+### 12. JVM and Memory Management ###
+---
+
+### Java Class Loaders
+
+   - **ClassLoader**: 
+		Loads .class files generated by the compiler and stores corresponding class data into method area.
+   - **Parent Delegation Model**: Each ClassLoader delegates loading to its parent first to avoid loading the same class multiple times.
+   
+   - **Types**: 
+	1) Bootstrap Class Loader - 
+		It is responsible to load core java API classes. i.e. the classes present in rt.jar
+
+	2) Extension Class Loader - 
+		It is responsible to load classes from extension classpath(jdk\jre\lib\ext) i.e. jdk\jre\lib\ext\*.jar.
+
+	3) Application Class Loader -
+		It is responsible to load classes from application classpath.
+   
+### Memory Management
+
+   - **Method Area**: Class Metadata and static variables are stored in method area.
+
+   - **Java Heap**: Objects and corresponding instance variables will be stored in the heap area.
+					Heap is not thread safe.
+   - **Stack**: For every thread JVM will create a seperate stack at the time of thread creation.
+				Each and every method call performned by that thread will be stored in the stack including local variables also.
+				Stack is thread safe.
+				Stack follows FIFO principle.
+				
+   - **Stack vs Heap**: Stack memory is for method calls and local variables, while the heap is for objects and instance variable.
+   
+### What is garbage collection, and how does it work in Java?
+	
+	Garbage collection is the automatic memory management process of removing 
+	unused objects from heap memory to free up space for new objects.
+	
+### What is Young Generation, Old Generation, and Metaspace?
+
+	Young Generation: Holds new objects, and is quickly garbage-collected (Minor GC).
+	Old Generation: Holds longer-living objects, garbage-collected less frequently (Major/Full GC).
+	Metaspace: Stores metadata about loaded classes, grows dynamically, and replaces the old PermGen space.

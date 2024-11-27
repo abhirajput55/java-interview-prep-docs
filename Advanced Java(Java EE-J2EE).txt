@@ -1,0 +1,22 @@
+Advanced Java(Java EE/J2EE)
+
+
+1) Can you explain the lifecycle of a servlet?
+
+Loading and Instantiation: 
+	The servlet is loaded by the servlet container and an instance is created when the server starts or when it's first accessed.
+
+Initialization (init() Method): 
+	The servlet is initialized by calling the init() method, where setup tasks like reading configuration parameters are done.
+	init() method called only ones.
+
+Request Handling (service() Method): 
+	For each client request, the service() method is called. It processes the request and generates the response.
+	Concurrency: The service() method can handle multiple requests concurrently by creating new threads for each request, 
+	ensuring that the servlet can process many clients simultaneously.
+
+Response: 
+	The servlet sends the response back to the client.
+
+Destruction (destroy() Method): 
+	When the server shuts down or the servlet is unloaded, the destroy() method is called for cleanup, releasing resources before the servlet is discarded.

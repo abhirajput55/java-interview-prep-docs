@@ -1,0 +1,672 @@
+
+### Hibernate 
+
+Hibernate is a ORM tool that maps the Java Objects to tables in Relational database. 
+It simplifies the data creation, data manipulation and data access.
+
+Elements of Hibernate Architecture
+	SessionFactory
+	Session
+	Transaction
+	ConnectionProvider
+	TransactionFactory
+	
+SessionFactory
+The SessionFactory is a factory of session and client of ConnectionProvider. 
+It holds second level cache (optional) of data. 
+The org.hibernate.SessionFactory interface provides factory method to get the object of Session.
+
+Session
+The session object provides an interface between the application and data stored in the database. 
+It is a short-lived object and wraps the JDBC connection.
+It holds a first-level cache (mandatory) of data. 
+The org.hibernate.Session interface provides methods to insert, update and delete the object. 
+It also provides factory methods for Transaction, Query and Criteria.
+
+Transaction
+The transaction object specifies the atomic unit of work. It is optional. 
+The org.hibernate.Transaction interface provides methods for transaction management.
+
+How to configure and use Hibernate in java?
+
+Configuration - 
+	First we have to add hibernate core dependency in pom.xml file.
+	Then we have to add hibernate configuration in cfg.xml file by using tags.
+	In this configuration we have to add database properties and object mappings.
+
+Implementation - 
+	After that we have to create SessionFactory object and open session object if not present the we have to get current session.
+	Then we can use session object methods to perform crud operations in database without using SQL queries.
+	
+ex. SessionFactory factory = Configuration.configure().buildSessionFactory();
+	Session session = factory.openSession();		// if not already present
+	Session session = factory.getCurrentSession();	// if present
+	Transaction tx = session.beginTransaction();
+  
+    Employee emp = new Employee();
+    emp.setName("John Doe");
+    Serializable id = session.save(emp);  // Save operation
+    
+    tx.commit();
+    session.close();
+	
+
+/* The Hibernate object lifecycle */
+
+### 1. **Transient State**
+   -  The object is **not associated** with any Hibernate `Session` and **not represented in the database**.
+
+   - **How an object enters this state**:
+     - When you create a new object of an entity class (e.g., `new Employee()`).
+   - **How to move out of this state**:
+     - Call `session.save()` or `session.persist()` to move the object to the Persistent state.
+
+   ```java
+   Employee emp = new Employee();  // Transient object
+   ```
+
+### 2. **Persistent State**
+   -  The object is **associated with a Hibernate `Session`** and **represented in the database**.
+   - **Characteristics**:
+     - Hibernate is managing this object, meaning any changes made to the object are automatically synchronized with the database.
+     - The object has a valid identifier (primary key).
+     - The object is stored in the `Session` cache, and Hibernate tracks changes made to it.
+     - When the session is flushed or committed, the object is saved or updated in the database.
+   - **How an object enters this state**:
+     - By calling `session.save()`, `session.persist()`, or loading an object from the database using `session.get()` or `session.load()`.
+   - **How to move out of this state**:
+     - If the session is closed or `session.evict()` is called, the object moves to the Detached state.
+     - If `session.delete()` is called, it transitions to the Removed state.
+
+   ```java
+   session.save(emp);  // emp moves from Transient to Persistent state
+   ```
+
+### 3. **Detached State**
+   -  The object is **no longer associated with an active Hibernate `Session`**, but **still exists in the database**.
+   - **Characteristics**:
+     - The object was once persistent, but the session it was associated with has been closed or the object was manually evicted.
+     - The object can still be modified, but changes will **not** be automatically saved to the database unless it is re-attached to a new session.
+   - **How an object enters this state**:
+     - When the Hibernate `Session` is closed.
+     - By calling `session.evict()` or `session.clear()` on the object.
+   - **How to move out of this state**:
+     - By re-attaching the object to a new session using `session.update()`, `session.merge()`, or `session.saveOrUpdate()`, which moves it back to the Persistent state.
+
+   ```java
+   session.close();  // emp moves from Persistent to Detached state
+   ```
+
+### 4. **Removed State**
+   -  The object is **associated with a Hibernate `Session`**, but it is marked for **deletion from the database**.
+   - **Characteristics**:
+     - The object is in the session and will be deleted from the database once the session is flushed or committed.
+     - It will be removed from the database, and further interaction with this object is typically invalid.
+   - **How an object enters this state**:
+     - By calling `session.delete()` on a persistent object.
+   - **How to move out of this state**:
+     - If not yet flushed, `session.revert()` or canceling the transaction can prevent the object from being deleted.
+
+   ```java
+   session.delete(emp);  // emp moves from Persistent to Removed state
+   ```
+
+
+Important method of Session
+
+### 1. save()
+- Persists the given transient instance by saving it into the database.
+
+	session.save(emp);  // Save operation
+
+### 2. persist()
+- Makes a transient instance persistent but does not return the identifier. 
+  It is similar to `save()`, but it doesn't guarantee immediate insert.
+
+  session.persist(emp);
+
+### 3. get()
+- Retrieves an entity by its primary key. If the entity is not found, it returns `null`.
+- Return Type: Object (the requested entity).
+
+  Employee emp = session.get(Employee.class, empId);
+
+### 4. load()
+- Similar to `get()`, but it throws an exception (`ObjectNotFoundException`) if the entity is not found. 
+  It uses lazy loading, meaning it will return a proxy without accessing the database until necessary.
+- Return Type: Object.
+  
+  Employee emp = session.load(Employee.class, empId);
+
+### 5. update()
+- Updates the state of a detached entity (an entity previously loaded but now detached from the session) in the database.
+  
+  Employee emp = session.get(Employee.class, empId);
+  emp.setName("Updated Name");
+  session.update(emp);
+
+### 6. merge()
+- Similar to `update()`, but it can merge the state of a detached entity with the persistent state. 
+  If an entity is already persistent, it copies the detached object’s state to it.
+- Return Type: Object (the merged entity).
+
+  Employee detachedEmp = new Employee();
+  detachedEmp.setId(1);
+  detachedEmp.setName("Updated Name");
+  
+  Employee mergedEmp = (Employee) session.merge(detachedEmp);
+  
+### 7. delete()
+- Deletes a persistent entity from the database.
+  
+  Employee emp = session.get(Employee.class, empId);
+  session.delete(emp);
+  
+### 8. flush()
+- Synchronizes the session state with the database. It executes all SQL statements for pending changes (inserts, updates, deletes).
+  
+  session.flush();
+
+### 9. clear()
+- Completely clears the session, removing all loaded instances and cancels all pending operations.
+- Return Type: void.
+
+  session.clear();
+
+### 10. evict()
+- Removes a particular entity from the session cache, making it detached.
+- Return Type: void.
+
+  session.evict(emp);
+
+### 11. refresh()
+- Re-reads the state of the given instance from the database, overwriting any changes made to the entity in memory.
+- Return Type: void.
+
+  session.refresh(emp);
+
+### 12. createQuery()
+- Creates a query object using HQL (Hibernate Query Language).
+- Return Type: Query.
+  
+  Query query = session.createQuery("from Employee where name = :name");
+  query.setParameter("name", "John Doe");
+  List<Employee> employees = query.list();
+
+### 13. createSQLQuery()
+- Creates a query object using native SQL.
+- Return Type: SQLQuery.
+  
+  SQLQuery query = session.createSQLQuery("SELECT * FROM employee WHERE name = :name");
+  query.setParameter("name", "John Doe");
+  List<Object[]> rows = query.list();
+
+### 14. beginTransaction()
+- Starts a new database transaction.
+- Return Type: Transaction.
+
+  Transaction tx = session.beginTransaction();
+
+### 15. getTransaction()
+- Returns the current transaction associated with the session.
+- Return Type: Transaction.
+
+  Transaction tx = session.getTransaction();
+  
+
+/* Embedding objects in hibernate */
+
+Embeddable Object:
+This is a reusable, non-entity class (value type) that can be embedded inside an entity.
+It does not have its own lifecycle or identity (i.e., no primary key).
+The fields of the embedded object are mapped as columns in the entity’s table.
+
+Embedding an Object:
+An entity class can embed one or more @Embeddable objects.
+The fields of the @Embeddable object are treated as if they are part of the embedding entity’s table.
+
+Annotations Used:
+@Embeddable: Marks a class as embeddable, meaning it can be embedded in an entity.
+@Embedded: Marks a field in the entity class as an embedded object.
+@AttributeOverrides (optional): Allows customization of column names for fields in the embedded object.
+
+
+/* Hibernate Mappings */ 
+
+### 1. **One-to-One Mapping**
+- **Description**: One object is associated with exactly one other object.
+- **Example**: An `Employee` can have only one `Address`, and that `Address` is tied to just that `Employee`.
+- **How to Implement**:
+  - In the entity class, use the `@OneToOne` annotation.
+  - You can specify it as either a **unidirectional** (one side) or **bidirectional** (both sides) association.
+  
+```java
+@Entity
+public class Employee {
+    @Id
+    private int id;
+    
+    @OneToOne
+    private Address address;  // One-to-One relationship
+}
+```
+
+```java
+@Entity
+public class Address {
+    @Id
+    private int id;
+    
+    @OneToOne(mappedBy = "address")  // Bidirectional reference
+    private Employee employee;
+}
+```
+
+### 2. **One-to-Many Mapping**
+- **Description**: One object is associated with many other objects.
+- **Example**: An `Employer` can have many `Employees`, but each `Employee` works for just one `Employer`.
+- **How to Implement**:
+  - Use the `@OneToMany` annotation to define the relationship in the "one" side of the relationship.
+  - The "many" side is often represented using a `List` or `Set` in Java.
+
+```java
+@Entity
+public class Employer {
+    @Id
+    private int id;
+    
+    @OneToMany(mappedBy = "employer")
+    private List<Employee> employees;  // One-to-Many relationship
+}
+```
+
+```java
+@Entity
+public class Employee {
+    @Id
+    private int id;
+    
+    @ManyToOne
+    private Employer employer;  // Many-to-One reference
+}
+```
+
+### 3. **Many-to-One Mapping**
+- **Description**: Many objects are associated with one object. This is essentially the inverse of one-to-many.
+- **Example**: Many `Employees` work for one `Employer`.
+- **How to Implement**:
+  - Use the `@ManyToOne` annotation on the "many" side.
+  - The foreign key will be present in the table of the "many" side (i.e., the `Employee` table will have a foreign key to the `Employer`).
+
+```java
+@Entity
+public class Employee {
+    @Id
+    private int id;
+    
+    @ManyToOne
+    private Employer employer;  // Many-to-One relationship
+}
+```
+
+### 4. **Many-to-Many Mapping**
+- **Description**: Many objects are associated with many other objects.
+- **Example**: A `Student` can enroll in many `Courses`, and each `Course` can have many `Students`.
+- **How to Implement**:
+  - Use the `@ManyToMany` annotation in both entity classes.
+  - A **join table** is typically used to handle this relationship (i.e., a separate table links the two entities).
+
+```java
+@Entity
+public class Student {
+    @Id
+    private int id;
+    
+    @ManyToMany
+    @JoinTable(name = "student_course",  // Join table for the many-to-many relationship
+               joinColumns = @JoinColumn(name = "student_id"),
+               inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private List<Course> courses;  // Many-to-Many relationship
+}
+```
+
+```java
+@Entity
+public class Course {
+    @Id
+    private int id;
+    
+    @ManyToMany(mappedBy = "courses")
+    private List<Student> students;
+}
+```
+
+### 5. **Unidirectional vs Bidirectional Mapping**
+- **Unidirectional**: Only one side knows about the relationship.
+  - Example: If only `Employer` knows about its employees, and `Employee` doesn’t have any reference to `Employer`.
+  
+- **Bidirectional**: Both sides know about each other.
+  - Example: Both `Employer` and `Employee` have references to each other.
+  
+  
+/* Fetch Types in Hibernate */
+
+### 1. **EAGER Fetching**
+- **Description**: With **EAGER** fetch type, Hibernate loads the associated entities or collections as soon as the parent entity is retrieved. 
+				   This happens even if the associations are not used in the application.
+- **Use Case**: This is typically used when you are certain that the associated data is needed along with the main entity.
+- **Performance Impact**: Eager fetching can lead to performance issues, especially with large collections or multiple associations, 
+						  as Hibernate will retrieve everything in one go (which could result in a large number of unnecessary queries).
+
+```java
+@Entity
+public class Employee {
+    
+    @Id
+    private int id;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private Address address;  // Eager fetching
+}
+```
+- In the above example, whenever an `Employee` entity is loaded, its associated `Address` will also be fetched immediately, 
+  even if you don't need the `Address` data.
+
+### 2. **LAZY Fetching**
+- **Description**: With **LAZY** fetch type, Hibernate will not retrieve the associated entities or collections until they are explicitly accessed in the code. 
+				   It loads the data only when needed, saving memory and database resources.
+- **Use Case**: This is the default fetch type for many-to-many and one-to-many relationships, and is generally preferred for performance reasons. 
+				It’s ideal when you do not always need the related data.
+- **Performance Impact**: Lazy fetching improves performance because only the required data is fetched from the database. 
+						  However, it can result in the **N+1 select problem** if not handled properly.
+
+```java
+@Entity
+public class Employee {
+    
+    @Id
+    private int id;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Address> addresses;  // Lazy fetching
+}
+```
+- In the above example, when an `Employee` is retrieved, the list of `Address` objects is not fetched until you explicitly access the `addresses` field.
+
+### Fetch Type Defaults
+- **@OneToOne** and **@ManyToOne** relationships default to **EAGER** fetching.
+- **@OneToMany** and **@ManyToMany** relationships default to **LAZY** fetching.
+
+### When to Use Which:
+- **EAGER**: Use it when the associated data is always needed alongside the main entity.
+- **LAZY**: Use it when the associated data is not always needed, or it’s a large collection, to avoid performance issues.
+
+
+/* HQL (Hibernate Query Language) and SQL (Structured Query Language) */
+
+### **SQL (Structured Query Language)**
+
+- **Purpose**: SQL is a standard language used to interact directly with relational databases (like MySQL, PostgreSQL, Oracle). 
+			   It allows you to perform operations like querying data, inserting, updating, and deleting records in database tables.
+  
+- **Database-Centric**: SQL operates directly on the database tables. You write queries that work with columns and rows in the database.
+
+- **Syntax**: SQL uses a predefined syntax to perform operations on a database. Common SQL statements include `SELECT`, `INSERT`, `UPDATE`, `DELETE`.
+
+- **Performance**: SQL queries are processed and optimized by the database engine. You can also use SQL in conjunction with JDBC in Java applications to run native SQL queries.
+
+---
+
+### **HQL (Hibernate Query Language)**
+
+- **Purpose**: HQL is an **object-oriented query language** used in Hibernate (an ORM framework) to interact with Java objects rather than database tables directly. 
+               It is designed to work with Hibernate’s persistent objects and their relationships (defined as entities).
+
+- **Object-Centric**: HQL operates on **entities** (Java objects mapped to database tables) rather than directly working with database tables. 
+                      It understands Java class names, properties, and relationships like one-to-many, many-to-one, etc.
+
+- **Syntax**: HQL syntax is similar to SQL, but instead of tables and columns, you work with Java class names and fields.
+
+- **Automatic SQL Generation**: Hibernate converts HQL queries into the equivalent SQL statements, 
+                                making it easier to work with databases in an object-oriented way without worrying about the specifics of SQL.
+
+---
+
+### **Key Differences**:
+
+| Aspect             | SQL                              | HQL                              |
+|--------------------|----------------------------------|----------------------------------|
+| **Level**          | Database level                   | Object level (Java entities)     |
+| **Focus**          | Tables, rows, and columns        | Entities, properties, relationships |
+| **Purpose**        | Direct database interaction      | Queries on Java objects mapped to the database |
+| **Portability**    | Tied to a specific database       | Database independent (Hibernate translates HQL to SQL) |
+| **Object-Oriented**| No                               | Yes                             |
+| **Example Query**  | `SELECT * FROM employees`        | `from Employee`                 |
+| **Relationship Handling**| Complex joins required manually | Automatically handles relationships via mappings |
+
+---
+
+### **When to Use SQL and HQL?**
+
+- **Use SQL**:
+  - When you want to work directly with the database.
+  - For non-Hibernate projects or cases where you need specific SQL features or optimizations tied to the database engine.
+
+- **Use HQL**:
+  - In Hibernate-based applications, when you want to work with Java objects instead of raw database tables.
+  - When you want portability across different databases and Hibernate to handle query translation.
+  
+  
+/* Hibernate Caching */
+
+In Hibernate, **caching** is used to improve application performance by reducing the number of database hits. 
+Instead of hitting the database every time a query is made, data can be temporarily stored in memory, making future accesses faster. 
+
+### 1. **First-Level Cache**
+- **Description**: This is the default cache provided by Hibernate, and it is **session-scoped**. 
+				   Each Hibernate `Session` object maintains a cache of the objects that it is managing.
+- **Scope**: The scope of the first-level cache is **limited to the session**. Once the session is closed, the cache is cleared.
+- **Automatic**: Hibernate automatically stores objects in the first-level cache, 
+				 and when a session requests the same object again, it retrieves it from the cache instead of querying the database.
+- **No Configuration Required**: This cache is built-in, and no extra configuration is needed.
+  
+#### How It Works:
+- When you retrieve an object using a `Session`, Hibernate first checks the cache (the session cache). 
+  If the object is found, it is returned from the cache.
+- If it’s not in the cache, Hibernate executes a query to retrieve the object from the database and stores it in the session cache.
+
+```java
+Session session = sessionFactory.openSession();
+
+// Fetching entity, loads from DB and adds to cache
+Employee emp1 = session.get(Employee.class, 1);
+
+// Fetching the same entity again within the same session
+Employee emp2 = session.get(Employee.class, 1);  // This will be fetched from cache, not DB
+```
+
+### 2. **Second-Level Cache**
+- **Description**: The second-level cache is **session-factory-scoped**, meaning it is shared across multiple sessions. 
+				   It is not enabled by default; you need to configure and enable it explicitly.
+- **Scope**: The second-level cache persists beyond a single session and is shared by all sessions created by the same `SessionFactory`.
+- **Purpose**: It is primarily used to cache frequently accessed data at the session factory level, 
+               reducing the load on the database by allowing multiple sessions to share cached data.
+- **Configurable**: To use the second-level cache, you need to enable it in the configuration file and 
+					specify a caching provider (e.g., Ehcache, Redis, or Infinispan).
+
+#### How It Works:
+- When the second-level cache is enabled, Hibernate first checks the first-level (session) cache. 
+  If the object isn’t found there, it then checks the second-level cache. If it’s not in the second-level cache, the database is queried.
+- Once the data is fetched from the database, it is stored in both caches (first-level and second-level).
+
+#### Steps to Enable Second-Level Cache:
+1. **Add caching provider dependency** (e.g., Ehcache).
+2. **Enable second-level cache** in Hibernate configuration (`hibernate.cfg.xml` or `application.properties`).
+3. **Configure caching for specific entities** using annotations or mapping files.
+
+#### Example:
+```xml
+<!-- Enable second-level cache in hibernate.cfg.xml -->
+<property name="hibernate.cache.use_second_level_cache">true</property>
+<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+
+<!-- Specify caching for an entity -->
+<class name="Employee" table="EMPLOYEE" ...>
+    <cache usage="read-write" />
+</class>
+```
+
+### **Cache Strategies**
+
+Hibernate provides several caching strategies for second-level cache:
+
+1. **Read-Only**: Suitable for data that does not change (e.g., reference tables).
+2. **Read-Write**: Suitable for data that can be read and modified. Ensures strong consistency between the cache and the database.
+3. **Non-Strict Read-Write**: Suitable for data that can change but does not require immediate consistency between the cache and database.
+4. **Transactional**: Used when you need transactional cache behavior (usually with JTA transactions).
+
+### **Query Cache**
+In addition to the first and second-level caches, Hibernate also supports a **query cache**, which caches the results of queries. 
+This can be helpful when the same query is executed multiple times with the same result.
+
+To enable query caching:
+```xml
+<property name="hibernate.cache.use_query_cache">true</property>
+```
+
+### **Summary of Hibernate Caching:**
+1. **First-Level Cache**:
+   - Session-scoped.
+   - Built-in and default.
+   - No extra configuration needed.
+   - Only available within a single session.
+   
+2. **Second-Level Cache**:
+   - Session-factory-scoped.
+   - Shared across multiple sessions.
+   - Needs explicit configuration and a caching provider (Ehcache, Redis, etc.).
+   
+3. **Cache Strategies**:
+   - Read-Only, Read-Write, Non-Strict Read-Write, and Transactional strategies to control how data is cached and synchronized.
+
+4. **Query Cache**:
+   - Caches the results of queries to speed up frequently executed queries.
+   - Must be enabled separately.
+   
+   
+/* Cascading in Hibernate */
+
+**Cascading** in Hibernate is a mechanism that allows you to propagate operations (like save, update, delete, etc.) performed on one entity to its related entities. 
+This is particularly useful when working with relationships like `@OneToMany`, `@ManyToOne`, `@OneToOne`, and `@ManyToMany`. 
+Instead of manually performing operations on associated entities, cascading helps automate the process.
+
+### Why Cascade?
+
+When you have a parent-child relationship (e.g., an `Order` entity containing `OrderItem` entities), 
+if you save or delete an `Order`, you might want Hibernate to automatically save or delete the associated `OrderItem` objects 
+without having to write additional code. Cascade operations make this easier.
+
+### Types of Cascade Operations
+
+1. **CascadeType.ALL**:
+   - This applies **all** the cascade operations (`persist`, `merge`, `remove`, `refresh`, `detach`).
+   - It ensures that any operation on the parent is applied to the child entities as well.
+
+2. **CascadeType.PERSIST**:
+   - If the parent entity is saved (or persisted), the associated child entities will also be saved automatically.
+   
+3. **CascadeType.MERGE**:
+   - If the parent entity is updated (merged), the associated child entities will also be updated.
+
+4. **CascadeType.REMOVE**:
+   - If the parent entity is deleted, the associated child entities will also be deleted from the database.
+
+5. **CascadeType.REFRESH**:
+   - It refreshes the state of the child entities when the parent entity is refreshed from the database.
+
+6. **CascadeType.DETACH**:
+   - When the parent entity is detached from the persistence context, its child entities will also be detached.
+
+### Operations With Cascade
+
+1. **Persist (Save)**:
+   - When you save the parent entity, all associated child entities are automatically saved if `CascadeType.PERSIST` or `CascadeType.ALL` is used.
+
+   ```java
+   Order order = new Order();
+   OrderItem item1 = new OrderItem();
+   item1.setOrder(order);
+
+   order.getOrderItems().add(item1);
+
+   session.save(order);  // Saves both order and item1 due to CascadeType.PERSIST or ALL
+   ```
+
+2. **Merge (Update)**:
+   - When you update the parent entity, the associated child entities will also be updated if `CascadeType.MERGE` or `CascadeType.ALL` is used.
+
+3. **Remove (Delete)**:
+   - When you delete the parent entity, all associated child entities will also be deleted if `CascadeType.REMOVE` or `CascadeType.ALL` is used.
+
+   ```java
+   session.delete(order);  // Deletes both order and associated orderItems
+   ```
+
+4. **Refresh**:
+   - Refreshes the parent and child entities to synchronize with the database.
+
+5. **Detach**:
+   - Detaches both parent and child entities from the persistence context, meaning they are no longer tracked by Hibernate.
+
+### **Real-Life Example**:
+
+Imagine you have an **Order** and associated **OrderItem** entities:
+- When you create an order and add items to it, you want to save everything in one go. 
+  Using `CascadeType.PERSIST` ensures that both the `Order` and `OrderItem` objects are saved without extra code.
+- If the order is canceled, deleting the `Order` should also remove the associated `OrderItem` records. 
+  With `CascadeType.REMOVE`, this happens automatically.
+
+### Cascade Types in One-To-Many Relationship Example:
+```java
+@Entity
+public class Library {
+
+    @Id
+    private Long id;
+
+    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)  // Cascade ALL
+    private List<Book> books;
+
+    // getters and setters
+}
+
+@Entity
+public class Book {
+
+    @Id
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "library_id")
+    private Library library;
+
+    // getters and setters
+}
+```
+
+### Summary of Cascade Types in Hibernate:
+- **CascadeType.PERSIST**: Automatically saves the related entities.
+- **CascadeType.MERGE**: Automatically updates the related entities.
+- **CascadeType.REMOVE**: Automatically deletes the related entities.
+- **CascadeType.REFRESH**: Refreshes the state of the related entities from the database.
+- **CascadeType.DETACH**: Automatically detaches the related entities from the persistence context.
+- **CascadeType.ALL**: Applies all of the above cascade types.
+
+
+/* Criteria API */
+
+Criteria API is a programmatic way of building queries in Hibernate.
+It allows you to dynamically construct queries at runtime with type safety.
+It uses CriteriaBuilder, CriteriaQuery, and Root to define queries.
+You can perform operations like filtering (where), sorting (orderBy), aggregation (count, sum), and joining related entities.
+Criteria API is best suited for dynamic queries or complex queries that might change at runtime.

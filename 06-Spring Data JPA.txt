@@ -1,0 +1,217 @@
+Spring Data JPA
+
+ 1. What is Spring Data JPA?
+Answer:  
+Spring Data JPA is a part of the Spring Data family that provides an abstraction over the JPA (Java Persistence API) specification. It simplifies the development of data access layers by reducing boilerplate code through its repository abstraction, making it easier to interact with relational databases.
+
+---
+
+ 2. What is the difference between JPA and Hibernate?
+Answer:  
+- JPA: It is a specification that defines the standard for ORM (Object-Relational Mapping) in Java. It does not provide any implementation.  
+- Hibernate: It is a popular JPA implementation that provides additional features like caching, lazy loading, and fetching strategies.
+
+---
+
+ 3. What are the key interfaces provided by Spring Data JPA?
+Answer:  
+- Repository: Base interface for all repositories.  
+- CrudRepository: Provides CRUD operations (save, findById, delete, etc.).  
+- PagingAndSortingRepository: Adds pagination and sorting capabilities.  
+- JpaRepository: Extends `PagingAndSortingRepository` and adds JPA-specific features like batch operations and flushing persistence context.
+
+---
+
+ 4. What is a Repository in Spring Data JPA? How do you define one?
+Answer:  
+A Repository in Spring Data JPA is an interface that acts as a mediator between the service layer and the database. It is defined by extending one of the base interfaces like `JpaRepository`.
+
+Example:
+```java
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    List<Employee> findByDepartment(String department);
+}
+```
+
+---
+
+ 5. What is the significance of `@Entity` and `@Table` annotations?
+Answer:  
+- @Entity: Marks a class as a JPA entity, allowing it to map to a database table.  
+- @Table: Allows customization of the table name and schema. By default, the table name is the same as the entity name.
+
+Example:
+```java
+@Entity
+@Table(name = "employees")
+public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    // Getters and Setters
+}
+```
+
+---
+
+ 6. What are JPQL and Native Queries? How are they different?
+Answer:  
+- JPQL (Java Persistence Query Language): Object-oriented queries written in terms of the entity model.  
+  Example: `@Query("SELECT e FROM Employee e WHERE e.department = :department")`.  
+- Native Queries: SQL queries written directly in the database's SQL syntax.  
+  Example: `@Query(value = "SELECT * FROM employees WHERE department = :department", nativeQuery = true)`.
+
+---
+
+ 7. What is the difference between `@Query` and `NamedQuery`?
+Answer:  
+- @Query: Used for defining a query at the method level in a repository.  
+  Example:
+  ```java
+  @Query("SELECT e FROM Employee e WHERE e.name = :name")
+  List<Employee> findByName(@Param("name") String name);
+  ```
+- NamedQuery: Defined at the entity level and referenced by its name.  
+  Example:
+  ```java
+  @NamedQuery(name = "Employee.findByName", query = "SELECT e FROM Employee e WHERE e.name = :name")
+  ```
+
+---
+
+ 8. What is the difference between `save()` and `saveAndFlush()`?
+Answer:  
+- save(): Saves the entity but doesn’t immediately flush changes to the database.  
+- saveAndFlush(): Saves the entity and immediately flushes the changes to the database, making them visible in the current transaction.
+
+---
+
+ 9. What are Cascade Types in JPA? Explain with examples.
+Answer:  
+Cascade types determine the behavior of related entities during persistence operations.
+
+- ALL: Propagates all operations.
+- PERSIST: Propagates `persist()` operation.
+- MERGE: Propagates `merge()` operation.
+- REMOVE: Propagates `remove()` operation.
+- REFRESH: Propagates `refresh()` operation.
+- DETACH: Propagates `detach()` operation.
+
+Example:
+```java
+@OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+private List<Employee> employees;
+```
+
+---
+
+ 10. What is Lazy Loading and Eager Loading in JPA?
+Answer:  
+- Lazy Loading: Data is fetched only when it is accessed for the first time. It saves memory and improves performance.
+- Eager Loading: Data is fetched immediately along with the parent entity.  
+
+Example:
+```java
+@OneToMany(fetch = FetchType.LAZY)
+private List<Employee> employees;
+```
+
+---
+
+ 11. What is the use of the `@Modifying` annotation in Spring Data JPA?
+Answer:  
+The `@Modifying` annotation is used to modify data in the database (e.g., for update or delete queries). It works in conjunction with `@Query`.
+
+Example:
+```java
+@Modifying
+@Query("UPDATE Employee e SET e.salary = :salary WHERE e.id = :id")
+int updateSalary(@Param("id") Long id, @Param("salary") Double salary);
+```
+
+---
+
+ 12. How do you handle pagination and sorting in Spring Data JPA?
+Answer:  
+Pagination and sorting are supported by extending `PagingAndSortingRepository` or `JpaRepository`.
+
+Example:
+```java
+Pageable pageable = PageRequest.of(0, 10, Sort.by("name").ascending());
+Page<Employee> employees = employeeRepository.findAll(pageable);
+```
+
+---
+
+ 13. What is the difference between `EntityManager` and `Hibernate Session`?
+Answer:  
+- EntityManager: A JPA interface for managing entities.  
+- Session: A Hibernate-specific implementation of `EntityManager` that provides more features like Criteria API.
+
+---
+
+ 14. Explain the `@OneToOne`, `@OneToMany`, `@ManyToOne`, and `@ManyToMany` relationships in JPA.
+Answer:  
+- @OneToOne: One entity is associated with one other entity.  
+- @OneToMany: One entity is associated with multiple entities.  
+- @ManyToOne: Many entities are associated with one entity.  
+- @ManyToMany: Many entities are associated with many entities.
+
+Example:
+```java
+@OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+private List<Employee> employees;
+```
+
+---
+
+ 15. What is the purpose of the `@Transactional` annotation?
+Answer:  
+The `@Transactional` annotation manages database transactions automatically. It ensures ACID properties and rollback in case of exceptions.
+
+Example:
+```java
+@Transactional
+public void saveEmployee(Employee employee) {
+    employeeRepository.save(employee);
+}
+```
+
+---
+
+ 16. What are Projections in Spring Data JPA?
+Answer:  
+Projections allow you to fetch only selected fields from the database instead of entire entities.
+
+Example:
+```java
+public interface EmployeeNameProjection {
+    String getName();
+}
+
+List<EmployeeNameProjection> findAllBy();
+```
+
+---
+
+ 17. What is the purpose of the `@Embeddable` and `@Embedded` annotations?
+Answer:  
+These annotations are used for embedding one class into another.
+
+Example:
+```java
+@Embeddable
+public class Address {
+    private String street;
+    private String city;
+}
+
+@Entity
+public class Employee {
+    @Embedded
+    private Address address;
+}
+```

@@ -1,0 +1,197 @@
+
+
+1) Running Java file with single Java Command:
+
+Up to Java 10 version 
+for Compilation we use : javac Test.java command
+for Execution we use   : java Test
+
+From Java 11 version onwards, we can compile and execute Java File by using 
+single : java Test.java command.
+
+This single command internally do compilation and execution of Java file.
+
+---
+
+If we provide multiple classes with main method in a single Java file 
+then JVM will execute main method of first class in which we have specified main method
+from top to bottom.
+
+2) String Class added new utility methods
+
+1) isBlank() -
+	String str = "   ";
+	sysout(str.isBlank());	-> true
+	sysout(str.isEmpty());	-> false
+	
+	isBlank method checks for any non-white space character present in the string.
+	isEmpty method checks the length of string is greater that 0 or not.
+	
+2) strip()
+	String str = "  Java11  ";
+	sysout(str.strip());	-> Java11
+	
+	strip method removes all types of whitespace characters as defined by the Unicode specification before and after the string.
+	trim method only removes whitespace characters with Unicode values less than or equal to U+0020.
+	
+3) stripLeading()
+	This method removes white spaces before the string.
+	
+4) stripTrailing()
+	This method removes white spaces after the string.
+	
+5) lines()
+	This method return a stream of strings on the basis of next line character.
+	and we can print that string in multiple lines.
+	
+6) repeat(int count)
+	This method returns a string concatinated the same string with given number of times.
+	
+	String text = "abc";
+    String repeatedText = text.repeat(3);  // Repeats the string 3 times
+    System.out.println(repeatedText);  // Output: "abcabcabc"
+    
+    String emptyRepeat = text.repeat(0);  // Repeat 0 times
+    System.out.println(emptyRepeat);  // Output: ""
+    
+    String negativeRepeat = text.repeat(-1);  // Repeat -1 times
+    System.out.println(negativeRepeat);  // Output: ""
+	
+---
+
+3) var in Lambda Expression
+	We can use var for local variables within the lambda body, but not for the parameters of the lambda expression.
+	Ex.:-
+	interface Cal{
+		int sum(int a, int b);
+	}
+	
+	Cal cal = (var x, var y) -> x + y;
+	sysout(cal.sum(4 + 5));	-> 9
+	
+4) Predicate not method
+	The not() method is used to negate a Predicate, making it easier to write conditions where you need the opposite of an existing predicate.
+	
+	Predicate<Integer> isEven = num -> num % 2 == 0;
+	isEven.test(3);	-> false
+	isEven.test(4);	-> true
+	
+	Predicate<Integer> isOdd = isEven.not();
+	isOdd.test(3);	-> true
+	
+	Difference between negate and not method
+	- negate() is an instance method available since Java 8 and negates the result of the Predicate it is called on.
+	- not() is a static method introduced in Java 11, and it negates the predicate passed to it as an argument.
+	
+5) readString() and writeString() method for file handling
+	
+	- readString(Path): Reads the contents of a file as a string.
+	try {
+        Path path = Paths.get("example.txt");
+        String content = Files.readString(path);
+        System.out.println(content);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+	
+	- writeString(Path, CharSequence): Writes a string or text content to a file.
+	try {
+        Path path = Paths.get("output.txt");
+        String content = "Hello, World!";
+        Files.writeString(path, content);
+    } catch (IOException e) {
+		e.printStackTrace();
+    }
+	
+6) Nest-Based Access Control
+	Before Java 11, nested and inner classes were not part of the same "nest," 
+	and access to private members required reflection or other techniques.
+	
+	After Java 11, with Nest-Based Access Control, related classes that are part of the same nest 
+	can access each other's private members directly, making the code simpler and more efficient.
+	
+	public class OuterClass {
+		private String privateField = "Private Data";
+
+		// Nested inner class
+		public class InnerClass {
+			public void accessOuterPrivate() {
+				// Direct access to the private field of OuterClass
+				System.out.println(privateField);  // Accessing privateField directly
+			}
+		}
+
+		public static void main(String[] args) {
+			OuterClass outer = new OuterClass();
+			InnerClass inner = outer.new InnerClass();
+			inner.accessOuterPrivate();  // Outputs: Private Data
+		}
+	}
+
+
+7) HTTP Client API
+
+	In Java 11, the HTTP Client API (java.net.http) was introduced to simplify HTTP requests and responses. 
+	It provides both synchronous and asynchronous methods for making HTTP requests, 
+	supports HTTP/1.1 and HTTP/2, and is more modern and efficient compared to the older HttpURLConnection.
+	
+Synchronous HTTP GET Request:
+	import java.net.URI;
+	import java.net.http.HttpClient;
+	import java.net.http.HttpRequest;
+	import java.net.http.HttpResponse;
+
+	public class HttpClientExample {
+		public static void main(String[] args) {
+			try {
+				// Create an HttpClient instance
+				HttpClient client = HttpClient.newHttpClient();
+				
+				// Build the GET request
+				HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create("https://jsonplaceholder.typicode.com/posts/1"))
+					.build();
+				
+				// Send the GET request synchronously and get the response
+				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+				
+				// Print the response status code and body
+				System.out.println("Response Code: " + response.statusCode());
+				System.out.println("Response Body: " + response.body());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+Asynchronous HTTP GET Request Example:
+	import java.net.URI;
+	import java.net.http.HttpClient;
+	import java.net.http.HttpRequest;
+	import java.net.http.HttpResponse;
+	import java.util.concurrent.CompletableFuture;
+
+	public class HttpClientAsyncExample {
+		public static void main(String[] args) {
+			// Create an HttpClient instance
+			HttpClient client = HttpClient.newHttpClient();
+			
+			// Build the GET request
+			HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create("https://jsonplaceholder.typicode.com/posts/1"))
+				.build();
+			
+			// Send the request asynchronously and handle the response
+			CompletableFuture<HttpResponse<String>> responseFuture = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+			
+			// When the response is ready, process it
+			responseFuture.thenAccept(response -> {
+				System.out.println("Response Code: " + response.statusCode());
+				System.out.println("Response Body: " + response.body());
+			});
+			
+			// Wait for the asynchronous request to complete before exiting
+			responseFuture.join();
+		}
+	}
+
