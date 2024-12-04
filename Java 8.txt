@@ -1,0 +1,436 @@
+
+# 1. What are the main features introduced in Java 8?
+
+Java 8 introduced several important features, the most notable being:
+- Lambda Expressions: A new way to write anonymous methods (functional programming style).
+- Streams API: A new abstraction to process sequences of data (collections, arrays, etc.) in a declarative and parallelizable manner.
+- Default Methods: Methods in interfaces that have a body, allowing interfaces to evolve without breaking existing implementations.
+- Method References: A shorthand notation for calling a method (similar to lambda expressions but more concise).
+- Optional Class: A container for objects that may be null, reducing null pointer exceptions and making code cleaner.
+- New Date and Time API: The `java.time` package, which improves upon the old `java.util.Date` and `java.util.Calendar`.
+- Nashorn JavaScript Engine: A new JavaScript engine that replaces the older Rhino engine.
+- Parallel Streams: For easier parallel processing of collections.
+
+---
+
+# 2. What are Lambda expressions in Java 8? Can you give an example?
+
+Lambda expressions allow you to treat functionality as a method argument, or to create a small function that can be passed around. 
+It enables functional programming in Java by providing a clear and concise way to express instances of single-method interfaces (functional interfaces).
+
+Syntax:
+```java
+(parameters) -> expression
+```
+
+Example:
+```java
+// Traditional anonymous class
+Runnable r = new Runnable() {
+    public void run() {
+        System.out.println("Hello from Runnable");
+    }
+};
+
+// Lambda expression
+Runnable r = () -> System.out.println("Hello from Runnable");
+```
+In the above example, the `Runnable` interface is implemented using a lambda expression instead of an anonymous class.
+
+---
+
+# 3. What is a functional interface in Java?
+
+A functional interface is an interface that has only one abstract method, and it may have multiple default or static methods. 
+These interfaces can be used with lambda expressions and method references.
+
+The `@FunctionalInterface` annotation is used to indicate that an interface is a functional interface, but it’s not required.
+
+Example:
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void myMethod(); // single abstract method
+}
+```
+
+Java 8 has built-in functional interfaces like `Runnable`, `Callable`, `Comparator`, etc.
+
+---
+
+# 4. What is the `Stream` API in Java 8 and how is it different from traditional iteration?
+
+The `Stream` API is introduced in Java 8 to process collections of objects in a functional-style way. 
+It supports operations like map, filter, reduce, and more, allowing you to process data declaratively and efficiently.
+
+Key Differences from Traditional Iteration:
+- Declarative: You describe what you want to do, not how (e.g., filtering a list of strings that contain the letter "a").
+- Lazy Evaluation: Operations on streams are lazy and are only executed when a terminal operation (like `collect()`, `forEach()`) is invoked.
+- Parallel Processing: Streams can be processed in parallel easily using `parallelStream()`.
+
+Example:
+```java
+List<String> names = Arrays.asList("John", "Jane", "David", "Diana");
+
+// Using Stream
+names.stream()
+     .filter(name -> name.startsWith("J"))
+     .forEach(System.out::println);  // Prints John and Jane
+```
+
+---
+
+# 5. Explain the difference between `map()` and `flatMap()` in Streams.
+
+- `map()`: Transforms each element of the stream into another object, producing a new stream where each element is transformed by the provided function.
+- `flatMap()`: Flattens the structure of the stream. If the function applied to each element produces a stream itself, 
+			   `flatMap()` merges these multiple streams into a single stream.
+
+Example of `map()`:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+List<Integer> wordLengths = words.stream()
+                                 .map(String::length)  // Converts each string to its length
+                                 .collect(Collectors.toList());
+System.out.println(wordLengths);  // [5, 6, 6]
+```
+
+Example of `flatMap()`:
+```java
+List<List<String>> listOfLists = Arrays.asList(
+    Arrays.asList("apple", "banana"),
+    Arrays.asList("cherry", "date")
+);
+List<String> flattened = listOfLists.stream()
+                                    .flatMap(List::stream)  // Flattens the list of lists
+                                    .collect(Collectors.toList());
+System.out.println(flattened);  // [apple, banana, cherry, date]
+```
+---
+
+# 6. What is the `Optional` class in Java 8?
+
+`Optional` is a container object which may or may not contain a value. 
+It’s used to avoid `NullPointerExceptions` and provides methods for more functional-style handling of `null` values.
+
+Common methods:
+- `Optional.of(value)`: Returns an Optional containing the value, or throws `NullPointerException` if the value is `null`.
+- `Optional.empty()`: Returns an empty Optional.
+- `Optional.isPresent()`: Returns `true` if the value is present, `false` otherwise.
+- `Optional.ifPresent(Consumer)`: If a value is present, it performs the provided action.
+- `Optional.orElse(value)`: Returns the value if present, otherwise returns the given default value.
+
+Example:
+```java
+Optional<String> name = Optional.ofNullable("John");
+name.ifPresent(System.out::println);  // Prints John
+
+Optional<String> emptyName = Optional.ofNullable(null);
+System.out.println(emptyName.orElse("Default Name"));  // Prints Default Name
+```
+---
+
+# 7. What are Default Methods in interfaces and why were they introduced?
+
+Default methods are methods in interfaces that have a body. They were introduced in Java 8 to allow backward compatibility. 
+They enable developers to add new methods to interfaces without breaking the existing implementation of classes.
+
+Syntax:
+```java
+interface MyInterface {
+    default void defaultMethod() {
+        System.out.println("This is a default method.");
+    }
+}
+```
+
+Example:
+```java
+interface MyInterface {
+    default void greet() {
+        System.out.println("Hello from the interface!");
+    }
+}
+
+class MyClass implements MyInterface {}
+
+public class Main {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.greet();  // Prints: Hello from the interface!
+    }
+}
+```
+---
+
+# 8. Explain the new Date/Time API in Java 8.
+
+The `java.time` package introduced in Java 8 is a major improvement over the old `java.util.Date` and `java.util.Calendar` classes. 
+It is immutable, thread-safe, and has a clearer API for handling dates, times, and durations.
+
+Important Classes:
+- `LocalDate`: Represents a date without time (e.g., 2024-11-30).
+- `LocalTime`: Represents a time without date (e.g., 15:30).
+- `LocalDateTime`: Combines both date and time.
+- `ZonedDateTime`: Represents date and time with time zone information.
+- `Duration`: Represents a time-based amount of time.
+- `Period`: Represents a date-based amount of time.
+
+Example:
+```java
+LocalDate date = LocalDate.of(2024, 11, 30);
+LocalTime time = LocalTime.of(14, 30);
+LocalDateTime dateTime = LocalDateTime.of(date, time);
+System.out.println(dateTime);  // Prints 2024-11-30T14:30
+```
+---
+
+# 9. What is the difference between `forEach()` and `forEachOrdered()` in Java 8 streams?
+
+- `forEach()`: Performs an action for each element in the stream. It may not preserve the order of elements in a parallel stream.
+- `forEachOrdered()`: Ensures that the elements are processed in the encounter order 
+					  (i.e., the order they appeared in the original stream) even in parallel streams.
+
+Example:
+```java
+List<String> list = Arrays.asList("apple", "banana", "cherry");
+
+// Sequential stream
+list.stream().forEach(System.out::println);  // Prints in order
+
+// Parallel stream
+list.parallelStream().forEach(System.out::println);  // May not print in order
+
+list.parallelStream().forEachOrdered(System.out::println);  // Ensures printing in order
+```
+---
+
+# 10. What is the purpose of the `Collectors` class in Java 8?
+
+The `Collectors` class provides a set of static methods that are used to collect the elements of a 
+stream into various types of containers such as lists, sets, maps, and other collections.
+
+Commonly used Collectors:
+- `toList()`: Collects the elements into a `List`.
+- `toSet()`: Collects the elements into a `Set`.
+- `groupingBy()`: Groups the elements by a classifier function.
+- `partitioningBy()`: Partitions the elements into two groups.
+- `joining()`: Concatenates the elements into a string.
+
+---
+
+# 11. What is the difference between `Stream` and `Collection` in Java 8?
+
+- Collection: A collection represents a group of objects, such as lists, sets, or maps, and provides operations to store and retrieve elements. 
+			  Collections are eagerly evaluated, meaning they process elements as soon as you invoke a method on them.
+  
+- Stream: A stream is an abstraction for processing sequences of elements in a functional-style. 
+		  Streams are lazy evaluated, meaning intermediate operations are not executed until a terminal operation (like `collect()`, `forEach()`) is invoked.
+
+Key Differences:
+- `Collection` is used to store data, while `Stream` is used to process data.
+- `Collection` stores elements, whereas `Stream` provides a way to process data in a more declarative style.
+- Streams can be processed in parallel easily, while collections don’t have such functionality out of the box.
+
+Example:
+```java
+// Collection Example
+List<String> names = Arrays.asList("John", "Jane", "Alice");
+for (String name : names) {
+    System.out.println(name);
+}
+
+// Stream Example
+names.stream()
+     .filter(name -> name.startsWith("J"))
+     .forEach(System.out::println);  // John, Jane
+```
+---
+
+# 12. What is the use of `@FunctionalInterface` annotation in Java 8?
+
+The `@FunctionalInterface` annotation is used to indicate that an interface is a functional interface, 
+meaning it has exactly one abstract method and can be used as the target for lambda expressions or method references. 
+
+This annotation is optional but helps to clearly define functional interfaces and ensures that the interface conforms 
+to the rules of functional interfaces. If you accidentally add more than one abstract method, the compiler will throw an error.
+
+Example:
+```java
+@FunctionalInterface
+interface MyFunction {
+    void apply();  // Single abstract method
+}
+```
+---
+
+# 13. What are the advantages of using `Stream` API in Java 8?
+
+- Concise and Readable Code: The `Stream` API allows you to write more declarative code that is easier to understand and maintain.
+- Parallel Processing: Streams provide an easy way to process data in parallel using `parallelStream()`, which improves performance for large datasets.
+- Lazy Evaluation: Intermediate operations on streams are lazily evaluated, meaning computation is only done when a terminal operation is executed, improving performance.
+- Functional Programming: The `Stream` API encourages a functional programming approach (e.g., using `map()`, `filter()`, `reduce()`), which leads to more modular and reusable code.
+  
+Example:
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+// Summing up the numbers in a functional style
+int sum = numbers.stream()
+                  .filter(n -> n % 2 == 0)
+                  .mapToInt(Integer::intValue)
+                  .sum();
+System.out.println(sum);  // Output: 6 (2 + 4)
+```
+---
+
+# 14. What is the difference between `map()` and `flatMap()` in Java 8 Streams?
+
+- `map()`: The `map()` function transforms each element of the stream into another object, producing a 
+		   new stream where each element is transformed by the provided function.
+- `flatMap()`: The `flatMap()` function transforms each element into a stream of objects, and then flattens the resulting streams into a single stream.
+
+Example of `map()`:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+List<Integer> lengths = words.stream()
+                             .map(String::length)  // Maps each word to its length
+                             .collect(Collectors.toList());
+System.out.println(lengths);  // [5, 6, 6]
+```
+Example of `flatMap()`:
+```java
+List<List<String>> listOfLists = Arrays.asList(
+    Arrays.asList("a", "b"),
+    Arrays.asList("c", "d")
+);
+List<String> flatList = listOfLists.stream()
+                                   .flatMap(List::stream)  // Flattens the lists
+                                   .collect(Collectors.toList());
+System.out.println(flatList);  // [a, b, c, d]
+```
+---
+
+# 15. What is the `Collectors.groupingBy()` method in Java 8?
+
+The `Collectors.groupingBy()` method is used to group elements of a stream by a classifier function. 
+This method returns a `Map`, where the keys are the result of applying the classifier function, 
+and the values are lists of items from the stream that correspond to those keys.
+
+Syntax:
+```java
+Collectors.groupingBy(Function<? super T, ? extends K> classifier)
+```
+
+Example:
+```java
+List<String> names = Arrays.asList("John", "Jane", "David", "Diana");
+
+// Grouping by first letter of the name
+Map<Character, List<String>> groupedByLetter = names.stream()
+                                                    .collect(Collectors.groupingBy(name -> name.charAt(0)));
+System.out.println(groupedByLetter);
+// Output: {J=[John, Jane], D=[David, Diana]}
+```
+---
+
+# 16. What is the purpose of the `default` keyword in Java 8?
+
+The `default` keyword in Java 8 is used to define methods with a body in an interface. 
+These methods can have a default implementation, which allows interfaces to evolve without breaking the existing implementing classes.
+
+Example:
+```java
+interface Animal {
+    default void speak() {
+        System.out.println("Animal is speaking");
+    }
+}
+
+class Dog implements Animal {
+    // No need to implement speak() method because it has a default implementation
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.speak();  // Output: Animal is speaking
+    }
+}
+```
+---
+
+# 17. What is the difference between `findFirst()` and `findAny()` in Java 8 Streams?
+
+- `findFirst()`: Returns the first element in the stream, according to the encounter order (if present).
+- `findAny()`: Returns any element from the stream, and may be more efficient for parallel streams as it doesn’t need to preserve the encounter order.
+
+Example:
+```java
+List<String> names = Arrays.asList("John", "Jane", "David", "Diana");
+
+// Using findFirst()
+String firstName = names.stream().findFirst().orElse("No name");
+System.out.println(firstName);  // Output: John
+
+// Using findAny() (may return any element, even in parallel streams)
+String anyName = names.stream().findAny().orElse("No name");
+System.out.println(anyName);  // Output: Any name from the list
+```
+---
+
+# 18. What is the role of `reduce()` in Java 8 Streams?
+
+The `reduce()` method is a terminal operation that combines elements of a stream into a single result. 
+It performs a reduction of elements by repeatedly applying a combining function.
+
+Syntax:
+```java
+T reduce(T identity, BinaryOperator<T> accumulator);
+```
+
+- `identity`: The identity value (often the initial value of the result).
+- `accumulator`: A function that combines two elements of the stream.
+
+Example:
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+// Using reduce to sum up the numbers
+int sum = numbers.stream()
+                 .reduce(0, (a, b) -> a + b);
+System.out.println(sum);  // Output: 15
+```
+---
+
+# 19. What are `Consumer`, `Function`, and `Predicate` interfaces in Java 8?
+
+- `Consumer<T>`: Represents an operation that takes a single argument of type `T` and returns no result. 
+				 It’s used for operations that perform side effects.
+  ```java
+  Consumer<String> consumer = s -> System.out.println(s);
+  ```
+
+- `Function<T, R>`: Represents a function that takes an argument of type `T` and returns a result of type `R`.
+  ```java
+  Function<String, Integer> function = s -> s.length();
+  ```
+
+- `Predicate<T>`: Represents a boolean-valued function that takes an argument of type `T`. It is used for filtering and matching conditions.
+  ```java
+  Predicate<String> predicate = s -> s.length() > 5;
+  ```
+---
+
+# 20. How does `java.util.function` package relate to Java 8?
+
+The `java.util.function` package in Java 8 provides common functional interfaces that can be used to represent lambda expressions or method references. 
+These interfaces support functional programming constructs, allowing more flexible, reusable, and concise code.
+
+Key functional interfaces in this package include:
+- `Function<T, R>`
+- `Predicate<T>`
+- `Consumer<T>`
+- `Supplier<T>`
+- `UnaryOperator<T>`
+- `BinaryOperator<T>`
