@@ -116,23 +116,6 @@ If no matching bean is found, Spring throws an exception unless the dependency i
 
 ---
 
- 11. What is Spring's `@Configuration` annotation?
-  
-The `@Configuration` annotation is used to indicate that a class contains Spring bean definitions. 
-This is a Java-based configuration alternative to XML configuration. 
-A class annotated with `@Configuration` can define methods annotated with `@Bean` to create and configure beans for the Spring context.
-
----
-
- 12. What is the difference between `@Component` and `@Bean` annotations?
-  
-- `@Component`: Marks a class as a Spring-managed bean, and Spring automatically detects it through component scanning. 
-				It is used on classes that are automatically instantiated by the Spring container.
-- `@Bean`: Used in Java-based configuration to explicitly define a method that creates and returns a bean. 
-		   It is part of `@Configuration`-annotated classes.
-
----
-
  13. What is the `@Qualifier` annotation in Spring?
 
 The `@Qualifier` annotation is used in conjunction with `@Autowired` to specify which bean should be injected when multiple beans of the same type exist. 
@@ -381,9 +364,9 @@ Some common implementations of `ApplicationContext` are:
 
  27. What is the difference between `@Bean` and `@Component` annotations?
 
-- `@Bean`: It is used in a method inside a `@Configuration` class to declare a bean definition explicitly. 
-		   This approach is used for defining beans programmatically.
-
+- `@Bean`: Used in Java-based configuration to explicitly define a method that creates and returns a bean. 
+		   It is part of `@Configuration`-annotated classes.
+		   
 	```java
 	@Configuration
 	public class AppConfig {
@@ -393,10 +376,8 @@ Some common implementations of `ApplicationContext` are:
 		}
 	}
 	```
-
-- `@Component`: It is used to annotate a class, indicating that Spring should automatically detect 
-				it during classpath scanning and register it as a bean. 
-				This is typically used for classes in service, repository, or controller layers.
+- `@Component`: Marks a class as a Spring-managed bean, and Spring automatically detects it through component scanning. 
+				It is used on classes that are automatically instantiated by the Spring container.
 
 	```java
 	@Component
