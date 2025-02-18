@@ -1,0 +1,1678 @@
+
+
+# Complexity
+
+
+Time complexity is a measure of the amount of time an algorithm takes to complete as a function of the input size (n). 
+It helps us evaluate how efficient an algorithm is and predict its performance as the input grows.
+
+---
+
+### Types of Time Complexities
+
+1. Constant Time: O(1)
+   - The time taken by the algorithm is the same, regardless of the input size.
+   - Example: Accessing an array element by its index.
+   ```java
+   int value = array[3]; // O(1)
+   ```
+
+2. Linear Time: O(n)
+   - The time taken grows linearly with the size of the input.
+   - Example: Traversing an array.
+   ```java
+   for (int i = 0; i < array.length; i++) {
+       System.out.println(array[i]); // O(n)
+   }
+   ```
+
+3. Quadratic Time: O(n²)
+   - The time taken grows quadratically with the size of the input.
+   - Example: Nested loops for finding pairs.
+   ```java
+   for (int i = 0; i < n; i++) {
+       for (int j = 0; j < n; j++) {
+           System.out.println(array[i] + array[j]); // O(n²)
+       }
+   }
+   ```
+
+4. Logarithmic Time: O(log n)
+   - The time taken grows logarithmically as the input size increases.
+   - Example: Binary search on a sorted array.
+   ```java
+   int binarySearch(int[] arr, int target) {
+       int left = 0, right = arr.length - 1;
+       while (left <= right) {
+           int mid = left + (right - left) / 2;
+           if (arr[mid] == target) return mid; // O(log n)
+           if (arr[mid] < target) left = mid + 1;
+           else right = mid - 1;
+       }
+       return -1;
+   }
+   ```
+
+5. Exponential Time: O(2ⁿ)
+   - The time taken doubles with each additional input.
+   - Example: Solving the Tower of Hanoi problem or brute force recursion.
+   ```java
+   int fibonacci(int n) {
+       if (n <= 1) return n;
+       return fibonacci(n - 1) + fibonacci(n - 2); // O(2ⁿ)
+   }
+   ```
+
+6. Factorial Time: O(n!)
+   - The time grows extremely fast and is often seen in combinatorial problems.
+   - Example: Generating permutations of a set.
+
+---
+
+### How to Analyze Time Complexity
+
+#### 1. Count the Dominant Operations
+   - Look for loops, recursive calls, or repeated operations.
+   - Example:
+     ```java
+     for (int i = 0; i < n; i++) {  // O(n)
+         for (int j = 0; j < n; j++) {  // O(n)
+             System.out.println(i + j);  // O(1)
+         }
+     }
+     // Total: O(n * n) = O(n²)
+     ```
+
+#### 2. Ignore Constants
+   - Coefficients and constants don't affect the growth rate.
+   - Example: `O(2n)`, `O(3n)` → Simplified to `O(n)`.
+
+#### 3. Identify Worst Case
+   - Analyze the scenario where the algorithm takes the most time.
+
+---
+
+### Why Time Complexity Matters
+It helps you:
+1. Compare algorithms.
+2. Write efficient code for large inputs.
+3. Avoid performance issues in production systems.
+
+---
+
+### What is Space Complexity?
+
+Space complexity is the amount of memory space an algorithm uses as a function of the input size (n). 
+It includes:
+1. Fixed Part: Space required to store the program, constants, and variables (independent of input size).
+2. Variable Part: Space required for dynamic allocation like recursion, data structures (arrays, lists), and intermediate computations.
+
+It is crucial to analyze space complexity to optimize the memory usage of an algorithm.
+
+---
+
+### Components of Space Complexity
+
+1. Input Space:
+   - Memory required to store the input data.
+   - Example: If you process an array of size `n`, input space is proportional to `n`.
+
+2. Auxiliary Space:
+   - Memory used by the algorithm, excluding the input.
+   - Example: Temporary variables, recursion stack, or additional data structures.
+
+3. Call Stack Space:
+   - Space required for recursive function calls.
+
+---
+
+### Common Space Complexities
+
+1. O(1) (Constant Space):
+   - The algorithm uses a fixed amount of memory, regardless of input size.
+   - Example: Swapping two variables.
+   ```java
+   void swap(int a, int b) {
+       int temp = a;
+       a = b;
+       b = temp; // O(1)
+   }
+   ```
+
+2. O(n) (Linear Space):
+   - Memory usage grows linearly with input size.
+   - Example: Storing an array of size `n`.
+   ```java
+   int[] array = new int[n]; // O(n)
+   ```
+
+3. O(n²) (Quadratic Space):
+   - Memory usage grows quadratically with input size.
+   - Example: Using a 2D matrix of size `n x n`.
+   ```java
+   int[][] matrix = new int[n][n]; // O(n²)
+   ```
+
+4. O(log n) (Logarithmic Space):
+   - Typically occurs in divide-and-conquer algorithms or recursion.
+   - Example: Space complexity of binary search (recursive implementation).
+
+5. O(2ⁿ) (Exponential Space):
+   - Seen in problems like generating all subsets or solving recursive combinatorial problems.
+
+---
+
+### Example: Space Complexity of a Recursive Function
+Let’s analyze the space complexity of a function to calculate the factorial of a number using recursion.
+
+```java
+int factorial(int n) {
+    if (n == 1) return 1; // Base case
+    return n * factorial(n - 1); // Recursive call
+}
+```
+
+- Input space: O(1) (storing `n`).
+- Auxiliary space: O(n) (stack frames for each recursive call).
+
+If `n = 5`, the recursion stack will look like this:
+```
+factorial(5)
+factorial(4)
+factorial(3)
+factorial(2)
+factorial(1)
+```
+The depth of the recursion is `n`, so the space complexity is O(n).
+
+---
+
+### Optimizing Space Complexity
+
+1. Use Iterative Solutions:
+   - Replace recursion with loops to avoid stack space usage.
+   - Example: Iterative factorial uses O(1) auxiliary space.
+
+2. In-place Algorithms:
+   - Modify the data in the same array instead of using additional arrays.
+   - Example: In-place reversal of an array.
+
+3. Avoid Unnecessary Variables:
+   - Minimize the use of temporary or duplicate data structures.
+
+---
+
+### Array
+
+An array is a collection of elements of the same type, stored at contiguous memory locations. Arrays are fixed in size once created.
+
+Key Features of Arrays:
+Fixed Size: You must define the size when you create an array.
+Indexing: Elements are accessed using a zero-based index.
+Homogeneous Data: All elements in the array must be of the same type.
+Efficient Access: Accessing an element by index is fast (O(1)).
+
+Disadvantages of Arrays
+Fixed Size: Once created, the size cannot be modified (use dynamic arrays like ArrayList in Java for variable-sized collections).
+Costly Insertion/Deletion: Adding or removing elements involves shifting elements, which takes O(n) time in the worst case.
+Memory Waste: If the array size is overestimated, it leads to unused memory.
+
+---
+
+### Linear Search Algorithm
+
+Linear Search is the simplest search algorithm. It involves traversing through each element 
+of the array sequentially until the desired element is found or the end of the array is reached.
+
+1. Start at the first element of the array.
+2. Compare the current element with the target value.
+3. If they match, return the index of the current element.
+4. If they don’t match, move to the next element.
+5. If the target is not found by the end of the array, return an indicator (e.g., `-1` or a message) to signify the target is not in the array.
+
+### Implementation in Java
+```java
+public class LinearSearch {
+    public static int linearSearch(int[] array, int target) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == target) {
+                return i; // Return index if target is found
+            }
+        }
+        return -1; // Return -1 if target is not found
+    }
+
+    public static void main(String[] args) {
+        int[] array = {10, 20, 30, 40, 50};
+        int target = 30;
+        int result = linearSearch(array, target);
+    }
+}
+```
+
+### Time Complexity
+
+1. Best Case:  
+   - The target is at the first position.  
+   - Time Complexity: `O(1)`.
+
+2. Worst Case:  
+   - The target is at the last position, or not in the array.  
+   - Time Complexity: `O(n)`.
+
+3. Average Case:  
+   - The target is somewhere in the middle of the array.  
+   - Time Complexity: `O(n)`.
+
+### Space Complexity
+- Auxiliary Space: `O(1)`  
+  No extra space is used except for a few variables.
+
+### Advantages
+1. Simple to implement.
+2. Works on both sorted and unsorted arrays.
+3. No additional memory is required.
+
+### Disadvantages
+1. Inefficient for large datasets due to `O(n)` complexity.
+2. Better alternatives like Binary Search exist for sorted arrays.
+
+### Practice Problems
+Q. Implement Linear Search on a 2D array.
+int arr[][] = { { 3, 12, 9 }, { 5, 2, 89 }, { 90, 45, 22 } };
+int target = 89;
+
+for(int i=0; i<arr.length; i++){
+	for(int j=0; j<arr[i].length; j++){
+		if(arr[i][j] == target)
+			return new int[] {i, j};
+	}
+}
+
+
+### Binary Search Algorithm
+
+Binary Search is an efficient searching algorithm that works on sorted arrays. 
+It repeatedly divides the search interval in half until the target value is found or the interval is empty.
+
+1. Precondition:
+   - The array must be sorted.
+2. Steps:
+   - Define the search range with two pointers: `low` (start of the array) and `high` (end of the array).
+   - Calculate the middle index:  
+		mid = low + (high - low) / 2
+   - Compare the middle element with the target:
+     - If it matches, return the index.
+     - If the target is smaller, search in the left half (`high = mid - 1`).
+     - If the target is larger, search in the right half (`low = mid + 1`).
+   - Repeat until the target is found or the range becomes invalid (`low > high`).
+
+### Implementation in Java
+```java
+public class BinarySearch {
+    public static int binarySearch(int[] array, int target) {
+        int low = 0;
+        int high = array.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2; // Calculate the mid index
+            
+            if (array[mid] == target) {
+                return mid; // Target found
+            } else if (array[mid] < target) {
+                low = mid + 1; // Search in the right half
+            } else {
+                high = mid - 1; // Search in the left half
+            }
+        }
+
+        return -1; // Target not found
+    }
+
+    public static void main(String[] args) {
+        int[] array = {10, 20, 30, 40, 50};
+        int target = 30;
+        int result = binarySearch(array, target);
+    }
+}
+```
+
+### Time Complexity
+1. Best Case:  
+   - The target is found in the middle of the first iteration.  
+   - Time Complexity: `O(1)`.
+
+2. Worst Case:  
+   - The search interval is halved repeatedly until the target is found or the array is fully traversed.  
+   - Time Complexity: O(log n), where (n) is the size of the array.
+
+### Space Complexity
+- Auxiliary Space:  
+  - Iterative Binary Search: `O(1)` (no extra space).  
+  - Recursive Binary Search: `O(log n)` (stack space due to recursion).
+
+### Advantages
+1. Highly efficient for large datasets compared to Linear Search.
+2. Performs significantly fewer comparisons.
+
+### Disadvantages
+1. Requires the array to be sorted.
+2. Not suitable for unsorted arrays or datasets.
+
+### Practice Problems
+1. Implement Binary Search using recursion.
+2. Write a program to find the first and last occurrence of a target in a sorted array.
+3. Use Binary Search to find the square root of a number (integer part only).
+4. Implement Binary Search to search in a rotated sorted array.
+
+
+### Bubble Sort Algorithm
+
+Bubble Sort is a simple sorting algorithm that repeatedly steps through the list, 
+compares adjacent elements, and swaps them if they are in the wrong order. 
+This process is repeated until the list is sorted.
+
+---
+
+### How Bubble Sort Works
+1. Start at the beginning of the array.
+2. Compare the first two elements:
+   - If the first is greater than the second, swap them.
+3. Move to the next pair of elements and repeat the process.
+4. At the end of each pass through the array:
+   - The largest unsorted element "bubbles up" to its correct position.
+5. Repeat the process for the remaining unsorted elements until no swaps are needed.
+
+### Algorithm (Step-by-Step)
+
+1. For ( n ) elements, you need at most ( n - 1 ) passes.
+2. After each pass, the largest element in the unsorted part of the array is sorted and placed in its correct position.
+
+### Time Complexity
+- Best Case: O(n) (when the array is already sorted, and no swaps are needed).
+- Worst Case: O(n^2) (when the array is sorted in reverse order).
+- Average Case: O(n^2).
+
+### Space Complexity
+- O(1) (in-place sorting, no additional memory required).
+
+### Bubble Sort Implementation in Java
+Here is the implementation of Bubble Sort:
+
+```java
+import java.util.Arrays;
+
+public class BubbleSort {
+    public static void bubbleSort(int[] array) {
+        int n = array.length;
+        boolean swapped;
+
+        for (int i = 0; i < n - 1; i++) { // Pass through the array
+            swapped = false;
+
+            // Compare adjacent elements
+            for (int j = 0; j < n - 1 - i; j++) { // Last `i` elements are already sorted
+                if (array[j] > array[j + 1]) {
+                    // Swap if the current element is greater than the next
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+
+                    swapped = true; // Indicate that a swap occurred
+                }
+            }
+
+            // If no swaps occurred in this pass, the array is already sorted
+            if (!swapped) {
+                break;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] array = {64, 34, 25, 12, 22, 11, 90};
+
+
+        System.out.println("Unsorted array: " + Arrays.toString(array));
+        bubbleSort(array);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+}
+```
+---
+
+### Selection Sort Algorithm
+
+Selection Sort is a simple sorting algorithm where the smallest (or largest) element is 
+repeatedly selected from the unsorted part of the array and moved to the sorted part.
+
+### How Selection Sort Works
+1. Divide the array into two parts:
+   - Sorted part: Initially empty.
+   - Unsorted part: Contains the entire array at the beginning.
+2. In each iteration:
+   - Find the smallest element in the unsorted part.
+   - Swap it with the first element of the unsorted part.
+3. Expand the sorted part by one and reduce the unsorted part.
+4. Repeat until the entire array is sorted.
+
+### Algorithm (Step-by-Step)
+1. Start with the first element.
+2. Find the smallest element in the remaining unsorted part.
+3. Swap the smallest element with the current element.
+4. Move to the next element and repeat until the array is sorted.
+
+### Time Complexity
+- Best Case: O(n^2) (even if the array is already sorted).
+- Worst Case: O(n^2) (when the array is sorted in reverse order).
+- Average Case: O(n^2)
+
+### Space Complexity
+- O(1) (in-place sorting, no extra memory required).
+
+### Implementation in Java
+
+Here’s the implementation of Selection Sort:
+
+```java
+import java.util.Arrays;
+
+public class SelectionSort {
+    public static void selectionSort(int[] array) {
+        int n = array.length;
+
+        for (int i = 0; i < n - 1; i++) {
+            // Assume the current index is the minimum
+            int minIndex = i;
+
+            // Find the index of the smallest element in the unsorted part
+            for (int j = i + 1; j < n; j++) {
+                if (array[j] < array[minIndex]) {
+                    minIndex = j;
+                }
+            }
+
+            // Swap the smallest element with the first unsorted element
+            int temp = array[minIndex];
+            array[minIndex] = array[i];
+            array[i] = temp;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] array = {64, 25, 12, 22, 11};
+
+        System.out.println("Unsorted array: " + Arrays.toString(array));
+        selectionSort(array);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+}
+```
+
+### How the Code Works
+1. The outer loop iterates through the array, treating each element as the first unsorted element.
+2. The inner loop finds the smallest element in the unsorted portion of the array.
+3. After finding the smallest element, it swaps it with the first unsorted element.
+
+### Key Points
+1. Selection Sort is not stable, meaning the relative order of equal elements might not be preserved.
+2. It is useful when memory usage is a concern (since it doesn’t require extra memory).
+3. Its O(n^2) complexity makes it inefficient for large datasets.
+
+---
+
+### Insertion Sort Algorithm
+
+Insertion Sort is a simple and intuitive sorting algorithm that works similarly to how we sort playing cards in our hands. 
+It builds the sorted array one element at a time by comparing and inserting elements into their correct position.
+
+### How Insertion Sort Works
+1. Start with the second element (index 1) and compare it with the elements in the sorted part (elements to its left).
+2. Insert the current element into its correct position in the sorted part.
+3. Repeat this process for all remaining elements in the array.
+
+
+### Steps (High-Level)
+1. Treat the first element as already sorted.
+2. For each subsequent element:
+   - Compare it with the elements in the sorted part.
+   - Shift the larger elements to the right to make space for the current element.
+   - Insert the current element in the correct position.
+
+
+### Algorithm
+
+- Outer loop: Iterates through each element starting from the second element.
+- Inner loop: Moves the current element to its correct position in the sorted part by comparing it with elements to its left.
+
+### Implementation in Java
+
+```java
+import java.util.Arrays;
+
+public class InsertionSort {
+    public static void insertionSort(int[] array) {
+        int n = array.length;
+
+        for (int i = 1; i < n; i++) {
+            int key = array[i]; // Current element to be inserted
+            int j = i - 1;
+
+            // Move elements of array[0..i-1] that are greater than key
+            // to one position ahead of their current position
+            while (j >= 0 && array[j] > key) {
+                array[j + 1] = array[j];
+                j--;
+            }
+
+            // Insert the key into its correct position
+            array[j + 1] = key;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] array = {64, 25, 12, 22, 11};
+
+        System.out.println("Unsorted array: " + Arrays.toString(array));
+        insertionSort(array);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+}
+```
+
+### How the Code Works
+1. The outer loop starts with the second element (index 1).
+2. The inner loop shifts elements larger than the current element (`key`) one position to the right.
+3. After the correct position is found, the current element is inserted.
+
+
+### Key Features of Insertion Sort
+1. Type: Comparison-based, in-place sorting algorithm.
+2. Stability: It is stable, meaning it preserves the relative order of equal elements.
+3. Efficiency:
+   - Best for small datasets or nearly sorted arrays.
+   - Performs poorly on large datasets due to its \( O(n^2) \) complexity in the worst case.
+
+
+### Time Complexity
+1. Best Case: O(n) 
+   - Happens when the array is already sorted. Each element is compared only once.
+2. Worst Case: O(n^2)
+   - Happens when the array is sorted in reverse order. Each element is compared to all previous elements.
+3. Average Case: O(n^2)  
+   - Comparisons depend on the number of inversions in the array.
+
+### Space Complexity
+- O(1) : In-place algorithm that does not require additional memory for sorting.
+
+
+### Advantages of Insertion Sort
+1. Simple Implementation: Easy to code and understand.
+2. Efficient for Small or Nearly Sorted Arrays: Performs well when the array is small or only a few elements are unsorted.
+3. In-Place Sorting: Does not require extra memory.
+4. Stable Algorithm: Keeps the relative order of duplicate elements.
+
+### Disadvantages of Insertion Sort
+1. Inefficient for Large Arrays: O(n^2) makes it impractical for large datasets.
+2. High Number of Comparisons: Even if the array is partially sorted, comparisons are still necessary for all elements.
+
+
+---
+
+### What is Quick Sort?
+
+Quick Sort is a divide-and-conquer algorithm that:
+1. Picks an element as a pivot.
+2. Partitions the array around the pivot so that:
+   - All elements smaller than the pivot come before it.
+   - All elements greater than the pivot come after it.
+3. Recursively applies the same steps to the sub-arrays.
+
+
+### Steps of Quick Sort
+1. Choose a Pivot: This can be the first element, last element, middle element, or a random element.
+2. Partition the Array:
+   - Rearrange the array so elements smaller than the pivot go to its left, and elements larger go to its right.
+3. Recursively Apply Quick Sort:
+   - Repeat the process for the left and right sub-arrays.
+
+
+### Pseudocode
+```text
+QuickSort(arr, low, high):
+    if low < high:
+        pivotIndex = Partition(arr, low, high)
+        QuickSort(arr, low, pivotIndex - 1)  // Sort left sub-array
+        QuickSort(arr, pivotIndex + 1, high) // Sort right sub-array
+```
+
+### Partition Function
+1. Select a pivot.
+2. Rearrange the array so:
+   - Elements smaller than the pivot are on the left.
+   - Elements larger than the pivot are on the right.
+3. Return the index of the pivot after partitioning.
+
+
+### Implementation in Java
+
+```java
+public class QuickSort {
+
+    // Main function to call QuickSort
+    public static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            // Partition the array and get the pivot index
+            int pivotIndex = partition(arr, low, high);
+            
+            // Recursively sort left and right sub-arrays
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    // Partition function
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high]; // Choose the last element as the pivot
+        int i = low - 1; // Pointer for the smaller element
+
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                // Swap arr[i] and arr[j]
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+
+        // Swap the pivot element with the element at i + 1
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+
+        return i + 1; // Return the index of the pivot
+    }
+
+    // Test the algorithm
+    public static void main(String[] args) {
+        int[] arr = {10, 80, 30, 90, 40, 50, 70};
+        System.out.println("Original Array: " + java.util.Arrays.toString(arr));
+        
+        quickSort(arr, 0, arr.length - 1);
+        
+        System.out.println("Sorted Array: " + java.util.Arrays.toString(arr));
+    }
+}
+```
+
+### Time Complexity
+- Best Case: O(n log n) (balanced partitioning).
+- Average Case: O(n log n).
+- Worst Case: O(n^2) (highly unbalanced, e.g., already sorted array with poor pivot selection).
+
+
+### Space Complexity
+- \(O(\log n)\) for recursive stack calls.
+
+
+### Advantages
+Efficient: Works well for large datasets.
+In-Place: Doesn’t require extra memory.
+Versatile: Performs well on average for most input cases.
+
+
+### Disadvantages
+Worst-Case Performance: O(n^2) for poor pivot choices (e.g., already sorted arrays).
+Not Stable: Relative order of duplicate elements is not preserved.
+
+
+---
+
+### What is Recursion?
+Recursion is a programming technique where a function calls itself to solve smaller instances of the same problem until it reaches a base case. 
+
+
+### Key Concepts in Recursion
+1. Base Case:  
+   - The condition where the recursion stops.
+   - Without it, the function would keep calling itself indefinitely, leading to a stack overflow error.
+
+2. Recursive Case:  
+   - The part of the function where the problem is broken down into smaller instances of the same problem.
+
+3. Call Stack:  
+   - Each recursive call adds a new frame to the stack. Once the base case is reached, the stack unwinds as the function calls are resolved.
+
+
+### Structure of a Recursive Function
+```java
+void recursiveFunction(parameters) {
+    // Base case: Condition to stop recursion
+    if (someCondition) {
+        return;
+    }
+
+    // Recursive case: Call the function with modified parameters
+    recursiveFunction(modifiedParameters);
+}
+```
+
+### Simple Example: Factorial
+The factorial of a number \( n \) is defined as:
+ n! = n * (n-1) * (n-2) . . * 1
+
+#### Recursive Implementation
+```java
+public class Factorial {
+    public static int factorial(int n) {
+        // Base case
+        if (n == 0 || n == 1) {
+            return 1;
+        }
+        // Recursive case
+        return n * factorial(n - 1);
+    }
+
+    public static void main(String[] args) {
+        int number = 5;
+        System.out.println("Factorial of " + number + " is: " + factorial(number));
+    }
+}
+```
+
+---
+
+### What is Merge Sort?
+
+- Merge Sort is a divide-and-conquer algorithm:
+  1. Divide: Split the array into two halves.
+  2. Conquer: Recursively sort each half.
+  3. Combine: Merge the two sorted halves into a single sorted array.
+
+
+### Key Characteristics
+- Stable Sort: Retains the relative order of equal elements.
+- Divide-and-Conquer approach.
+- Suitable for large datasets due to its guaranteed \( O(n \log n) \) time complexity.
+
+
+### Steps to Perform Merge Sort
+
+1. Divide:
+   - Split the array into two halves until each subarray has one element.
+2. Merge:
+   - Merge the two sorted halves by comparing elements from each half.
+   
+
+### Algorithm
+
+#### Base Case:
+- If the array has 1 or 0 elements, it’s already sorted.
+
+#### Recursive Case:
+1. Divide the array into two halves.
+2. Recursively sort both halves.
+3. Merge the sorted halves.
+
+// Find the middle point
+// Recursively sort the first and second halves
+// Merge the sorted halves
+// Calculate the Sizes of the two subarrays to be merged
+// Create temporary arrays
+// Copy data to temporary arrays
+// Merge the temporary arrays into our array
+// Copy remaining elements of leftArray, if any
+// Copy remaining elements of rightArray, if any
+
+
+### Implementation in Java
+
+```java
+import java.util.Arrays;
+
+public class MergeSort {
+
+    // Merge Sort function
+    public static void mergeSort(int[] array, int left, int right) {
+        if (left < right) {
+            // Find the middle point
+            int mid = left + (right - left) / 2;
+
+            // Recursively sort the first and second halves
+            mergeSort(array, left, mid);
+            mergeSort(array, mid + 1, right);
+
+            // Merge the sorted halves
+            merge(array, left, mid, right);
+        }
+    }
+
+    // Merge function to combine two sorted halves
+    private static void merge(int[] array, int left, int mid, int right) {
+        // Sizes of the two subarrays to be merged
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        // Create temporary arrays
+        int[] leftArray = new int[n1];
+        int[] rightArray = new int[n2];
+
+        // Copy data to temporary arrays
+        for (int i = 0; i < n1; i++) {
+            leftArray[i] = array[left + i];
+        }
+        for (int j = 0; j < n2; j++) {
+            rightArray[j] = array[mid + 1 + j];
+        }
+
+        // Merge the temporary arrays
+
+        int i = 0, j = 0; // Initial indices of left and right subarrays
+        int k = left;     // Initial index of merged array
+
+        while (i < n1 && j < n2) {
+            if (leftArray[i] <= rightArray[j]) {
+                array[k] = leftArray[i];
+                i++;
+            } else {
+                array[k] = rightArray[j];
+                j++;
+            }
+            k++;
+        }
+
+        // Copy remaining elements of leftArray, if any
+        while (i < n1) {
+            array[k] = leftArray[i];
+            i++;
+            k++;
+        }
+
+        // Copy remaining elements of rightArray, if any
+        while (j < n2) {
+            array[k] = rightArray[j];
+            j++;
+            k++;
+        }
+    }
+
+    // Main method to test Merge Sort
+    public static void main(String[] args) {
+        int[] array = {12, 11, 13, 5, 6, 7};
+        System.out.println("Original Array: " + Arrays.toString(array));
+
+        mergeSort(array, 0, array.length - 1);
+
+        System.out.println("Sorted Array: " + Arrays.toString(array));
+    }
+}
+```
+
+### Example Walkthrough
+#### Input:
+```java
+int[] array = {12, 11, 13, 5, 6, 7};
+```
+
+#### Process:
+1. Divide the array:
+   - Left: `{12, 11, 13}`
+   - Right: `{5, 6, 7}`
+
+2. Sort each half:
+   - `{12, 11, 13}` → `{11, 12, 13}`
+   - `{5, 6, 7}` → `{5, 6, 7}`
+
+3. Merge:
+   - `{11, 12, 13}` and `{5, 6, 7}` → `{5, 6, 7, 11, 12, 13}`
+
+### Output
+```
+Original Array: [12, 11, 13, 5, 6, 7]
+Sorted Array: [5, 6, 7, 11, 12, 13]
+```
+
+### Time Complexity
+1. Divide Step: O(log n) as the array is divided into halves.
+2. Merge Step: O(n) for merging two halves.
+
+Total Time Complexity: O(n log n).
+
+### Space Complexity
+- Requires additional space for temporary arrays: O(n).
+
+---
+
+
+### LinkedList Data Structure
+A Linked List is a linear data structure where elements (called nodes) are linked using pointers. 
+Unlike arrays, linked lists do not require contiguous memory allocation.
+
+
+### Types of Linked Lists
+1. Singly Linked List – Each node has a reference to the next node.
+2. Doubly Linked List – Each node has references to both the previous and next nodes.
+3. Circular Linked List – The last node links back to the first node.
+
+
+### Basic Structure of a Node
+```java
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+```
+
+### Basic Structure of a LinkedList
+```java
+class LinkedList {
+    
+	Node head = null;   // Head of the list
+	
+	public void add(int data){
+		...
+	}
+}
+```
+
+### Advantages of Linked Lists
+✔ Dynamic Size – No need to define the size beforehand.  
+✔ Efficient Insertions/Deletions – Faster than arrays for adding/removing elements at the beginning or middle.
+
+### Disadvantages
+❌ Extra Memory Usage – Each node needs extra space for pointers.  
+❌ Slower Access Time – Unlike arrays, you can’t directly access elements using an index.
+
+
+### Common Linked List Operations
+1. Insertion (At beginning, end, or middle)
+2. Deletion (From beginning, end, or middle)
+3. Search an Element
+4. Reverse the List
+5. Detect a Loop
+
+
+### Singly Linked List Implementation in Java
+
+### 1. Node Structure
+Each node contains:
+- `data` → Stores the value.
+- `next` → Points to the next node.
+
+```java
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+```
+
+### 2. Linked List Class
+This class will support basic operations:
+- Insert at the end
+- Insert at the beginning
+- Delete a node
+- Display the list
+
+```java
+class LinkedList {
+    Node head; // Head of the list
+
+    // Insert at the end
+    void insertAtEnd(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+            return;
+        }
+        Node temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+        temp.next = newNode;
+    }
+
+    // Insert at the beginning
+    void insertAtBeginning(int data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    // Delete a node
+    void deleteNode(int key) {
+        Node temp = head, prev = null;
+
+        // If the head node is the key
+        if (temp != null && temp.data == key) {
+            head = temp.next;
+            return;
+        }
+
+        // Search for the key
+        while (temp != null && temp.data != key) {
+            prev = temp;
+            temp = temp.next;
+        }
+
+        // If the key was not found
+        if (temp == null) return;
+
+        // Remove the node
+        prev.next = temp.next;
+    }
+
+    // Display the linked list
+    void display() {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.data + " -> ");
+            temp = temp.next;
+        }
+        System.out.println("null");
+    }
+}
+```
+
+### Time Complexity of Operations
+| Operation         	| Time Complexity 	|
+|-----------------------|-------------------|
+| Insert at Beginning 	|       O(1) 		|
+| Insert at End 		|       O(n) 		|
+| Delete a Node 		|       O(n) 		|
+| Search a Node 		|       O(n) 		|
+| Display List 			|       O(n) 		|
+
+---
+
+
+### Stack Data Structure
+
+A Stack is a linear data structure that follows the Last In, First Out (LIFO) principle. 
+The last element added is the first one to be removed.
+
+### Key Stack Operations
+1. Push (x) → Insert an element `x` onto the stack.
+2. Pop () → Remove the top element.
+3. Peek () → Get the top element without removing it.
+4. isEmpty () → Check if the stack is empty.
+
+
+### Implementation in Java
+#### 1. Using an Array
+```java
+class StackArray {
+    int top;
+    int[] stack;
+    int capacity;
+
+    StackArray(int size) {
+        stack = new int[size];
+        capacity = size;
+        top = -1;
+    }
+
+    // Push operation
+    void push(int data) {
+        if (top == capacity - 1) {
+            System.out.println("Stack Overflow!");
+            return;
+        }
+        stack[++top] = data;
+    }
+
+    // Pop operation
+    int pop() {
+        if (top == -1) {
+            System.out.println("Stack Underflow!");
+            return -1;
+        }
+        return stack[top--];
+    }
+
+    // Peek operation
+    int peek() {
+        if (top == -1) {
+            System.out.println("Stack is Empty!");
+            return -1;
+        }
+        return stack[top];
+    }
+
+    // Check if the stack is empty
+    boolean isEmpty() {
+        return top == -1;
+    }
+}
+
+public class StackDemo {
+    public static void main(String[] args) {
+        StackArray stack = new StackArray(5);
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        System.out.println(stack.pop());  // Output: 30
+        System.out.println(stack.peek()); // Output: 20
+    }
+}
+```
+
+#### 2. Using Linked List (Dynamic Stack)
+```java
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class StackLinkedList {
+    Node top;
+
+    // Push operation
+    void push(int data) {
+        Node newNode = new Node(data);
+        newNode.next = top;
+        top = newNode;
+    }
+
+    // Pop operation
+    int pop() {
+        if (top == null) {
+            System.out.println("Stack Underflow!");
+            return -1;
+        }
+        int value = top.data;
+        top = top.next;
+        return value;
+    }
+
+    // Peek operation
+    int peek() {
+        if (top == null) {
+            System.out.println("Stack is Empty!");
+            return -1;
+        }
+        return top.data;
+    }
+
+    // Check if the stack is empty
+    boolean isEmpty() {
+        return top == null;
+    }
+}
+
+public class StackLinkedListDemo {
+    public static void main(String[] args) {
+        StackLinkedList stack = new StackLinkedList();
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        System.out.println(stack.pop());  // Output: 30
+        System.out.println(stack.peek()); // Output: 20
+    }
+}
+```
+
+### Time Complexity
+| Operation | Time Complexity |
+|-----------|-----------------|
+| Push 		|      O(1)       |
+| Pop 		|      O(1)       |
+| Peek 		|      O(1)       |
+
+---
+
+
+### Queue Data Structure
+A Queue is a linear data structure that follows the First In, First Out (FIFO) principle. 
+The element added first is the first one to be removed.
+
+
+### Key Queue Operations
+1. Enqueue (x) → Insert an element `x` at the rear.
+2. Dequeue () → Remove an element from the front.
+3. Peek () → Get the front element without removing it.
+4. isEmpty () → Check if the queue is empty.
+
+
+## 1. Implementation Using an Array
+```java
+class QueueArray {
+    int front, rear, size;
+    int[] queue;
+
+    QueueArray(int capacity) {
+        queue = new int[capacity];
+        size = capacity;
+        front = 0;
+        rear = -1;
+    }
+
+    // Enqueue operation
+    void enqueue(int data) {
+        if (rear == size - 1) {
+            System.out.println("Queue Overflow!");
+            return;
+        }
+        queue[++rear] = data;
+    }
+
+    // Dequeue operation
+    int dequeue() {
+        if (front > rear) {
+            System.out.println("Queue Underflow!");
+            return -1;
+        }
+        return queue[front++];
+    }
+
+    // Peek operation
+    int peek() {
+        if (front > rear) {
+            System.out.println("Queue is Empty!");
+            return -1;
+        }
+        return queue[front];
+    }
+
+    // Check if queue is empty
+    boolean isEmpty() {
+        return front > rear;
+    }
+}
+
+public class QueueArrayDemo {
+    public static void main(String[] args) {
+        QueueArray queue = new QueueArray(5);
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+
+        System.out.println(queue.dequeue());  // Output: 10
+        System.out.println(queue.peek());     // Output: 20
+    }
+}
+```
+
+## 2. Implementation Using Linked List (Dynamic Queue)
+```java
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class QueueLinkedList {
+    Node front, rear;
+
+    // Enqueue operation
+    void enqueue(int data) {
+        Node newNode = new Node(data);
+        if (rear == null) {
+            front = rear = newNode;
+            return;
+        }
+        rear.next = newNode;
+        rear = newNode;
+    }
+
+    // Dequeue operation
+    int dequeue() {
+        if (front == null) {
+            System.out.println("Queue Underflow!");
+            return -1;
+        }
+        int value = front.data;
+        front = front.next;
+        if (front == null) rear = null;
+        return value;
+    }
+
+    // Peek operation
+    int peek() {
+        if (front == null) {
+            System.out.println("Queue is Empty!");
+            return -1;
+        }
+        return front.data;
+    }
+
+    // Check if queue is empty
+    boolean isEmpty() {
+        return front == null;
+    }
+}
+
+public class QueueLinkedListDemo {
+    public static void main(String[] args) {
+        QueueLinkedList queue = new QueueLinkedList();
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+
+        System.out.println(queue.dequeue());  // Output: 10
+        System.out.println(queue.peek());     // Output: 20
+    }
+}
+```
+
+### Time Complexity
+| Operation | Time Complexity |
+|-----------|-----------------|
+| Enqueue 	|        O(1)     |
+| Dequeue 	|        O(1)     |
+| Peek 		|        O(1)     |
+
+---
+
+### Circular Queue Data Structure
+A Circular Queue is an advanced version of a regular queue where the last position is connected back to the first position to form a circle. 
+It solves the problem of unused space in a normal queue when elements are dequeued.
+
+
+### Why Circular Queue?
+✔ Overcomes the limitation of a standard queue where space is wasted when elements are dequeued.  
+✔ Allows efficient use of memory by reusing vacant positions. 
+
+
+### Implementing Circular Queue Using Linked List  
+
+Yes! We can implement a Circular Queue using a Linked List, where the last node's `next` 
+pointer points back to the first node, forming a circular connection.
+
+### Why Use a Linked List for Circular Queue?  
+✔ Dynamic size: Unlike an array, a linked list does not have a fixed capacity.  
+✔ Efficient memory usage: We can dynamically allocate memory as needed.  
+✔ No wasted space: Unlike an array-based queue, there’s no need to shift elements.
+
+## Circular Queue Implementation Using Linked List in Java
+```java
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class CircularQueueLinkedList {
+    Node front, rear;
+
+    // Check if queue is empty
+    boolean isEmpty() {
+        return front == null;
+    }
+
+    // Enqueue operation
+    void enqueue(int data) {
+        Node newNode = new Node(data);
+        if (isEmpty()) {
+            front = rear = newNode;
+            rear.next = front;  // Make it circular
+        } else {
+            rear.next = newNode;
+            rear = newNode;
+            rear.next = front;  // Maintain circular connection
+        }
+    }
+
+    // Dequeue operation
+    int dequeue() {
+        if (isEmpty()) {
+            System.out.println("Queue is Empty!");
+            return -1;
+        }
+        int value = front.data;
+        if (front == rear) {  // If only one element was present
+            front = rear = null;
+        } else {
+            front = front.next;
+            rear.next = front;  // Maintain circular connection
+        }
+        return value;
+    }
+
+    // Peek operation
+    int peek() {
+        if (isEmpty()) {
+            System.out.println("Queue is Empty!");
+            return -1;
+        }
+        return front.data;
+    }
+
+    // Display queue elements
+    void display() {
+        if (isEmpty()) {
+            System.out.println("Queue is Empty!");
+            return;
+        }
+        Node temp = front;
+        do {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        } while (temp != front);
+        System.out.println();
+    }
+}
+
+public class CircularQueueLinkedListDemo {
+    public static void main(String[] args) {
+        CircularQueueLinkedList queue = new CircularQueueLinkedList();
+
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+        queue.enqueue(40);
+        queue.enqueue(50);
+
+        queue.display(); // Output: 10 20 30 40 50
+
+        System.out.println("Dequeued: " + queue.dequeue()); // Output: 10
+        queue.display(); // Output: 20 30 40 50
+
+        queue.enqueue(60);
+        queue.display(); // Output: 20 30 40 50 60
+
+        System.out.println("Front Element: " + queue.peek()); // Output: 20
+    }
+}
+```
+
+### Time Complexity
+| Operation | Time Complexity |
+|-----------|-----------------|
+| Enqueue 	|       O(1)      |
+| Dequeue 	|       O(1)      |
+| Peek 		|       O(1)      |
+
+
+### Key Differences Between Queue and Circular Queue
+| Feature 				| Normal Queue 								| Circular Queue 					|
+|-----------------------|-------------------------------------------|-----------------------------------|
+| Memory Usage 			| Wastes space when elements are dequeued 	| Efficient, reuses space 			|
+| Rear Movement 		| Moves in one direction 					| Moves circularly 					|
+| Overflow Condition 	| When `rear == size - 1` 					| When `(rear + 1) % size == front` |
+
+---
+
+
+### Tree Data Structure
+
+A Tree is a hierarchical data structure that consists of nodes connected by edges. 
+It is widely used in searching, sorting, and organizing hierarchical data such as file systems, databases, and AI decision trees.
+
+
+## Basic Terminology
+1. Root → The topmost node of the tree.
+2. Parent Node → A node that has children.
+3. Child Node → A node that has a parent.
+4. Leaf Node → A node that has no children.
+5. Edge → A connection between two nodes.
+6. Height → The longest path from the root to a leaf.
+7. Depth → The number of edges from the root to a node.
+8. Subtree → A smaller tree within a tree.
+
+
+## Types of Trees
+1. Binary Tree → Each node has at most two children.
+2. Binary Search Tree (BST) → A binary tree where left child < root < right child.
+3. Balanced Tree → A tree where the height difference between left and right subtrees is minimal (e.g., AVL Tree, Red-Black Tree).
+4. Heap → A tree used for priority queues.
+5. Trie (Prefix Tree) → A tree used for storing strings efficiently.
+6. N-ary Tree → A tree where each node can have up to N children.
+
+
+### Time Complexity of Tree Operations
+| Operation | Average Case | Worst Case          |
+|-----------|--------------|---------------------|
+| Search    |    O(log N)  |  O(N) (Skewed Tree) |
+| Insert    |    O(log N)  |  O(N)               |
+| Delete    |    O(log N)  |  O(N)               |
+
+
+### Binary Search Tree (BST)
+
+A Binary Search Tree (BST) is a special type of Binary Tree where:  
+1. The left subtree contains nodes with values less than the root.  
+2. The right subtree contains nodes with values greater than the root.  
+3. Both left and right subtrees are also BSTs.
+
+
+### BST Properties
+✔ Efficient Searching: Average time complexity is O(log N).  
+✔ Ordered Structure: Enables efficient searching, insertion, and deletion.  
+✔ No Duplicate Values: (By default, but can be modified to allow duplicates).
+
+
+## BST Operations and Implementation in Java
+
+```java
+class Node {
+    int data;
+    Node left, right;
+
+    public Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+class BST {
+    Node root;
+
+    // Insert a node in BST
+    Node insert(Node root, int value) {
+        if (root == null) {
+            return new Node(value);
+        }
+        if (value < root.data) {
+            root.left = insert(root.left, value);
+        } else if (value > root.data) {
+            root.right = insert(root.right, value);
+        }
+        return root;
+    }
+
+    // Inorder Traversal (Left -> Root -> Right)
+    void inorder(Node root) {
+        if (root != null) {
+            inorder(root.left);
+            System.out.print(root.data + " ");
+            inorder(root.right);
+        }
+    }
+	
+	// Search for a value in BST
+	boolean search(Node root, int key) {
+		if (root == null) return false;
+		if (root.data == key) return true;
+		return key < root.data ? search(root.left, key) : search(root.right, key);
+	}
+	
+	// Delete a Node from BST
+	Node delete(Node root, int key) {
+		if (root == null) return root;
+
+		if (key < root.data) {
+			root.left = delete(root.left, key);
+		} else if (key > root.data) {
+			root.right = delete(root.right, key);
+		} else {
+			// Node with only one child or no child
+			if (root.left == null) return root.right;
+			else if (root.right == null) return root.left;
+
+			// Node with two children: Get the inorder successor (smallest in right subtree)
+			root.data = minValue(root.right);
+			root.right = delete(root.right, root.data);
+		}
+		return root;
+	}
+
+	int minValue(Node root) {
+		int minVal = root.data;
+		while (root.left != null) {
+			minVal = root.left.data;
+			root = root.left;
+		}
+		return minVal;
+	}
+
+    public static void main(String[] args) {
+        BST tree = new BST();
+        tree.root = tree.insert(tree.root, 50);
+        tree.insert(tree.root, 30);
+        tree.insert(tree.root, 70);
+        tree.insert(tree.root, 20);
+        tree.insert(tree.root, 40);
+        tree.insert(tree.root, 60);
+        tree.insert(tree.root, 80);
+
+        System.out.print("Inorder Traversal: ");
+        tree.inorder(tree.root); // Output: 20 30 40 50 60 70 80
+    }
+}
+```
+
+### BST Traversals
+| Traversal | Order 			  | Output (50,30,70,20,40,60,80) |
+|-----------|---------------------|-------------------------------|
+| Inorder 	| Left → Root → Right |    (20 30 40 50 60 70 80) 	  |
+| Preorder 	| Root → Left → Right |    (50 30 20 40 70 60 80)     |
+| Postorder | Left → Right → Root |    (20 40 30 60 80 70 50)     |
+
+
+### Time Complexity of BST
+| Operation | Best Case | Worst Case (Skewed BST) |
+|-----------|-----------|-------------------------|
+| Insertion | O(log N) 	|         O(N)            |
+| Search 	| O(log N) 	|         O(N)            |
+| Deletion 	| O(log N) 	|         O(N)            |
+
+📌 Note: If the tree is unbalanced, the worst-case complexity is O(N). 
+To improve performance, we can use self-balancing trees like AVL Tree or Red-Black Tree.
+
+---

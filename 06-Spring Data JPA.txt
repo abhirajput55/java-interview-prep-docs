@@ -1,20 +1,22 @@
 Spring Data JPA
 
  1. What is Spring Data JPA?
-Answer:  
-Spring Data JPA is a part of the Spring Data family that provides an abstraction over the JPA (Java Persistence API) specification. It simplifies the development of data access layers by reducing boilerplate code through its repository abstraction, making it easier to interact with relational databases.
+  
+Spring Data JPA is a part of the Spring Data family that provides an abstraction over the JPA (Java Persistence API) specification. 
+It simplifies the development of data access layers by reducing boilerplate code through its repository abstraction, 
+making it easier to interact with relational databases.
 
 ---
 
  2. What is the difference between JPA and Hibernate?
-Answer:  
+  
 - JPA: It is a specification that defines the standard for ORM (Object-Relational Mapping) in Java. It does not provide any implementation.  
 - Hibernate: It is a popular JPA implementation that provides additional features like caching, lazy loading, and fetching strategies.
 
 ---
 
  3. What are the key interfaces provided by Spring Data JPA?
-Answer:  
+  
 - Repository: Base interface for all repositories.  
 - CrudRepository: Provides CRUD operations (save, findById, delete, etc.).  
 - PagingAndSortingRepository: Adds pagination and sorting capabilities.  
@@ -23,51 +25,41 @@ Answer:
 ---
 
  4. What is a Repository in Spring Data JPA? How do you define one?
-Answer:  
-A Repository in Spring Data JPA is an interface that acts as a mediator between the service layer and the database. It is defined by extending one of the base interfaces like `JpaRepository`.
-
-Example:
-```java
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-    List<Employee> findByDepartment(String department);
-}
-```
+  
+A Repository in Spring Data JPA is an interface that acts as a mediator between the service layer and the database. 
+It is defined by extending one of the base interfaces like `JpaRepository`.
 
 ---
 
  5. What is the significance of `@Entity` and `@Table` annotations?
-Answer:  
+  
 - @Entity: Marks a class as a JPA entity, allowing it to map to a database table.  
 - @Table: Allows customization of the table name and schema. By default, the table name is the same as the entity name.
 
-Example:
-```java
-@Entity
-@Table(name = "employees")
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String name;
-
-    // Getters and Setters
-}
-```
-
 ---
 
- 6. What are JPQL and Native Queries? How are they different?
-Answer:  
-- JPQL (Java Persistence Query Language): Object-oriented queries written in terms of the entity model.  
-  Example: `@Query("SELECT e FROM Employee e WHERE e.department = :department")`.  
-- Native Queries: SQL queries written directly in the database's SQL syntax.  
-  Example: `@Query(value = "SELECT * FROM employees WHERE department = :department", nativeQuery = true)`.
+Q. How can you override certain method in JPA using SQL?
+
+To override methods in JPA using SQL, we can use the @Query annotation in Spring Data JPA. 
+By default, Spring Data generates queries based on method names, but for more complex queries, we can specify custom JPQL or 
+native SQL queries using the @Query annotation. If we want to use native SQL, we can set the nativeQuery attribute to true. 
+Additionally, when we perform update or delete operations, we need to use the @Modifying annotation along with @Query. 
+This allows us to directly control the SQL execution, which is helpful when we need to optimize queries or use database-specific features.
+
+
+Q. What is difference between Native SQL and JPQL?
+
+JPQL (Java Persistence Query Language) where we can use entity names and field names to query the database.
+JPQL queries are portable across different databases because they are database independent. 
+
+On the other hand, Native SQL uses the actual SQL syntax used by the database. It works directly with tables and columns, and it’s database-specific. 
+Native SQL is useful when you need to use database-specific features or optimize queries that can't be expressed in JPQL. 
+While JPQL is more flexible and portable, Native SQL offers greater control over the specific SQL syntax and optimizations offered by the database.
 
 ---
 
  7. What is the difference between `@Query` and `NamedQuery`?
-Answer:  
+  
 - @Query: Used for defining a query at the method level in a repository.  
   Example:
   ```java
@@ -79,18 +71,17 @@ Answer:
   ```java
   @NamedQuery(name = "Employee.findByName", query = "SELECT e FROM Employee e WHERE e.name = :name")
   ```
-
 ---
 
  8. What is the difference between `save()` and `saveAndFlush()`?
-Answer:  
+  
 - save(): Saves the entity but doesn’t immediately flush changes to the database.  
 - saveAndFlush(): Saves the entity and immediately flushes the changes to the database, making them visible in the current transaction.
 
 ---
 
  9. What are Cascade Types in JPA? Explain with examples.
-Answer:  
+  
 Cascade types determine the behavior of related entities during persistence operations.
 
 - ALL: Propagates all operations.
@@ -109,7 +100,7 @@ private List<Employee> employees;
 ---
 
  10. What is Lazy Loading and Eager Loading in JPA?
-Answer:  
+  
 - Lazy Loading: Data is fetched only when it is accessed for the first time. It saves memory and improves performance.
 - Eager Loading: Data is fetched immediately along with the parent entity.  
 
@@ -122,7 +113,7 @@ private List<Employee> employees;
 ---
 
  11. What is the use of the `@Modifying` annotation in Spring Data JPA?
-Answer:  
+  
 The `@Modifying` annotation is used to modify data in the database (e.g., for update or delete queries). It works in conjunction with `@Query`.
 
 Example:
@@ -135,7 +126,7 @@ int updateSalary(@Param("id") Long id, @Param("salary") Double salary);
 ---
 
  12. How do you handle pagination and sorting in Spring Data JPA?
-Answer:  
+  
 Pagination and sorting are supported by extending `PagingAndSortingRepository` or `JpaRepository`.
 
 Example:
@@ -147,14 +138,14 @@ Page<Employee> employees = employeeRepository.findAll(pageable);
 ---
 
  13. What is the difference between `EntityManager` and `Hibernate Session`?
-Answer:  
+  
 - EntityManager: A JPA interface for managing entities.  
 - Session: A Hibernate-specific implementation of `EntityManager` that provides more features like Criteria API.
 
 ---
 
  14. Explain the `@OneToOne`, `@OneToMany`, `@ManyToOne`, and `@ManyToMany` relationships in JPA.
-Answer:  
+  
 - @OneToOne: One entity is associated with one other entity.  
 - @OneToMany: One entity is associated with multiple entities.  
 - @ManyToOne: Many entities are associated with one entity.  
@@ -169,7 +160,7 @@ private List<Employee> employees;
 ---
 
  15. What is the purpose of the `@Transactional` annotation?
-Answer:  
+  
 The `@Transactional` annotation manages database transactions automatically. It ensures ACID properties and rollback in case of exceptions.
 
 Example:
@@ -183,7 +174,7 @@ public void saveEmployee(Employee employee) {
 ---
 
  16. What are Projections in Spring Data JPA?
-Answer:  
+  
 Projections allow you to fetch only selected fields from the database instead of entire entities.
 
 Example:
@@ -198,8 +189,13 @@ List<EmployeeNameProjection> findAllBy();
 ---
 
  17. What is the purpose of the `@Embeddable` and `@Embedded` annotations?
-Answer:  
-These annotations are used for embedding one class into another.
+  
+The @Embeddable and @Embedded annotations in JPA are used to map reusable value objects within an entity. 
+@Embeddable is applied to a class to indicate that it can be embedded, while @Embedded is used in an entity to include an instance of the @Embeddable class. 
+
+For example, an Address class marked as @Embeddable can be embedded in multiple entities like Employee or Customer using @Embedded. 
+This approach promotes reusability, logical grouping of fields, and maintains a normalized database design. 
+Additionally, column mappings for embedded fields can be customized with @AttributeOverrides if needed.
 
 Example:
 ```java

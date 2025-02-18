@@ -1,0 +1,94 @@
+# Spring Security
+
+Q. What is spring security, how to implement it?
+
+Spring Security provides authentication and authorization services for Java-based applications. 
+It helps secure applications by handling concerns like user authentication, access control, and protection against common attacks like CSRF. 
+
+To implement Spring Security, first we need to add the spring-boot-starter-security dependency in our project. 
+Then we need to create a custom security configuration class, where we can configure authentication and authorization. 
+
+You can also create a custom UserDetailsService for database user authentication, password encoder like BCryptPasswordEncoder to store passwords securely. 
+If you’re building a REST API, you can use JWT tokens for stateless authentication.
+
+
+Q. How to implement authorization?
+
+For method-level authorization, Spring Security provides annotations like @PreAuthorize and @Secured, 
+which allow you to secure individual methods based on roles or authorities.
+
+
+Q. How authentication works internally in spring security?
+
+Authentication is the process of verifying the identity of a user. In Spring Security, authentication is typically implemented using username and password. 
+
+First request will go to the filter where request object is converted to authentication object and delegate it to AuthenticationManager.
+AuthenticationManager will go to ProviderManager where it calls the supports() method on each AuthenticationProvider. 
+If any AuthenticationProvider returns true then that AuthenticationProvider authenticate method will be called in which it uses UserDetailsService to load user from database
+and validate it with provided creadentials. If it valids then it set the authentication to true and returns back the authentication object to ProviderManager 
+and ProviderManager returns back that authentication object to filter where authentication will be set into SecurityContextHolder.
+
+
+Q. What is JWT token
+
+JWT (JSON Web Token) is a compact, URL-safe token used in stateless authentication. 
+which eliminates the need to store session data on server. 
+It consists of three parts:
+  - Header: Contains which token and signing algorithm (e.g., HS256) is used.
+  - Payload: Contains the claims such user information, roles and permissions.
+  - Signature: Contains the signed secret key with header and payload.
+
+
+Q. How JWT Token Authentication works?
+
+When a user logs in with there username and password the request goes to filter where filter will check if it is allowed url or not. 
+If it ia allowed then request will go to our authenticate API. 
+In authenticate API we need to authenticate the user by using AuthenticationManager authenticate method providing username and password.
+If it the user is successfully authenticated then we need to generates a JWT token containing the Algorithm Type, user's information in claims, which is signed with a secret key.
+This JWT token is returned to the client and it stores in localStorage or sessionStorage in the browser.
+
+After that for every request clients needs to send the JWT token in Authorization header which will be 
+validated in filter by extracting the token from request and validateToken method.
+After successful validation we can create the Authentication object and set it to SecurityContextHolder and move the request further to controller layer.
+
+
+Q. Where can we see JWT token in the UI?
+
+- JWT tokens are typically not displayed in the UI directly. Instead, they are stored in the browser’s `localStorage` or `sessionStorage`.
+- These storage options are used to persist the JWT token across page reloads or browser sessions.
+
+localStorage.setItem("jwtToken", <JWT-TOKEN>);
+
+
+Q. How JWT token refreshes if expired in a session?
+
+- JWT tokens usually have an expiration time set in the payload, defined in the `exp` claim (e.g., 1 hour). 
+Once the JWT token expires, the user can no longer make authenticated requests.
+  
+To handle expired tokens, we can implement a refresh token mechanism.
+- A refresh token is a long-lived token that is used to obtain a new JWT token when the old one expires.
+- When the JWT token expires, the client sends the refresh token to the server, which validates it. If valid, the server responds with a new JWT token and refresh token.
+ 
+Example of a refresh token endpoint:
+```java
+@PostMapping("/refresh")
+public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    String refreshToken = refreshTokenRequest.getRefreshToken();
+    if (isValid(refreshToken)) {
+        String newJwtToken = generateNewJwtToken(refreshToken);
+        return ResponseEntity.ok(new JwtResponse(newJwtToken));
+    }
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+}
+```
+
+
+23. How can you implement method-level security in a Spring Boot application?
+
+To implement method-level security in a Spring Boot application, you can use the @PreAuthorize or @PostAuthorize annotations provided by Spring Security. 
+
+Here's an example:
+ - Configure Spring Security in your application by including the necessary dependencies and configuration.
+ - Annotate the methods that require security checks with @PreAuthorize or @PostAuthorize.
+ - Specify the desired security expressions in the annotations to define the required conditions for method invocation.
+ - Spring Security will evaluate the expressions and allow or deny access to the methods based on the configured security rules.

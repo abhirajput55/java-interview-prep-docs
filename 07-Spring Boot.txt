@@ -1,139 +1,603 @@
-https://www.turing.com/interview-questions/spring-boot
 
-# Basic Spring Boot interview questions and answers #
+Part 1
 
 1. What is Spring Boot, and how does it differ from Spring Framework?
 
 Spring Boot is a framework designed to simplify the development of Spring-based applications. 
-It builds upon the Spring Framework, providing a convention-over-configuration approach and auto-configuration capabilities.
+It builds upon the Spring Framework. 
 
-Unlike the Spring Framework, which requires explicit configuration, 
-Spring Boot aims to minimize boilerplate code and provides defaults for various components. 
-This makes it easier to get started with Spring-based applications.
+In spring framework we need to do a lot of xml or java based configuration. 
+Also we need to add lots of dependencies and manage there version in pom.xml file.
+Also we need configure tomcat externally to deploy application.
 
-
-2. Explain the benefits of using Spring Boot for application development.
-
-Some benefits of using Spring Boot for application development include:
- - Simplified setup and configuration through auto-configuration and starter dependencies.
- - Reduced boilerplate code, enabling developers to focus more on application logic.
- - Embedded server support, allowing applications to be run as standalone JAR files.
- - Enhanced testability through the provision of t est utilities and annotations.
+Dependency Resolution feature avoid version conflicts of dependencies.
+Avoid additional configuration to minimize boilerplate code. 
+Provide support for embedded Tomcat/Jetty, allowing applications to be run as standalone JAR files.
+Provides production ready features like Actuator for monitoring and managing applications at runtime.
 
 
-3. What are the key features of Spring Boot?
+Q. What are the key features of Spring Boot?
 
-Key features of Spring Boot include:
  - Auto-configuration: Automatically configures Spring-based applications based on dependencies and defaults.
  - Starter dependencies: Pre-packaged dependencies that simplify the setup of specific application features or technologies.
- - Developer tools: Tools that enhance developer productivity such as automatic application restarts and live reload.
- - Actuator: Provides endpoints for monitoring and managing applications at runtime.
+ - Developer tools: Provide automatic application restarts and live reload.
+ - Actuator: Provides health and metrics endpoints for monitoring and managing applications at runtime.
 
 
-4. Explain the concept of Spring Boot starters and provide an example.
+Q. What are the components of the spring boot application?
 
-In the context of Spring Boot, Starters are a set of convenient dependency management providers that one can include in a Spring Boot application. 
-Starters are a collection of dependency descriptors, which can help simplify your dependency management.
-For instance, if you want to get started with Spring JPA, you just have to include the spring-boot-starter-data-jpa dependency 
-and everything required for it (like Hibernate, Spring Data, etc.) will be added to your application.
+Core Components of a Spring Boot Application:
 
-Here's an example of what the Spring Boot Starter for JPA might look like in a pom.xml file:
+Main Application Class annotated with @SpringBootApplication for entry point.
 
-Image 27-07-23 at 12.36 PM.webp
+Auto-Configuration, Spring Boot’s @EnableAutoConfiguration automatically configures beans based on the application’s dependencies and environment. 
+For example, if spring-boot-starter-web is on the classpath, it configures a DispatcherServlet for handling web requests.
 
-By including this dependency, Spring Boot provides all the required dependencies for creating a JPA application.
+Starter dependencies include pre-configured dependencies, reducing the need for manual configuration.
 
+application.properties or application.yml file for externalized configuration.
 
-5. What is the purpose of the @SpringBootApplication annotation?
+Embedded Server, Spring Boot applications run as standalone programs with an embedded server like Tomcat, Jetty, or Undertow. 
+This eliminates the need to deploy the application in an external server.
 
-The @SpringBootApplication annotation is a convenience annotation provided by Spring Boot. It serves as the entry point for the Spring Boot application. 
-It combines three commonly used annotations: @Configuration, @EnableAutoConfiguration, and @ComponentScan.
+Beans: Spring-managed objects defined using @Component or Java configuration.
 
-With @SpringBootApplication, developers can enable auto-configuration, component scanning, and configuration properties in a single step.
-
-
-6. What is the default port number for a Spring Boot application?
-
-The default port number for a Spring Boot application is 8080. However, you can change it by specifying the desired port number 
-in the application's configuration file (e.g., application.properties or application.yml) using the property server.port.
+Dependency Injection, Spring Boot uses dependency injection to manage and wire components. 
+Beans are injected into each other automatically using annotations like @Autowired, @Qualifier, or constructor injection.
 
 
-7. How can you enable the auto-configuration feature in Spring Boot?
-
-Auto-configuration is enabled by default in Spring Boot. It leverages the classpath and the defined dependencies to automatically configure the application. 
-Spring Boot analyzes the dependencies and uses their presence to configure various components such as data sources, web servers, and messaging systems.
-
-If needed, you can disable specific auto-configuration classes or customize the configuration by providing your own beans.
-
-
-8. Explain the concept of starters in Spring Boot.
+Q. Explain the concept of Spring Boot starters and provide an example.
 
 Starters in Spring Boot are a set of dependencies that make it easier to configure and use specific features or technologies in an application. 
 They encapsulate the required dependencies and configurations, allowing developers to add them to their projects with minimal effort.
-
 For example, the spring-boot-starter-web starter includes all the necessary dependencies for building 
 web applications including the Spring MVC framework, embedded web server, and JSON support.
 
 
-9. How does Spring Boot handle external configuration?
+Q. What dependencies are required for a Spring Boot project?
 
-Spring Boot provides multiple ways to handle external configurations. It supports property files (application.properties or application.yml) 
-that can be placed in various locations including the classpath, file system, or external directories.
-
-Spring Boot also supports environment variables, command-line arguments, and the use of profiles for different deployment environments. 
-The configuration values can be accessed using the @Value annotation or by binding them to Java objects using the @ConfigurationProperties annotation
+In a Spring Boot project, dependencies are managed using Maven or Gradle, and Spring Boot provides pre-configured starter dependencies for common use cases.
+For example, the core starter spring-boot-starter-parent, spring-boot-starter-web is used for web applications, 
+spring-boot-starter-data-jpa for database interactions, and spring-boot-starter-test for testing, etc. 
 
 
-10. What is the purpose of the application.properties (or application.yml) file?
+2. What is the purpose of the SpringApplication.run() method or How run method works internally?
 
-The application.properties or application.yml file is used for external configuration in a Spring Boot application. 
-It allows developers to specify various properties and their values to configure the application.
+The SpringApplication.run() method is present in @SpringBootApplication annotated class main method which is the application's entry point.
 
-These properties can control various aspects of the application such as server port, database connection details, logging configuration, and much more. 
-The properties file can be placed in the classpath or other predefined locations, 
-and Spring Boot will automatically load and apply the configuration during application startup.
+The run() method initializes the Spring application context based on webApplicationType, registers beans into context, 
+performs auto-configuration, starts the embedded tomcat server, and starts the application lifecycle. 
+It returns an instance of the ConfigurableApplicationContext.
 
 
-11. Describe the Spring Boot auto-configuration mechanism.
+3. What is the purpose of the @SpringBootApplication annotation?
+
+The @SpringBootApplication annotation is a combination of three annotation @Configuration, @EnableAutoConfiguration, and @ComponentScan. 
+It serves as the entry point for the Spring Boot application. 
+
+@Configuration for specifying this is configuration class.
+@EnableAutoConfiguration to enable auto configuration and load required things based on classpath and provided dependencies.
+@ComponentScan will scan all the subpackeges for spring managed beans.
+
+
+4. Can I use this three annotation instead of using one @SpringBootApplication annotation?
+Yes, also our application will run as expected.
+
+
+Q. How component scanning works.
+
+Component scanning in Spring Boot is an automatic mechanism triggered by the @SpringBootApplication annotation. 
+It scans the package where the main application class presents and its sub-packages for components 
+annotated with @Component, @Service, @Repository, and other stereotypes. 
+
+This simplifies bean registration and configuration in application context. 
+Also we can customize the scanning behavior using the @ComponentScan annotation and basePackages and excludeFilters attribute.
+
+
+5. Describe the Spring Boot auto-configuration mechanism.
 
 The Spring Boot auto-configuration mechanism automatically configures the Spring application based on the dependencies present in the classpath. 
-It uses the concept of conditionals to determine which beans and configurations should be enabled or disabled.
-
-By analyzing the classpath and the available configuration, Spring Boot can provide sensible defaults and reduce the need for explicit configuration. 
+By analyzing the dependencies present in the classpath, 
+It matches all the conditions applied to the auto-configuration class to determine it should be enabled or disabled.
 This makes it easier to start and configure a Spring application.
 
 
-12. What is the purpose of the @Component annotation in Spring Boot?
+6. How can you disable a specific auto-configuration class in Spring Boot?
 
-The @Component annotation is a core annotation from the Spring Framework and is also used in Spring Boot. 
-It is a generic stereotype annotation used to mark a class as a Spring-managed component.
-
-Components are auto-detected by Spring and can be used for dependency injection and component scanning. 
-The @Component annotation serves as a base annotation for more specific annotations like @Repository, @Service, and @Controller.
+By defining exclude attribute with Auto-configuration class names with @SpringBootApplication annotation.
+Another way is we can add spring.autoconfigure.exclude key in properties file and giving multilple values of fully qualified Auto-configuration class names.
 
 
-13. Explain the difference between @Component, @Repository, @Service, and @Controller annotations in Spring Boot.
+7. How can you customize the default configuration in Spring Boot?
 
-@Component: It is a generic stereotype annotation used to mark a class as a Spring-managed component. 
-			It is a broad and generic term that can be used for any type of Spring-managed component.
-
-@Repository: It is a specialized form of @Component used to indicate that a class is a repository or data access component. 
-			 It typically encapsulates database operations and exception translation.
-
-@Service: It is a specialized form of @Component used to indicate that a class is a service component. 
-		  It encapsulates business logic and is often used as an intermediate layer between controllers and repositories.
-
-@Controller: It is a specialized form of @Component used to indicate that a class is a web controller component. 
-			 It handles incoming requests, performs business logic, and prepares the response to be sent back to the client.
+By providing our own configuration properties in application.properties or application.yml file
+we can override the default configuration.
+For Ex. by defining custom port number for tomcat like server.port=8081 we are overriding it with default 8080.
 
 
-14. What is the role of the @Autowired annotation in Spring Boot?
+8. What is CommandLineRunner in Spring Boot?
 
-The @Autowired annotation is used for dependency injection in Spring Boot. 
-When applied to a field, setter method, or constructor, it allows Spring to automatically resolve and inject the required dependencies.
+CommandLineRunner is a functional interface in spring boot which contains a single run method.
+If we want to execute anything at the time of application startup like DB Connection, Populate some data into DB then those logic we can write in this method.
+But SpringApplication.run() method will execute first then this run method will execute.
 
-By using @Autowired, developers don't need to manually instantiate and wire dependencies. 
-Spring Boot scans the application context for beans matching the required type and injects them automatically.
+
+Part 2
+
+9. Can you explain the purpose of stereotype annotations in Spring Framework?
+
+Stereotype annotations are used to define a role or purpose of a class within the spring application.
+
+There are 5 stereotype annotations in spring.
+@Component 		- This is parent stereotype annotation
+@Service		- This is inherited from @Component
+@Repository		- This is inherited from @Component
+@Controller		- This is inherited from @Component
+@RestController	- This is inherited from @Controller
+
+
+10. How can you define a bean in Spring Framework?
+
+First ways is by using stereotype annotation on a class to tell spring boot to manage the lifecycle of the bean.
+Second way is by doing java based configuration in configuration class providing methods annotated with @Bean that return the object of class. 
+
+
+13. Where you would choose to use the setter injection over constructor injection and vice versa?
+
+When the dependency is manadatory for a bean and it must be injected then I will go for constructor injection.
+The dependency is immutable in nature in constructor injection.
+We can not resolve circular dependency error in constructor injection.
+
+When the dependency is optional for a bean then I will go for setter injection.
+The dependency is mutable in nature in setter injection.
+We can easily resolve circular dependency error in setter injection.
+
+
+14. What is @PostConstruct annotation? Can you provide a real world use case where @PostConstruct is particularly useful?
+
+@PostConstruct annotation is used on a method where we can write any preprocessing logic 
+that should be executed when the bean is initialize and dependencies are injected before going to use the bean.
+
+We can use @PostConstruct in real world use case like while connection pool logic, data seeding, any objects we need to instanciate.
+
+
+15. How can we dynamically load values in a Spring Boot application?
+
+By using @Value("${key specified in properties file}") annotation on a field.
+Or by using Enviornment object getProperty("key specified in properties file") method.
+
+
+16. Can you explain the key difference between yml and properties file, and in what scenarios you might prefer one format over the other?
+
+Syntax and Structure:
+	We are repeating the key prefix in properties file because of flat structure.
+	But in yml because of hierarchy structure key prefix won't repeate. This is more human readable.
+	
+List and Array Values:
+	In yml file there is a support of List and Array values to specify.
+	But in properties file we have to specify the List and Arrays values by separating by ,
+	
+Complex Data Types:
+	In properties file we can use only String and Integer type of values.
+	But in yml file we can use complex data types for values.
+	
+
+17. What is the difference between yml and yaml?
+
+There is no difference between yml and yaml extension.
+
+
+18. If I will configure same values in both yml and properties file then which value will be loaded in spring boot 
+or who will load the value first properties or yml file?
+
+Application.properties file will get more precedence than yml file and it will load the value first.
+
+
+19. How to load external properties file in Spring Boot?
+
+By using spring.config.import key in properties file and specifying file path as value.
+
+
+20. How to map or bind config properties to Java objects? 
+
+By annotating the the class with @ConfigurationProperties annotation and giving prefix attribute with prefix name.
+And specifying remaining keys as filed name in java class.
+
+ex. 
+	@Configuration
+	@ConfigurationProperties(prefix = "spring.datasource")
+	public DataSourceCofig {
+		private String username;
+		private String password;
+	}
+	
+
+Q. How can we externalize the configuration in spring boot project? 
+
+The most common approach is using application.properties or application.yml files, which define various configurations such as database settings, logging levels, etc. 
+For environment-specific configurations, we can use profile-specific property files, such as application-dev.properties or application-prod.properties.
+
+Another way to externalize configuration is by using command-line arguments or environment variables. 
+This properties can be injected directly into Spring Beans using @Value or @ConfigurationProperties annotation.
+
+For advanced use cases, Spring Cloud Config can be used to centralize configuration management, especially in microservices architectures. 
+This allows all services to pull their configuration from a central repository, making it easier to manage configurations across different environments.
+ 
+	
+	
+Part 3
+
+21. How will you resolve bean dependency ambiguity? 
+
+If we have 2 bean of a same type for a dependency then spring gets confused which class it should inject.
+This problem is called as dependency ambiguity. Spring will throw an error saying required a single bean, but 2 were found.
+
+By using @Qualifier annotation with the name of bean which should be injected in camlecase we can tell the spring boot.
+It is provided by Spring Framework and bean will be injected by type.
+
+
+22. Can we avoid this dependency ambiguity without using @Qualifier? 
+
+Yes, we can use @Resource(name = "bean name") annotation over the dependency.
+It is provided by Java Library and the bean will be injected by name.
+
+
+23. What is bean scope and can you explain different type of bean scope? 
+
+Bean scopes determines how long a bean instance will live and when it will be created or destroyed. 
+Its all about the bean lifecycle.
+
+
+24. How to define custom bean scope? 
+
+By implementing the Scope interface providing the implementation for the overriden methods.
+
+
+25. Can you provide a few real-time use cases for when to choose Singleton scope and Prototype scope?
+
+Singleton:
+	For database configuration class.
+	For application configuration class.
+	
+Prototype:
+	For user session.
+	When thread safety is required when multilple threads are concurrently working on same bean.
+
+
+26. Can we inject prototype bean in singleton bean? if yes what will happen if we inject prototype bean in singleton bean? 
+
+Yes, but only one instance of a prototype bean will be created in application context. 
+
+We can resolve this problem by using @Lookup annotation which will create a dynamic proxy for prototype bean.
+
+
+27. What is difference between spring singleton and plain singleton? 
+
+Spring singleton scope is limited to one application context.
+Plain singleton object is limited to one JVM.
+
+
+28. What is the purpose of the BeanPostProcessor interface in Spring, and how can you use it to customize bean initialization and destruction?
+
+Before and after initializing the bean if we want to customize something on your bean then we can perform this using BeanPostProcessor interface.
+There are two default methods in BeanPostProcessor postProcessBeforeInitialization and postProcessAfterInitialization.
+We can write our logic in this methods so that it will executed before and after bean initialization.
+
+Real time use cases of BeanPostProcessor are
+Aspect-Oriented Programming
+Custom Initialization Logic
+Proxy Creation
+Monitoring and Logging
+
+
+Part 4
+
+Q. Can you explain the flow of APIs across different Spring Boot layers?
+
+In a Spring Boot application, the flow of an API starts with the controller layer, which handles incoming HTTP requests. 
+The controller delegates the request to the service layer, where the business logic is processed. 
+The service layer interacts with the repository layer to fetch or manipulate data in the database. 
+The response flows back from the repository to the service layer, which processes it further if needed, and then to the controller layer. 
+Finally, the controller sends the response to the client in the desired format. 
+This layered MVC architecture ensures separation of concerns and makes the application modular, maintainable, and testable.
+
+
+29. Have you worked on Restful web services? If yes What all HTTP methods have you used in your project? 
+
+Yes, I have used HTTP methods like GET, POST, PUT, DELETE, PATCH in my project.
+
+
+30. How can you specify the HTTP method type for your REST endpoint? 
+
+Lets say we have to retrive data then we need to use @GetMapping annotation over a method.
+Also we can pass a value as path variable in url and map it to method parameter by using @PathVariable annotation.
+
+
+Q. What is REST and what are its principles?  
+
+REST (Representational State Transfer) is an architectural style for designing web services that use HTTP for communication. It follows six principles:  
+- Stateless: Each request is independent, and the server does not store client state i.e session.  
+- Client-Server: Separation of concerns between client and server.  
+- Cacheable: Responses can be cached to improve performance.  
+- Uniform Interface: Uses standard HTTP methods (GET, POST, PUT, DELETE).  
+- Layered System: Multiple layers (security, caching, etc.) can exist between client and server.  
+- Code on Demand (Optional): Server can send executable code to clients (e.g., JavaScript).  
+
+
+Q. What is the difference between REST and SOAP?
+  
+- REST is lightweight, uses JSON/XML, and relies on simple HTTP methods.  
+- SOAP is protocol-based, uses XML only, and follows a strict messaging structure.  
+- REST is faster, supports caching, and is more scalable than SOAP.  
+- SOAP is more secure (supports WS-Security) and used in enterprise applications like banking.  
+
+
+Q. What is the difference between PUT and POST? 
+ 
+- PUT is used to update an existing resource or create one if it does not exist. 
+  It is idempotent in nature means multiple identical requests to put will give the same result. GET, PUT, DELETE are idempotent. 
+- POST is used to create a new resource. 
+  It is not idempotent in nature means multiple identical requests create multiple resources on server.   
+
+
+Q. What is the difference between Put and Patch HTTP method? 
+
+ 1. PUT (Full Update)
+- Replaces the entire resource with the new data.
+- If a field is missing in the request body, it will be removed in the updated resource.
+- Idempotent (Multiple identical requests result in the same outcome).  
+
+ 2. PATCH (Partial Update)
+- Updates only specific fields without modifying other existing fields.
+- Not necessarily idempotent (depends on the implementation).  
+
+
+Q. What is the difference between URI and URL? 
+ 
+- URI (Uniform Resource Identifier) is a unique identifier for a resource (can be a name or a location).  
+- URL (Uniform Resource Locator) is a type of URI that provides the resource's location.  
+Example:  
+- URI: `https://example.com/users`  
+- URL: `https://example.com/users/123` (specifies where the resource is located)  
+
+Every URL is a URI, but not every URI is a URL.  
+
+
+Q. What is HATEOAS in REST? 
+ 
+HATEOAS (Hypermedia As The Engine Of Application State) is a REST principle where API responses include links to related actions.  
+Example:
+{
+  "id": 1,
+  "name": "Abhishek",
+  "links": [
+    { "rel": "self", "href": "/users/1" },
+    { "rel": "orders", "href": "/users/1/orders" }
+  ]
+}
+This allows the client to navigate the API dynamically without hardcoding URLs.  
+
+
+31. Can you design a rest endpoint, Assume that you have a product database, and your task is to create an API to filter a list of products by productType. 
+
+@GetMapping("/getProductsByType/{productType}")
+public ResponseEntity<Object> getProductsByType(@PathVariable String productType){}
+
+
+32. Design endpoints in a way that takes "productType" as input. 
+If the user provides this input, the endpoint should filter products based on the specified condition. 
+If "productType" is not provided, the endpoint should return all the products. 
+
+@GetMapping("/getProducts")
+public ResponseEntity<List<Product>> getProducts(@RequestParam(value = "productType", required = false) String productType){}
+
+
+33. What is the difference between @PathVariable and @RequestParam? 
+
+@PathVariable is manadatory and if we not provide the value in url then server will return 404 not found.
+@RequestParam is optional by defining required=false hence if we provide value or not still our endpoint get executed.
+
+
+Q. What is the difference between Path Param and Query Param?
+
+Path Parameter is part of the URL path and is used to identify a specific resource.
+Example: /users/{id} → /users/123 (Fetch user 123)
+
+Query Parameter is used to filter or modify a request and is sent after ? in the URL.
+Example: /users?role=admin&page=2 (Fetch admin users on page 2)
+
+
+34. Why did you use @RestController and why not @Controller? 
+
+@Controller always expect modelAndView to be return and if we want to return any other type then we have to use @ResponseBody annotation.
+@RestController is combination of @Controller and @ResponseBody hence we can return any type of value by using it.
+
+
+19. What is the purpose of the @RequestMapping annotation in Spring Boot?
+
+The @RequestMapping annotation is used to map HTTP requests to specific handler methods in a Spring Boot application. 
+It is applied at the method or class level to define the URL patterns that should trigger the execution of the annotated method.
+
+@RequestMapping allows developers to specify various attributes, such as the HTTP method (GET, POST, etc.), 
+request parameters, headers, and more to further refine the mapping.
+
+
+35. How can we deserialize a JSON request payload into an object within a Spring MVC controller? 
+
+We need to create a DTO for request payload with same key name as variable names. 
+@RequestBody annotation will map the JSON object to Java object by deserializing it.
+
+
+36. Can we perform update operation in POST http method if yes then why do we need PUT mapping or put http method? 
+
+Yes, but Post is non-idempotent in nature means it will create a new resource on a server every time when we hit the url.
+but Put is idempotent in nature means it will not create a new resource on a server when we hit the url.
+
+
+37. Can we pass Request Body in GET HTTP method? 
+
+Yes, we can pass request body in Get method but it is not recommanded to use.
+
+
+38. How can we perform content negotiation (XML/JSON) in Rest endpoint? 
+
+We need to specify produces attribute with application/json or application/xml as value.
+For xml we have to add jackson.dataformat.xml dependency in pom.xml file.
+
+
+39. What all status code you have observed in your application? 
+
+- 400: Bad Request for wrong input
+- 404: Not Found when url is not correct or not found
+- 401: Authentication Error For wrong creads 
+- 403: Not Authorize for Successfull Authentication but not access to specific functionality
+- 405: Method Not Allowed for accessing Post method with GET
+- 415: Unsupported MediaType when request needs JSON and we are sending xml
+- 500: Internal Server Error when server encounterd a problem
+- 502: Bad Gateway
+- 200: Ok for successful request and getting response
+- 201: Created for successful request and a new resource is created on server 
+
+
+40. How can you customize the status code for your endpoint? 
+
+By using @ResponseStatus(HttpStatus.Created) annotation.
+
+
+41. How can you enable cross origin? 
+We can use the @CrossOrigin(origins = "/") annotation over controller class.
+or globally configure CORS using a WebMvcConfigurer bean in configuration class.
+The annotation allows you to specify the allowed origins, HTTP methods, headers, and other CORS-related settings.
+Enabling CORS ensures that web browsers can make requests to your application from different domains.
+
+
+42. How can you upload or download a file in spring? 
+
+By using MultipartFile object as a method parameter in controller, Spring Boot automatically binds uploaded files to it.
+
+For file download, you can return the file as a response with appropriate headers. 
+Additionally, you can leverage storage services like Amazon S3 or Azure Blob Storage for file storage and retrieval.
+
+
+43. How do you maintain versioning for your REST API? 
+
+First way is by creating another API with version/url without changing the actual API.
+Second way is by passing version in request param and by applying condition on it.
+Third way is by passing version in request header and by applying condition on it.
+
+
+44. How will you document your REST API? 
+
+By using Swagger, we just need to add swagger dependency in pom.xml file and do some configuration if needed.
+
+
+45. How can you hide certain REST endpoints to prevent them from being exposed externally? 
+
+By using @Hidden annotation over our API.
+
+
+46. How will you consume restful API?
+
+We can use RestTemplate, FeignClient, Advance RestClient to consume any RESTful web services.
+
+In FeignClient we have to use @FeignClient annotation over a class and give url and name of the service as attribute to the annotation.
+And by defining REST enpoints in that class we can consume the Rest API of the another service.
+
+
+Q. How will you consume asynchronous API?
+
+We can use @Async + CompletableFuture, WebClient or Message Queue like ActiveMQ, RabbitMQ, Kafka.
+
+
+Part 5 
+
+47. How will you handle exceptions in your project? 
+
+By annotating a class with @RestControllerAdvice and defining methods to handle the respective exceptions with @ExceptionHandler annotation 
+we can tell spring boot to handle the exception if it occure. We can write the proper status code and message in this methods so that end 
+user can get a meaningful error message.
+
+
+48. How can you avoid defining handlers for multiple exceptions, or what is the best practise for handling exceptions? 
+
+By defining one global exception and handler for our project and put our every business logic in try block. 
+If any exception occure then throw our global exception from catch block with proper status code and error message.
+So that spring will handle our global exception for multiple exceptions.
+
+
+49. How will you validate or sanatize your input payload? 
+
+We can use various annotations from jakarta.validatation.constraints package like @NotNull, @NotBlank, @Min, @Max, @Email and etc
+over the fields of payload. And we have to tell spring boot to validate the payload for incomming request by defining @Valid annotation
+before our payload in controller class.
+
+
+51. How can you populate validation error message to the end user? 
+
+By defining exception handler for MethodArgumentNotValidException in @RestControllerAdvice class.
+In handler method we can get list of field errors and add the error messages in map and return it to user.
+
+
+52. How can you define custom bean validatation? 
+
+By defining a custom valiadtion annotation and providing an implementation to that annotation by using @Constraint annotation.
+That implementation class should implements ConstraintValidator and override isValid method.
+
+
+53. What is the purpose of the @Profile annotation in Spring Boot?
+
+The @Profile annotation is used to enable or disable beans, configuration based on active profile.
+This annotation will help you to use different settings for different environment like dev, test and prod.
+
+	```java
+	@Configuration
+	@Profile("dev")
+	public class DevConfig {
+		@Bean
+		public DataSource devDataSource() {
+			return new DataSource("dev-database-url");
+		}
+	}
+
+	@Configuration
+	@Profile("prod")
+	public class ProdConfig {
+		@Bean
+		public DataSource prodDataSource() {
+			return new DataSource("prod-database-url");
+		}
+	}
+	```
+
+We can define active profile by using spring.profiles.active property in properties or yml file.
+
+
+Q. Profiling how you do that if you have to do like - Prod env, Dev env, and QA env?
+
+We can use profile-specific property files, such as application-dev.properties or application-prod.properties.
+We can define active profile by using spring.profiles.active property in properties or yml file.
+
+
+54. use case: lets say you find a bug in production environment and now you want to debug the scenario, how can you do that from your local? 
+
+By using @Profile annotation and setting spring.profiles.active property to local.
+
+
+55. How can you enable a specific environment without using profiles? OR what is the alternative to profiles to achieving same use case? 
+
+We can enable a specific environment by using @ConditionalOnProperty annotation.
+Where we have to specify some attributes like prefix, name and havingValue.
+
+ex. project.active.env=prod
+
+	@ConditionalOnProperty(prefix="project.active", name="env", havingValue="prod")
+
+
+56. What is the difference between @Profile and @ConditionalOnProperty? 
+
+The @Profile annotation is used to load the beans or configuration based on the active profile.
+But @ConditionalOnProperty annotation is used to load the beans or configuration based on 
+the value of a specific property in properties file. 
 
 
 15. How can you implement logging in a Spring Boot application?
@@ -146,167 +610,13 @@ Additionally, you can include the desired logging framework dependencies in your
 framework's APIs to perform logging within your application code.
 
 
-16. What is the purpose of the SpringApplication.run() method?
+20. How can you implement request and response logging in a Spring Boot application?
 
-The SpringApplication.run() method is used to bootstrap and launch a Spring Boot application. 
-It is typically invoked from the main method of the application's entry point class.
+Request and response logging in a Spring Boot application can be implemented using filters or interceptors. 
+Creating a custom filter or interceptor lets you intercept incoming requests and outgoing responses and log their details, 
+such as headers, payloads, and other relevant information.
 
-The run() method initializes the Spring application context, performs auto-configuration, starts the embedded server, 
-and starts the application lifecycle. It returns an instance of the ApplicationContext, allowing access to the application context and its beans.
-
-
-17. What is Spring Boot CLI?
-
-Spring Boot Command Line Interface (CLI) is a command line tool that you can use to run and test Spring Boot applications from a command prompt. 
-It provides a fast way to get Spring applications up and running. 
-The CLI incorporates spring scripts into the unix-based shell to launch the boot applications.
-
-Some of the advantages of using Spring Boot CLI are:
- - It allows you to write your application using Groovy, which is a more succinct and expressive alternative to Java.
- - It automatically includes useful external libraries whenever possible. For example, if you're writing a web application 
-   and importing classes such as @RestController, the CLI will automatically provide a dependency for Spring MVC.
- - You can use various commands for different operations like run (to run the application), 
-   test (to test the application), jar (to create a jar file), init (to create a basic Java or Groovy project), etc.
-
-
-18. How does Spring Boot handle data validation?
-
-In Spring Boot, data validation can be performed using various mechanisms. 
-One common approach is to use the validation annotations provided by the Bean Validation API, 
-such as @NotNull, @Size, and @Pattern, on the fields of model objects.
-
-By including the necessary validation annotations, Spring Boot automatically validates the input data and generates validation errors. 
-These errors can be handled using BindingResult or Errors objects. 
-Additionally, custom validation logic can be implemented by creating custom validation classes and methods.
-
-
-19. What is the purpose of the @RequestMapping annotation in Spring Boot?
-
-The @RequestMapping annotation is used to map HTTP requests to specific handler methods in a Spring Boot application. 
-It is applied at the method or class level to define the URL patterns that should trigger the execution of the annotated method.
-
-@RequestMapping allows developers to specify various attributes, such as the HTTP method (GET, POST, etc.), 
-request parameters, headers, and more to further refine the mapping.
-
-
-20. How does Spring Boot integrate with containerization platforms like Docker and Kubernetes?
-
-Spring Boot integrates seamlessly with containerization platforms like Docker and Kubernetes. 
-You can package a Spring Boot application as a Docker image by creating a Dockerfile that includes the necessary dependencies and configurations.
-
-The image can be built and deployed to a containerization platform like Docker Swarm or Kubernetes. 
-Spring Boot also provides features like externalized configuration and health indicators which 
-can be leveraged by container orchestration platforms for efficient management and scaling of the application.
-
-
-21. Explain the concept of message-driven microservices using Spring Boot and Apache Pulsar.
-
-Message-driven microservices using Spring Boot and Apache Pulsar leverage the publish-subscribe messaging pattern 
-to enable loosely coupled and scalable communication between microservices. Apache Pulsar acts as the messaging system, 
-and Spring Boot provides the necessary abstractions for consuming and producing messages.
-
-With Pulsar's messaging features and Spring Boot's integration, you can implement event-driven architectures where microservices 
-communicate asynchronously through messages. This ensures decoupling and fault tolerance.
-
-
-22. What is the purpose of the @Value annotation in Spring Boot?
-
-The @Value annotation is used to inject values from properties files, environment variables, or other sources into Spring-managed beans. 
-It can be applied to fields, methods, or constructor parameters.
-
-With @Value, developers can easily access and use configuration properties or other values within their application code. 
-The values can be specified directly or referenced using SpEL (Spring Expression Language) expressions.
-
-
-23. Describe the role of the CommandLineRunner and ApplicationRunner interfaces in Spring Boot.
-
-In Spring Boot, the CommandLineRunner and ApplicationRunner interfaces are used for performing specific tasks during the application startup process. 
-When implemented, these interfaces provide a callback method (run()) that gets executed once the application context is initialized.
-
-They are particularly useful for performing tasks like data initialization, cache population, or other one-time setup operations. 
-The main difference between them is that CommandLineRunner receives the application's command-line arguments as a parameter, 
-while ApplicationRunner receives an ApplicationArguments object.
-
-
-24. How can you implement pagination in a Spring Boot application?
-
-To implement pagination in a Spring Boot application, you can utilize features provided by libraries like Spring Data JPA or Spring Data MongoDB. 
-They offer built-in support for pagination through the use of Pageable objects and repository methods.
-
-You can retrieve a subset of data from a larger dataset by specifying the page number, page size, and sort criteria. 
-The result is typically returned as a Page object that contains the requested data along with metadata such as total elements, total pages, and more.
-
-
-25. Explain the concept of bean scopes in Spring Boot.
-
-Bean scopes define the lifecycle and visibility of Spring-managed beans in a Spring Boot application. 
-
-The following are the commonly used bean scopes:
- - Singleton (default): Only one instance of the bean is created and shared across the entire application context.
- - Prototype: A new instance of the bean is created each time it is requested.
- - Request: A new instance of the bean is created for each HTTP request. It is only applicable in a web application context.
- - Session: A new instance of the bean is created for each user session. It is only applicable in a web application context.
- - Custom scopes: Spring Boot allows defining custom bean scopes by implementing the Scope interface and registering them in the application context.
-
-
-26. What is the purpose of the @Qualifier annotation in Spring Boot?
-
-The @Qualifier annotation in Spring is used to disambiguate bean references when we have multiple beans of the same type defined in the Spring container. 
-It is used in scenarios where a given type has more than one implementation and we need to inject a specific implementation.
-
-By default, Spring uses the by-type autowiring mechanism. This means that if we have more than one bean of the same type, 
-Spring will throw a NoUniqueBeanDefinitionException because it won't know which one to autowire.
-
-The @Qualifier annotation can be used in conjunction with @Autowired to specify which exact bean should be wired, 
-by providing the name of the bean as the qualifier value.
-
-
-27. How does Spring Boot handle exception logging and error handling?
-
-In Spring Boot, exception logging and error handling can be configured using various mechanisms. 
-Spring Boot automatically provides a default error page that displays a standardized error message for unhandled exceptions.
-
-However, you can customize the error-handling behavior by implementing exception handlers using the @ControllerAdvice annotation 
-and handling specific exceptions in dedicated methods.
-
-Additionally, you can configure logging frameworks to capture and log exceptions with desired levels of detail and appenders.
-
-
-28. Describe the purpose and usage of the @RestControllerAdvice annotation.
-
-The @RestControllerAdvice annotation is a specialized form of the @ControllerAdvice annotation in Spring Boot. 
-It combines the functionality of @ControllerAdvice and @ResponseBody, making it convenient for implementing global exception handling in RESTful APIs.
-
-By using @RestControllerAdvice, you can define exception handlers that handle exceptions thrown by any @RequestMapping or 
-@RestController method within the application. The exception handlers can return error responses in JSON or other supported formats.
-
-
-29. What is the purpose of the @ConfigurationProperties annotation in Spring Boot?
-
-The @ConfigurationProperties annotation is used to bind external configuration properties to Spring-managed beans. 
-By annotating a bean class with @ConfigurationProperties and specifying a prefix, 
-you can map properties with matching names to the fields or setter methods of the bean.
-
-Spring Boot will automatically bind the values from the configuration sources to the corresponding bean properties. 
-The annotation simplifies the retrieval and usage of configuration properties within your application.
-
-
-30. Describe the purpose and usage of the @DynamicPropertySource annotation in Spring Boot testing.
-
-The @DynamicPropertySource annotation in Spring Boot testing allows you to dynamically define and modify configuration properties during the test execution. 
-You can use this annotation in conjunction with the TestPropertyValues class to set or override properties based on dynamic values or test conditions.
-
-This provides flexibility in configuring the environment for testing and allows you to simulate different scenarios or configurations during testing.
-
-
-31. What is the purpose of the @TransactionalEventListener annotation in Spring Boot?
-
-The @TransactionalEventListener annotation in Spring Boot lets you listen to transactional events and perform actions based on those events. 
-You can use this annotation on methods that should be invoked when a specific transactional 
-event occurs such as before or after a transaction is committed or rolled back.
-
-The @TransactionalEventListener annotation provides a convenient way to handle domain-specific logic or 
-side effects based on transactional events in a Spring Boot application.
+Spring Boot allows you to register these filters or interceptors in the application's configuration, enabling centralized logging across the application.
 
 
 32. What is the purpose of the @Scheduled annotation in Spring Boot?
@@ -318,661 +628,55 @@ The schedule can be defined using various options such as fixed-rate, fixed-dela
 Spring Boot automatically detects and executes the scheduled methods based on the specified schedule.
 
 
-33. Describe the role of the @Profile annotation in Spring Boot.
-
-The @Profile annotation is used to activate or deactivate specific configuration components or beans based on 
-the current environment or profile in a Spring Boot application. Annotating a class or method with @Profile and 
-specifying the desired profile name lets you control when that component or bean should be active. 
-This allows you to have different configurations for different deployment environments such as development, testing, or production.
-
-
-34. What is the purpose of Spring Boot's dynamic reloading and how does it work?
-
-Spring Boot's dynamic reloading feature allows you to make changes to the application code or resources without the 
-need to restart the entire application. It improves development productivity by automatically reloading the modified classes or resources on the fly.
-
-The dynamic reloading feature uses class reloading mechanisms provided by the underlying JVM, such as Java Instrumentation API or 
-custom class loaders, to reload the changed classes while preserving the application's state.
-
-
-35. Explain the concept of externalized logging in Spring Boot using Logback or Log4j2.
-
-Externalized logging in Spring Boot allows you to configure and customize logging behavior without modifying the application code. 
-Logback or Log4j2 can be used as the underlying logging framework.
-
-The configuration is typically done in an external configuration file, such as logback.xml or log4j2.xml, 
-which can be placed in the classpath or specified using the logging.config property. 
-The externalized logging configuration file provides flexibility in defining log levels, appenders, formatters, and other logging-related properties.
-
-
-36. What is the purpose of the @ModelAttribute annotation in Spring Boot?
-
-The @ModelAttribute annotation is used in Spring Boot to bind request parameters or form data to method parameters or model attributes. 
-It can be applied to method parameters or method return values.
-
-When applied to method parameters, the @ModelAttribute annotation binds the incoming request parameters or form data to 
-the corresponding method parameters. When applied to method return values, it binds the method's return value to a model attribute, 
-making it available in the view for rendering.
-
-
-37. Explain the concept of reactive messaging with Spring Boot and Apache Kafka Streams.
-
-Reactive messaging with Spring Boot and Apache Kafka Streams enables the building of real-time streaming applications that 
-react to events and reactively process data streams. Spring Cloud Stream provides abstractions to integrate Spring Boot applications with Kafka Streams.
-
-With @StreamListener annotations, you can consume Kafka topics as reactive streams and perform processing operations using the reactive programming model. 
-This approach facilitates the development of scalable and resilient streaming applications.
-
-
-38. Describe the purpose and usage of the @Transactional(propagation = Propagation.NESTED) annotation.
-
-The @Transactional(propagation = Propagation.NESTED) annotation is used to define a nested transactional scope in a Spring Boot application. 
-When a method is annotated with this annotation, a nested transaction is created within the current transaction.
-
-The nested transaction behaves as an independent transaction and can be rolled back separately from the outer transaction. 
-If the nested transaction fails, only the changes made within the nested transaction are rolled back, while the outer transaction remains unaffected.
-
-
-39. What is the purpose of the @DataJpaTest annotation in Spring Boot testing?
-
-The @DataJpaTest annotation is used to configure and customize the testing environment for JPA repositories in a Spring Boot application. 
-When applied to a test class, it sets up an in-memory database, configures Spring Data JPA, and loads only the necessary components for testing JPA repositories.
-
-@DataJpaTest provides a lightweight and isolated environment for testing JPA-related functionality without 
-requiring a full application context or a real database connection.
-
-
-40. Describe the purpose and usage of the Spring Boot Admin Server for monitoring and managing applications.
-
-The Spring Boot Admin Server is a tool that provides a web-based interface for monitoring and managing multiple 
-Spring Boot applications in a centralized manner. It collects and displays various metrics, health statuses, 
-and other information about the registered Spring Boot applications.
-
-The Admin Server allows you to view and manage application details, monitor JVM metrics, and receive alerts on specific conditions. 
-It simplifies the monitoring and management of Spring Boot applications in a production environment.
-
-
-
-# Intermediate Spring Boot interview questions and answers #
-
-1. Differentiate between Spring MVC and Spring Boot.
-
-Spring MVC is a framework for building web applications using the Model-View-Controller (MVC) architectural pattern. 
-It provides features for handling requests, managing controllers, rendering views, and managing data flow.
-
-Spring Boot, on the other hand, is an opinionated framework built on top of Spring that aims to simplify the setup and configuration of Spring applications. 
-It provides out-of-the-box defaults and auto-configuration, reducing the need for manual configuration and boilerplate code.
-
-
-2. What is the role of the @RestController annotation in Spring Boot?
-
-The @RestController annotation is used to define a RESTful controller in a Spring Boot application. 
-It combines the functionality of the @Controller and @ResponseBody annotations, simplifying the process of building RESTful APIs 
-by automatically serializing the return values of methods into JSON or XML responses.
-
-
-3. How can you implement exception handling in a Spring Boot application?
-
-Exception handling in Spring Boot can be implemented using the @ControllerAdvice annotation. 
-By creating a class annotated with @ControllerAdvice and defining methods annotated with @ExceptionHandler, 
-you can handle specific exceptions and return appropriate responses.
-
-You can also use the @ResponseStatus annotation to specify the HTTP status code for the response.
-
-
-4. Explain the concept of dependency injection in Spring Boot.
-
-Dependency injection is a core concept in Spring Boot. It allows objects to be loosely coupled by providing their dependencies from external sources. 
-Spring Boot uses inversion of control (IoC) and the dependency injection pattern to manage dependencies.
-
-Spring Boot automatically resolves and injects the required dependencies at runtime by annotating classes with appropriate annotations such as @Autowired.
-
-
-5. How does Spring Boot support database operations?
-
-Spring Boot provides excellent support for database operations through its integration with Spring Data JPA. 
-By defining entities and repositories, you can perform CRUD (Create, Read, Update, Delete) operations on databases with minimal boilerplate code.
-
-Spring Boot automatically configures the database connection and transaction management, and provides powerful querying capabilities.
-
-
-6. Describe the role of the Spring Boot Actuator.
-
-Spring Boot Actuator is a feature that provides insight into the runtime of a Spring Boot application. 
-It offers a set of production-ready endpoints that expose information about application health, metrics, environment, logging, and more.
-
-The Actuator enables monitoring and management of the application, making it easier to understand and troubleshoot in production environments.
-
-
-7. How can you implement caching in a Spring Boot application?
-
-Caching in a Spring Boot application can be implemented using the @Cacheable, @CacheEvict, 
-and other cache-related annotations provided by the Spring Framework. 
-Adding these annotations to methods lets you cache the results and improve performance. 
-Spring Boot integrates with popular caching providers like Ehcache, Hazelcast, and Redis.
-
-
-8. What is the purpose of the @Scheduled annotation in Spring Boot?
-
-The @Scheduled annotation is used to schedule the execution of a method at fixed intervals or specific times. 
-It allows you to define cron expressions or fixed delay/initial delay values. 
-Spring Boot automatically triggers the annotated method based on the specified schedule, making it suitable 
-for performing recurring tasks such as data synchronization or sending periodic notifications.
-
-
-9. How can you enable cross-origin resource sharing (CORS) in a Spring Boot application?
-
-To enable CORS in a Spring Boot application, you can use the @CrossOrigin annotation at the controller level or 
-globally configure CORS using a WebMvcConfigurer bean. The annotation allows you to specify the allowed origins, HTTP methods, 
-headers, and other CORS-related settings. Enabling CORS ensures that web browsers can make requests to your application from different domains.
-
-
-10. Explain the concept of profiles in Spring Boot.
-
-Profiles in Spring Boot allow you to define different configurations for different environments or scenarios. 
-By using the @Profile annotation on classes or methods, you can specify which profiles should be active for the corresponding beans or configurations.
-
-Profiles enable you to have different property values, component configurations, or dependencies based on the active profile. 
-This facilitates easy deployment and testing across different environments.
-
-
-11. Explain the concept of the Spring Boot Actuator and its major features.
-
-Spring Boot Actuator provides a set of production-ready features and endpoints that help monitor and manage a Spring Boot application.
-
-Its major features include health checks, which provide information about the application's health; metrics, 
-which gather and expose various runtime metrics; info, which displays custom application information; logging, 
-which allows changing log levels at runtime, and many more endpoints for managing and understanding the application in a production environment.
-
-
-12. How can you integrate Spring Security in a Spring Boot application?
-
-To integrate Spring Security in a Spring Boot application, you need to add the appropriate dependencies and configure security settings. 
-Spring Security provides comprehensive authentication and authorization mechanisms.
-
-You can configure security rules using Java configuration or annotations, define user roles and permissions, and customize authentication providers, 
-such as in-memory authentication, database-backed authentication, or integration with external identity providers.
-
-
 13. Describe the role of the @Transactional annotation in Spring Boot.
 
 The @Transactional annotation is used to mark a method or class for transaction management in Spring Boot. 
 It ensures that the annotated method or all methods within the annotated class are executed within a transactional context.
 
-The @Transactional annotation manages the transaction boundaries, rollback behavior, 
-and other transactional aspects to ensure data consistency and integrity.
+The @Transactional annotation manages the transaction boundaries, rollback behavior, and other transactional aspects to ensure data consistency and integrity.
 
 
-14. How does Spring Boot handle internationalization (i18n) and localization (l10n)?
+57. What is AOP? 
 
-Spring Boot automatically resolves the appropriate message based on the user's locale, making it convenient to build multi-language applications. 
-It provides support for internationalization and localization through properties files and the use of the MessageSource interface.
+AOP provide a way to separate cross cutting conserns or secondary logic from the main buisness logic of our application.
+Like transaction, logging, validatation, etc which we call as Aspects. 
 
-By defining message bundles for different locales and configuring the message source, you can easily retrieve and display localized messages in your application.
+Aspect means the class who contains the cross cutting conserns.
 
 
-15. What is the purpose of the @RestControllerAdvice annotation?
+58. What is pointcut, join points and advice in AOP? 
 
-The @RestControllerAdvice annotation combines the functionalities of @ControllerAdvice and @ResponseBody annotations. 
-It is used to define a global exception handler for RESTful controllers in a Spring Boot application.
+Joinpoint means the target where we want to execute the particular aspect. ex. the method where we want to implement aspect.
 
-Annotated classes can contain exception-handling methods annotated with @ExceptionHandler which handles exceptions thrown within any 
-@RestController in the application. These methods can return custom error responses or perform other actions based on the exception type.
+Pointcut is an expression to tell to the AOP that who is your joinpoint. 
 
+Advice means how you want to execute the aspect on a jointpoint for ex. before or after.
 
-16. Explain the concept of Spring Data REST and its advantages.
 
-Spring Data REST is a project built on top of Spring Data, it takes the features of Spring HATEOAS and Spring Data to build 
-Spring MVC-based RESTful services with less code. With Spring Data REST, you can leverage your Spring Data repositories and 
-convert them into full-featured RESTful services with ease.
+59. What are different type of advice in AOP? 
 
-Some of its advantages are:
- - Rapid Development: With Spring Data REST, a great deal of your HTTP resource implementation time can be saved. 
-  				      It's quick and easy to build a RESTful service with full CRUD functionality.
-  				   
- - Data Access: It leverages Spring Data's repositories and provides seamless, RESTful access to your data model.
-   
- - HAL Browser: Spring Data REST includes support for the HAL Browser, allowing users to navigate, create, update, and delete 
-  			   resources directly from their web browsers.
-   
- - Search Support: It has built-in support for searches. Custom repository methods are automatically exposed as HTTP resources.
+Before, After, AfterReturning, AfterThrowing, Around, etc.
 
 
-17. How can you implement file upload and download functionality in a Spring Boot application?
+60. What is the difference between After and AfterReturning advice in AOP?
 
-File upload and download functionality can be implemented in a Spring Boot application by configuring multipart file handling. 
-By using the MultipartFile object as a method parameter, Spring Boot automatically binds uploaded files to it.
+After advice will always execute even though there is an exception in our joinpoint.
 
-For file download, you can return the file as a response with appropriate headers. Additionally, 
-you can leverage storage services like Amazon S3 or Azure Blob Storage for file storage and retrieval.
+But AfterReturning will only execute if the joinpoint will successfully return any value without any exception.
 
 
-18. Describe the purpose and usage of the @Async annotation in Spring Boot.
+61. use case - Can I use AOP to evaluate performance of a method or is this possible to design a logging framework to capture request and response body of a method?
 
-The @Async annotation is used to indicate that a method should be executed asynchronously. 
-When a method is annotated with @Async, Spring Boot runs it in a separate thread from a task executor, 
-allowing the caller to continue execution without waiting for the asynchronous method to complete.
+By using Around advice.
 
-This annotation is useful for offloading time-consuming tasks, improving performance, and providing a more responsive user experience.
+Part 6
 
-
-19. What is the role of the embedded servlet container in Spring Boot?
-
-The embedded servlet container in Spring Boot allows you to run web applications without the need for a separate web server. 
-It provides a lightweight servlet container, such as Tomcat, Jetty, or Undertow, that is embedded within the application.
-
-Spring Boot automatically configures and starts the embedded servlet container, simplifying the deployment and execution of web applications.
-
-
-20. How can you implement request and response logging in a Spring Boot application?
-
-Request and response logging in a Spring Boot application can be implemented using filters or interceptors. 
-Creating a custom filter or interceptor lets you intercept incoming requests and outgoing responses and log their details, 
-such as headers, payloads, and other relevant information.
-
-Spring Boot allows you to register these filters or interceptors in the application's configuration, enabling centralized logging across the application.
-
-
-21. Explain the concept of reactive data access in Spring Boot using Spring Data R2DBC.
-
-Reactive data access in Spring Boot allows you to build non-blocking and efficient applications that handle a large number of concurrent requests. 
-Spring Data R2DBC provides reactive database access by integrating with R2DBC (Reactive Relational Database Connectivity).
-
-It enables you to perform asynchronous database operations using reactive programming paradigms, 
-such as Flux and Mono, providing better scalability and responsiveness compared to traditional blocking database access.
-
-
-22. How can you perform asynchronous messaging using Spring Boot and RabbitMQ?
-
-Asynchronous messaging using Spring Boot and RabbitMQ can be achieved by integrating the Spring AMQP (Advanced Message Queuing Protocol) library. 
-By configuring the RabbitMQ connection details and using the appropriate annotations and components, you can send and receive messages asynchronously.
-
-Spring Boot provides abstractions like @RabbitListener for message consumption and RabbitTemplate for message production. 
-They make it easy to implement asynchronous messaging patterns like publish-subscribe and request-reply.
-
-
-23. Describe the purpose and usage of the @Conditional annotation in Spring Boot.
-
-The @Conditional annotation in Spring Boot allows you to conditionally activate or deactivate beans or configurations based on specific conditions. 
-By annotating a bean or configuration class with @Conditional and providing a condition class implementing the Condition interface, 
-you can control whether the bean or configuration should be created and registered based on runtime conditions. 
-This enables flexible configuration based on environment, properties, or other factors.
-
-
-24. What is the purpose of the @SpringBootTest annotation in Spring Boot testing?
-
-The @SpringBootTest annotation is used to bootstrap a Spring Boot application context for testing purposes. 
-It allows you to load the entire application context, including all configurations and beans, during integration tests.
-
-@SpringBootTest provides features like auto-configuration, dependency injection, 
-and easy access to application-specific components, enabling comprehensive testing of Spring Boot applications.
-
-
-25. Explain the concept of Spring Boot's actuator health checks and customizing health indicators.
-
-Spring Boot's actuator health checks are endpoints provided by the Actuator that give insights into the application's health. 
-By default, health indicators check the overall system health. 
-You can customize them by implementing the HealthIndicator interface and registering them with the application context.
-
-Custom health indicators allow you to monitor specific aspects of the application's health such as database connectivity, 
-external service availability, or custom health checks.
-
-
-26. How can you secure REST APIs in a Spring Boot application using JSON Web Tokens (JWT)?
-
-You can secure REST APIs in a Spring Boot application using JSON Web Tokens (JWT) by integrating Spring Security and JWT libraries. 
-Spring Security provides mechanisms for authentication and authorization, while JWT facilitates token-based authentication.
-
-By configuring Spring Security filters, implementing authentication and authorization providers, 
-and validating JWT tokens, you can protect your REST APIs and control access based on user roles and permissions.
-
-
-27. Describe the purpose and usage of the @EntityScan annotation in Spring Boot.
-
-The @EntityScan annotation is used to specify the base packages to scan for entity classes in a Spring Boot application. 
-When using JPA (Java Persistence API) with Spring Boot, @EntityScan helps the JPA provider locate and manage entity classes.
-
-By default, Spring Boot scans the package of the application's main class and its sub-packages. 
-However, if entity classes are located in different packages, you need to use @EntityScan to include those packages.
-
-
-28. What is the purpose of the @Retryable annotation in Spring Boot?
-
-The @Retryable annotation is used to specify that a method should be retried if it fails due to specified exceptions. 
-Adding @Retryable and configuring the desired retry behavior enables Spring Boot to automatically retry the method when exceptions occur.
-
-This can be useful for handling transient errors, such as network timeouts or temporary resource unavailability, 
-and ensuring the successful execution of critical operations.
-
-
-29. Explain the concept of auto-reconfiguration in Spring Boot and its limitations.
-
-Auto-reconfiguration in Spring Boot is a feature that automatically configures certain components and dependencies based on the classpath and 
-available resources. It simplifies the configuration process by detecting and configuring components like data sources, messaging brokers, and caches.
-
-Auto-reconfiguration has limitations when it comes to complex or custom configurations. 
-It may not always provide the desired configuration out of the box. In such cases, manual configuration may be required.
-
-
-30. How can you implement distributed caching in a Spring Boot application using Hazelcast or Redis?
-
-To implement distributed caching in a Spring Boot application with Hazelcast or Redis, you can leverage the respective cache providers' integration libraries. 
-Configuring the cache manager and cache-related settings lets you enable distributed caching.
-
-Spring Boot simplifies the setup and configuration process by providing auto-configuration support for both Hazelcast and Redis. 
-Additionally, you can annotate methods with cache-related annotations like @Cacheable or @CacheEvict to cache and retrieve data efficiently.
-
-
-
-# Advanced Spring Boot interview questions #
-
-1. How can you create a Spring Boot application using Gradle?
-
-To create a Spring Boot application using Gradle, follow these steps:
-
-Set up a new Gradle project or add Spring Boot dependencies to an existing Gradle project.
-Make sure you have the required plugins configured in the build.gradle file, such as the org.springframework.boot and io.spring.dependency-management plugins.
-Define the necessary dependencies in the dependencies section of the build.gradle file. Specify the desired Spring Boot starter dependencies.
-Create the main application class and annotate it with @SpringBootApplication.
-Implement the application logic within the main application class or other components.
-Use the Gradle command line or an IDE plugin to build and run the application.
-
-
-2. How can you customize the default error pages in a Spring Boot application?
-
-To customize the default error pages in a Spring Boot application, you can create an error page template or 
-controller method that handles the error. Defining an error template with the appropriate name and placing it in the 
-src/main/resources/templates/error directory enables Spring Boot to automatically render that template for the corresponding error status code.
-
-Alternatively, you can create a controller method with @ExceptionHandler annotation to handle specific exceptions and return a custom error response.
-
-
-3. How can you create a Spring Boot application using Maven?
-
-To create a Spring Boot application using Maven, follow these steps:
-
-Set up a new Maven project or add Spring Boot dependencies to an existing Maven project.
-Ensure that the project's dependencies include the spring-boot-starter-parent as the parent project.
-Define the necessary dependencies in the project's pom.xml file, such as spring-boot-starter-web for web applications.
-Create the main application class and annotate it with @SpringBootApplication.
-Implement the application logic within the main application class or other components.
-Use the Maven command line or an IDE plugin to build and run the application.
-
-
-4. How can you implement security in a Spring Boot application?
-
-Security can be implemented in a Spring Boot application by adding the appropriate dependencies, 
-such as spring-boot-starter-security, and configuring the security settings. 
-This can be done by creating a security configuration class that extends WebSecurityConfigurerAdapter and 
-overriding its methods to define authentication and authorization rules.
-
-Additionally, you can customize the login page, handle logout, and secure specific endpoints 
-using annotations like @EnableWebSecurity and @EnableGlobalMethodSecurity.
-
-
-5. What are the different deployment options for a Spring Boot application?
-
-Spring Boot applications can be deployed in various ways including:
-
- - Standalone JAR: Packaging the application as a self-contained executable JAR file with an embedded servlet container like Tomcat or Jetty.
-  
- - WAR deployment: Packaging the application as a traditional WAR file and deploying it to a servlet container.
-  
- - Docker: Containerizing the application using Docker and running it on Docker containers.
-  
- - Cloud platforms: Deploy the application to cloud platforms like AWS, Azure, or Google Cloud using platform-specific 
-					deployment options such as AWS Elastic Beanstalk or Azure App Service.
-
-
-6. Describe the process of creating a RESTful API using Spring Boot.
-
-To create a RESTful API using Spring Boot, you can follow these steps:
-
- - Define your domain model and business logic.
- - Create a Spring MVC controller class and define handler methods annotated with @RequestMapping or other mapping annotations.
- - Implement the required CRUD operations within the handler methods using appropriate annotations like @GetMapping, @PostMapping, etc.
- - Customize the request and response handling with annotations such as @RequestBody to map request payloads and @ResponseBody to define the response body.
- - Configure additional features like exception handling, input validation, and security, if required.
- - Run the Spring Boot application and the API endpoints will be accessible based on the mappings defined in the controller.
-
-
-7. How does Spring Boot integrate with messaging systems such as RabbitMQ?
-
-Spring Boot provides integration with messaging systems like RabbitMQ through the Spring AMQP project. 
-To integrate RabbitMQ with a Spring Boot application, you can include the spring-boot-starter-amqp dependency and 
-configure the necessary properties in the application's configuration file (application.properties or application.yml).
-
-You can use the RabbitTemplate class to send messages to RabbitMQ and consume messages using @RabbitListener annotations on appropriate methods.
-
-
-8. Explain the concept of Spring Boot Data JPA and provide an example.
-
-Spring Boot Data JPA is a sub-project of Spring Data that provides enhanced support for 
-JPA (Java Persistence API)-based repositories in Spring Boot applications. 
-It simplifies the implementation of the data access layer by automatically generating the boilerplate code for common database operations.
-
-For example, by defining a JPA entity class and extending JpaRepository, 
-you can get CRUD operations for that entity without writing any additional code. 
-You can also define custom queries using method name conventions or @Query annotations
-
-
-9. How can you handle large file uploads in a Spring Boot application?
-
-To handle large file uploads in a Spring Boot application, you can configure the maximum file size limit in the application's properties file 
-by setting the spring.servlet.multipart.max-file-size and spring.servlet.multipart.max-request-size properties 
-to appropriate values. Additionally, you can use the MultipartFile parameter in the controller method to receive the uploaded file and process it as needed.
-
-
-10. What is the purpose of Spring Boot Actuator endpoints?
-
-Spring Boot Actuator endpoints provide insights into the internals of a Spring Boot application such as health status, metrics, 
-environment information, and more. These endpoints expose management and monitoring capabilities over HTTP or other protocols, 
-allowing you to monitor and manage the application in production. Actuator endpoints can be customized and secured based on 
-the specific requirements of the application.
-
-
-11. Explain the concept of Spring Boot Actuator metrics and monitoring.
-
-Spring Boot Actuator metrics allow you to collect and monitor various application metrics such as 
-HTTP request counts, response times, JVM memory usage, and database connection pool metrics.
-
-Actuator metrics are collected by integrating with metrics libraries like Micrometer and can be exposed 
-through various endpoints such as /actuator/metrics. These metrics can be visualized using monitoring tools 
-like Prometheus, Grafana, or the built-in Actuator endpoints.
-
-
-12. How can you implement microservices architecture using Spring Boot?
-
-To implement a microservices architecture using Spring Boot, you can follow these steps:
-
- - Identify the different business capabilities and boundaries of your application.
- - Design and develop each microservice as a separate Spring Boot application, encapsulating a specific business capability.
- - Use lightweight communication mechanisms like REST or messaging for inter-service communication.
- - Implement service discovery and registration using tools like Netflix Eureka or HashiCorp Consul.
- - Apply fault tolerance and resilience patterns like circuit breakers (Hystrix) and distributed tracing (Sleuth) for better reliability.
- - Deploy and manage microservices using containerization platforms like Docker and orchestration tools like Kubernetes.
-
-
-13. Describe the role of the Spring Cloud Netflix stack in a Spring Boot application.
-
-The Spring Cloud Netflix stack provides integration with various Netflix OSS components to simplify the development of 
-distributed systems in a Spring Boot application. It includes modules like Eureka for service discovery, Ribbon for client-side load balancing, 
-Hystrix for fault tolerance, and Zuul for API gateway functionality.
-
-These components enable developers to build scalable and resilient microservices architectures by providing out-of-the-box solutions 
-for common distributed system challenges.
-
-
-14. What is the purpose of Spring Boot DevTools and how does it enhance development productivity?
-
-Spring Boot DevTools is a set of developer tools that enhance the development experience for Spring Boot applications. 
-It provides features like automatic application restart on code changes, live reloading of static resources, and enhanced logging during development.
-
-DevTools helps in reducing the development turnaround time by eliminating the need for manual restarts and providing quick feedback on code changes.
-
-
-15. How can you implement distributed tracing in a Spring Boot application using Spring Cloud Sleuth?
-
-To implement distributed tracing in a Spring Boot application with Spring Cloud Sleuth, you can include the necessary 
-dependencies like spring-cloud-starter-sleuth. Sleuth integrates with popular distributed tracing systems like Zipkin or Jaeger.
-
-Once configured, Sleuth automatically adds trace and span identifiers to the application's logs and propagates 
-them across different services. This allows you to trace the flow of requests across multiple services and analyze performance bottlenecks.
-
-
-16. Explain the concept of reactive programming in Spring Boot with Spring WebFlux.
-
-Reactive programming in Spring Boot with Spring WebFlux is based on the Reactive Streams specification and enables non-blocking, 
-event-driven programming for building scalable and resilient applications.
-
-Spring WebFlux provides an alternative to the traditional Servlet-based programming model and allows developers to 
-handle requests asynchronously using reactive types like Mono and Flux. This approach is well-suited for handling high 
-concurrency and building reactive systems that can handle a large number of concurrent connections with limited resources.
-
-
-17. How does Spring Boot integrate with Apache Kafka for event-driven architectures?
-
-Spring Boot provides integration with Apache Kafka through the Spring Kafka project. 
-You can include the spring-boot-starter-kafka dependency to get started.
-
-Spring Kafka provides abstractions to produce and consume messages from Kafka topics using the KafkaTemplate and @KafkaListener annotations, respectively. 
-Additionally, Spring Kafka integrates with Spring Boot's auto-configuration to simplify the configuration of Kafka-related properties.
-
-
-18. Describe the purpose and usage of Spring Boot's caching abstraction.
-
-Spring Boot's caching abstraction provides a convenient way to cache the results of expensive operations, 
-reducing the response time and improving application performance. By using annotations like @Cacheable, @CachePut, and @CacheEvict, 
-you can easily cache method results based on specified cache names or keys.
-
-The caching abstraction supports various cache providers, such as Redis or Ehcache, and can be easily configured using the application's properties file.
-
-
-19. How can you perform database migrations in a Spring Boot application using Flyway or Liquibase?
-
-Include corresponding dependencies (flyway-core or liquibase-core) to perform database 
-migrations in a Spring Boot application using Flyway or Liquibase. 
-By placing the migration scripts in the classpath (src/main/resources/db/migration), 
-Flyway or Liquibase will automatically execute the scripts during application startup.
-
-These migration scripts allow you to manage database schema changes, versioning, and data initialization in a controlled manner.
-
-
-20. Explain the concept of externalized configuration in Spring Boot and its benefits.
-
-Externalized configuration in Spring Boot allows you to configure the application using external properties files, environment variables, 
-or command-line arguments. This approach decouples the application configuration from the code, making it more flexible and easier to manage.
-
-The externalized configuration enables the application to be deployed in different environments without modifying the code. 
-Spring Boot provides a standardized and flexible way to read and use these external configurations.
-
-
-21. How can you implement distributed session management in a Spring Boot application using Spring Session?
-
-To implement distributed session management in a Spring Boot application using Spring Session, follow these steps:
-
- - Include the necessary dependencies for Spring Session and a session store implementation like Redis or Hazelcast.
- - Configure the session store details, such as the connection properties, 
-   in the application's configuration file (e.g., application.properties or application.yml).
- - Enable Spring Session support by annotating your configuration class with 
-   @EnableRedisHttpSession (for Redis) or @EnableHazelcastHttpSession (for Hazelcast).
- - Spring Session will automatically handle session creation, serialization, and synchronization with the session store, 
-   allowing session data to be shared across multiple instances of your application.
-
-
-22. How can you implement serverless functions using Spring Boot and AWS Lambda?
-
-You can use the spring-cloud-function-adapter-aws dependency to implement serverless functions using Spring Boot and AWS Lambda. 
-You can deploy Spring Boot applications as serverless functions on AWS Lambda by creating a function bean and configuring the AWS Lambda handler.
-
-The adapter takes care of the integration between Spring Cloud Function and AWS Lambda, 
-allowing you to develop serverless functions using the familiar Spring Boot programming model.
-
-
-23. How can you implement method-level security in a Spring Boot application?
-
-To implement method-level security in a Spring Boot application, you can use the @PreAuthorize or @PostAuthorize annotations provided by Spring Security. 
-
-Here's an example:
- - Configure Spring Security in your application by including the necessary dependencies and configuration.
- - Annotate the methods that require security checks with @PreAuthorize or @PostAuthorize.
- - Specify the desired security expressions in the annotations to define the required conditions for method invocation.
- - Spring Security will evaluate the expressions and allow or deny access to the methods based on the configured security rules.
-
-
-24. How can you implement server-sent events (SSE) in a Spring Boot application?
-
-To implement server-sent events (SSE) in a Spring Boot application, you can use the SseEmitter class provided by Spring Framework. 
-
-Here's an example of how to implement SSE:
- - Create a controller method that returns an SseEmitter object.
- - In this method, use the SseEmitter to send events to the client.
- - Use the send() method of SseEmitter to send events periodically or based on specific triggers.
- - Set appropriate headers, such as Content-Type and Cache-Control, for SSE support.
- - Register the SseEmitter as a handler method in your controller.
-
-
-25. How can you integrate Spring Boot with OAuth 2.0 for secure authentication and authorization?
-
-You can use the Spring Security OAuth2 module to integrate Spring Boot with OAuth 2.0. By configuring the appropriate OAuth 2.0 provider details and 
-defining the client registration properties, Spring Boot can handle the authentication and authorization flow.
-
-You can secure your endpoints by applying Spring Security annotations like @PreAuthorize or by using declarative configuration. 
-This integration enables secure authentication and authorization using OAuth 2.0 standards.
-
-
-26. How can you implement data caching in a Spring Boot application using the Spring Cache Abstraction?
-
-To implement data caching in a Spring Boot application, you can leverage the Spring Cache Abstraction. Follow these steps:
-
- - Enable caching support by annotating your configuration class with @EnableCaching.
- - Add the desired cache implementation library, such as Ehcache or Caffeine, as a dependency.
- - Annotate the methods that should be cached with @Cacheable and specify the cache name or key.
- - Configure the cache properties, such as eviction policies and time-to-live, in the cache implementation's configuration file or using Spring Boot's properties.
-
-
-27. How can you configure a custom error page in a Spring Boot application?
-
-To configure a custom error page in a Spring Boot application, you can create a custom error controller and map it to a specific URL or error status code. 
-
-Here's an example:
- - Create a class implementing the ErrorController interface.
- - Annotate the class with @Controller and, optionally, with @RequestMapping to specify the mapping URL or error status code.
- - Implement a method that handles the error and returns the desired error page view or response.
- - Register the custom error controller as a bean in the application context.
- - Optionally, configure the error page mapping in the application.properties or application.yml file using properties like server.error.path or server.error.whitelabel.enabled.
-
-
-28. How can you implement distributed tracing in a Spring Boot application using OpenTelemetry?
-
-To implement distributed tracing in a Spring Boot application using OpenTelemetry, 
-you can include the necessary OpenTelemetry dependencies such as open telemetry-API and an OpenTelemetry exporter. 
-Configuring the exporter lets you send trace data to a distributed tracing system like Jaeger or Zipkin.
-
-OpenTelemetry automatically instructs the application to capture and propagate trace information across different services, 
-allowing you to trace the execution path of requests in a distributed system.
-
-
-29. How can you implement asynchronous processing in a Spring Boot application?
-
-Spring Boot provides support for asynchronous processing through the use of the @Async annotation and the TaskExecutor interface. 
-
-To implement asynchronous processing, follow these steps:
-
- - Configure a TaskExecutor bean in your application's configuration. 
-   This bean defines the thread pool or executor service used for executing asynchronous tasks.
- - Annotate the methods that need to be executed asynchronously with the @Async annotation.
- - Invoke the annotated methods from other parts of your application. 
-   The invocation will return a Future object which can be used to obtain the result of the asynchronous task or monitor its progress.
-
-30. How can you enable HTTPS in a Spring Boot application?
-
-To enable HTTPS in a Spring Boot application, you need to configure the appropriate SSL certificate and modify the application's configuration. 
-
-Here are the general steps:
-
- - Obtain an SSL certificate and private key.
- - Configure the certificate and private key in the application's configuration, such as application.properties or application.yml, using properties like server.ssl.key-store and server.ssl.key-password.
- - Set the server.ssl.enabled property to true to enable HTTPS.
- - Optionally, configure other SSL-related properties like the SSL protocol and cipher suites.
- - Restart the application for the changes to take effect.
+60. How does your application interact with the database and which framework are you using? 
+61. Why is it important to configure a physical naming strategy ? (starts inline with que.61) 
+62. What are the key benefits of using spring data JPA ? 
+63. What are the differences between hibernate JPA and Spring Data JPA ? 
+64. How can you connect multiple databases or data sources in a single application ? 
+65. What are the different ways to define custom queries in spring Data JPA ? 
+66. How will you define entity relationships or association mapping in spring Data JPA ? 
+67. Is this possible to execute join query in spring data jpa ? if yes, how can you add some insights ? 
+68. How will you implement pagination and sorting in Spring Data JPA ? 

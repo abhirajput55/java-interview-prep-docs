@@ -1,0 +1,892 @@
+Java Collection Framework 
+
+1. Basic Concepts
+
+ 1. What is the Java Collection Framework?  
+The Java Collection Framework (JCF) is a set of classes and interfaces that provide a structure for storing and managing collections of objects. 
+It includes different types of collections like List, Set, Queue, and Map and provides various operations such as searching, sorting, inserting, 
+and deleting elements.  
+
+---
+
+ 2. What are the main interfaces in the Java Collection Framework?  
+  
+- List → Ordered collection, allows duplicates (e.g., `ArrayList`, `LinkedList`)  
+- Set → Unordered collection, does not allow duplicates (e.g., `HashSet`, `TreeSet`)  
+- Queue → Follows FIFO (First In, First Out) order (e.g., `LinkedList`, `PriorityQueue`)  
+- Map → Stores key-value pairs (e.g., `HashMap`, `TreeMap`, `LinkedHashMap`)  
+
+---
+
+ 3. What is the difference between Collection and Collections in Java?  
+- Collection is an interface that represents a group of objects (like List, Set, Queue).  
+- Collections is a utility class that provides helper methods to manipulate collections (like sorting, searching, and reversing).  
+
+---
+
+ 4. What is the difference between Set, List, and Queue in Java Collections?  
+- List → Maintains order, allows duplicates (e.g., `ArrayList`, `LinkedList`)  
+- Set → Does not allow duplicates, unordered (e.g., `HashSet`, `TreeSet`)  
+- Queue → Follows FIFO order, used for processing elements in sequence (e.g., `LinkedList`, `PriorityQueue`)  
+
+---
+
+ 5. What is the difference between ArrayList and LinkedList?  
+- ArrayList → `ArrayList` is an indexed collection of objects where duplicate objects are allowed and insertion order preserved. 
+			   It is faster for random access but slower for adding/removing in the middle. Uses Dynamic Array internally.
+- LinkedList → `LinkedList` is a collection of objects where each element has address of previous and next element. 
+			   `LinkedList` is faster for adding/removing in the middle but slower for random access due to sequential access.
+				Uses Doubly LinkedList internally.
+
+Use ArrayList when you need fast access, and LinkedList when you need frequent insertions/deletions.  
+
+---
+
+ 6. What is the difference between HashSet and TreeSet?  
+- HashSet → Unordered, allows one `null` value, faster (O(1) time complexity).  
+- TreeSet → Sorted order, does not allow `null`, slower (O(log n) time complexity).  
+
+Use HashSet when ordering is not needed, and TreeSet when sorted order is required.  
+
+---
+
+ 7. What is the difference between HashMap and TreeMap?  
+- HashMap → Unordered, allows one `null` key, faster (O(1) time complexity).  
+- TreeMap → Sorted order (keys in ascending order), does not allow `null` key, slower (O(log n) time complexity).  
+
+Use HashMap when ordering is not required and TreeMap when sorting by keys is needed.  
+
+---
+
+
+2. List Interface
+
+ 1. What is a List in Java?  
+A List in Java is an ordered collection that allows duplicate elements and maintains the insertion order. 
+It provides index-based access, which means elements can be retrieved using their position in the list. 
+The `List` interface is implemented by classes like ArrayList, LinkedList, Vector, and Stack.  
+
+---
+
+ 2. What is the difference between ArrayList and Vector?  
+The main difference is that ArrayList is not synchronized, meaning it is not thread-safe, while Vector is synchronized, 
+making it safe for multi-threaded environments. Because of this, ArrayList is faster as it does not have the overhead of synchronization, 
+while Vector is slower due to thread safety.  
+
+Another difference is that ArrayList increases its size by 50% when full, whereas Vector doubles its size.  
+In general, ArrayList is preferred unless thread safety is required.  
+
+---
+
+ 3. How does ArrayList work internally?  
+Internally, ArrayList uses a dynamic array to store elements. 
+When adding an element, if the array is full, a new array is created with 50% more capacity, and all elements are copied into the new array.
+  
+Accessing an element by index is fast (O(1)) because it directly accesses the memory location. 
+However, insertions and deletions are slow (O(n)), especially in the middle, because elements must be shifted.  
+
+---
+
+ 4. What are the performance implications of using ArrayList vs LinkedList for random access and insertion/removal?  
+ArrayList is better for random access because it provides O(1) time complexity for retrieving elements using an index. 
+However, insertions and deletions in the middle are slow (O(n)) because elements must be shifted.  
+
+LinkedList is better for insertions and deletions because it does not require shifting, making these operations O(1) if done at the beginning or end. 
+However, random access is slow (O(n)) because elements must be traversed one by one.  
+If frequent access is needed, use ArrayList. If frequent insertions and deletions are required, use LinkedList.  
+
+---
+
+ 5. How can you ensure that a List does not allow duplicates?  
+To ensure a List does not allow duplicates, you can:  
+1. Use a Set instead of a List, such as `HashSet` or `LinkedHashSet`, because Sets automatically prevent duplicates.  
+2. Manually check before adding elements using the `contains()` method. Example:  
+   ```java
+   List<Integer> list = new ArrayList<>();
+   if (!list.contains(10)) {
+       list.add(10);
+   }
+   ```
+3. Use Java 8 Streams to remove duplicates by calling the `distinct()` method. Example:  
+   ```java
+   List<Integer> list = Arrays.asList(1, 2, 2, 3);
+   List<Integer> uniqueList = list.stream().distinct().collect(Collectors.toList());
+   ```
+
+---
+
+
+3. Set Interface
+
+ 1. What is a Set in Java?  
+A Set in Java is a collection that does not allow duplicate elements. 
+It is part of the Java Collection Framework and is implemented by classes like HashSet, LinkedHashSet, and TreeSet.  
+Unlike Lists, a Set does not maintain insertion order (except for `LinkedHashSet`), and it provides faster lookups compared to Lists.  
+
+---
+
+ 2. What is the difference between HashSet, LinkedHashSet, and TreeSet?  
+- HashSet: Does not maintain any order. It uses a hash table internally and provides fast operations (O(1) on average).  
+- LinkedHashSet: Maintains insertion order. It is slightly slower than `HashSet` due to the extra linked structure.  
+- TreeSet: Maintains elements in sorted order using a Red-Black Tree, making operations slower (O(log n) time complexity) but providing sorted elements.  
+
+💡 Use HashSet for fast access, LinkedHashSet when order matters, and TreeSet when sorting is needed.  
+
+---
+
+ 3. How does HashSet work internally?  
+`HashSet` internally uses a HashMap to store elements.  
+- When an element is added, HashSet calls the hashCode() method to determine the bucket location.  
+- If multiple elements have the same hash code, they are stored in a linked list (or a balanced tree for large buckets) inside the bucket.  
+- If an element already exists (checked using equals()), it is not added again.  
+- Since it uses a HashMap, the value for each element is stored as a dummy object (constant value).  
+
+---
+
+ 4. What is the time complexity of basic operations (add, remove, contains) in a HashSet?  
+- Average case: `O(1)` for add, remove, and contains, since HashSet uses hashing.  
+- Worst case: `O(n)`, when all elements end up in the same bucket (due to hash collisions).  
+- For large data sets, time complexity can be improved using balanced trees (`O(log n)`).  
+
+---
+
+ 5. Can you have null elements in a HashSet?  
+Yes, `HashSet` allows one null value because it checks for duplicates using `equals()` and does not store multiple nulls. 
+However, TreeSet does not allow null values because it needs to compare elements using their natural ordering or a custom comparator.  
+
+---
+
+ 6. What is the significance of the equals() and hashCode() methods in the Set interface?  
+- The `equals()` method determines whether two objects are equal.  
+- The `hashCode()` method generates a unique integer (hash) for an object, which helps in efficient storage inside a hash-based collection like HashSet.  
+- In a `HashSet`, when an element is added, it first calculates the hash code, then checks equality using `equals()`.  
+- If `equals()` and `hashCode()` are not properly overridden, duplicate elements might be stored in HashSet, breaking its uniqueness property.  
+
+Example:  
+```java
+@Override
+public int hashCode() {
+    return id; // Assuming id is a unique field
+}
+
+@Override
+public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    Employee e = (Employee) obj;
+    return this.id == e.id;
+}
+```
+
+💡 Always override both equals() and hashCode() when using custom objects in a Set.  
+
+---
+
+4. Map Interface
+
+ 1. What is a Map in Java?  
+A Map in Java is a collection that stores key-value pairs, where each key is unique. 
+It allows fast retrieval of values based on keys. 
+Unlike a List or Set, a Map does not allow duplicate keys, but multiple keys can have the same value.  
+
+The `Map` interface is implemented by classes like HashMap, TreeMap, and LinkedHashMap.  
+
+---
+
+ 2. What is the difference between HashMap, TreeMap, and LinkedHashMap?  
+
+- HashMap:  
+  - Stores key-value pairs using a hash table.  
+  - Does not maintain insertion order.  
+  - Provides O(1) time complexity for `put()` and `get()` operations on average.  
+
+- LinkedHashMap:  
+  - Maintains insertion order.  
+  - Slightly slower than `HashMap` due to extra memory for storing order.  
+
+- TreeMap:  
+  - Stores elements in sorted order (based on natural ordering or a custom comparator).  
+  - Uses a Red-Black Tree, so operations take O(log n) time complexity.  
+
+💡 Use HashMap for fast lookups, LinkedHashMap when order matters, and TreeMap for sorted data.  
+
+---
+
+ 3. How does HashMap work internally?  
+- `HashMap` uses an array of linked lists (buckets) to store key-value pairs.  
+- When a key-value pair is inserted, the hashCode() method of the key is used to calculate an index (bucket location).  
+- If multiple keys produce the same index (hash collision), elements are stored in a linked list or a balanced tree (if too many collisions occur).  
+- The equals() method is used to check if a key already exists in the bucket before adding a new value.  
+
+---
+
+ 4. Explain the concept of a collision in HashMap and how it is resolved.  
+A collision occurs in a `HashMap` when two different keys produce the same hash index and are placed in the same bucket.  
+
+# How does HashMap handle collisions?  
+1. Chaining (Linked List): If multiple keys map to the same bucket, they are stored in a linked list inside that bucket.  
+2. Balanced Tree (Since Java 8): If a bucket has too many elements (threshold = 8), the linked list is converted into a Red-Black Tree for faster lookups (`O(log n)`).  
+
+---
+
+ 5. What are the differences between put() and putIfAbsent() in a Map?  
+- put(key, value): Inserts the key-value pair into the Map. If the key already exists, it replaces the old value with the new value.  
+- putIfAbsent(key, value): Inserts the key-value pair only if the key is not already present in the Map. If the key exists, the value remains unchanged.  
+
+Example:  
+```java
+Map<Integer, String> map = new HashMap<>();
+map.put(1, "A");           // Adds key 1 with value "A"
+map.put(1, "B");           // Replaces "A" with "B"
+map.putIfAbsent(1, "C");   // Does nothing because key 1 already exists
+```
+
+💡 Use `putIfAbsent()` when you want to insert a value only if the key is missing.  
+
+---
+
+ 6. What is the difference between keySet(), values(), and entrySet() in a Map?  
+
+- keySet(): Returns a Set of all keys in the Map.  
+- values(): Returns a Collection of all values in the Map.  
+- entrySet(): Returns a Set of key-value pairs (Map.Entry objects).  
+
+Example:  
+```java
+Map<Integer, String> map = new HashMap<>();
+map.put(1, "A");
+map.put(2, "B");
+
+Set<Integer> keys = map.keySet();   // {1, 2}
+Collection<String> values = map.values();   // {"A", "B"}
+Set<Map.Entry<Integer, String>> entries = map.entrySet();   // {1=A, 2=B}
+```
+
+💡 Use `keySet()` to iterate over keys, `values()` to get all values, and `entrySet()` to iterate over both keys and values.  
+
+---
+
+5. Queue and Deque
+
+ 1. What is a Queue in Java?  
+A Queue in Java is a collection that follows the FIFO (First-In-First-Out) principle. It means that elements are added at the rear and removed from the front.  
+The `Queue` interface is part of the Java Collection Framework and is implemented by classes like LinkedList, PriorityQueue, and ArrayDeque.  
+
+---
+
+ 2. What is the difference between a Queue and a Deque?  
+- Queue: Elements are added at the rear and removed from the front (FIFO). Example: `LinkedList`, `PriorityQueue`.  
+- Deque (Double-Ended Queue): Elements can be added or removed from both ends (front and rear). Example: `ArrayDeque`, `LinkedList`.  
+
+💡 Use Queue when you need FIFO behavior, and use Deque when you need flexible insertion and removal from both ends.  
+
+---
+
+ 3. What are the methods provided by the Queue interface?  
+
+| Method          | Description |
+|----------------|-------------|
+| `add(e)`       | Inserts an element, throws an exception if full. |
+| `offer(e)`     | Inserts an element, returns `false` if full. |
+| `remove()`     | Removes and returns the front element, throws an exception if empty. |
+| `poll()`       | Removes and returns the front element, returns `null` if empty. |
+| `element()`    | Retrieves the front element without removing, throws an exception if empty. |
+| `peek()`       | Retrieves the front element without removing, returns `null` if empty. |
+
+---
+
+ 4. What is the difference between offer() and add() in the Queue interface?  
+- `add(e)`: Inserts an element but throws an exception if the Queue is full.  
+- `offer(e)`: Inserts an element but returns `false` if the Queue is full (does not throw an exception).  
+
+
+💡 Use `offer()` when you want to handle capacity limitations gracefully.  
+
+---
+
+ 5. Explain the use of PriorityQueue in Java.  
+`PriorityQueue` is a special type of Queue where elements are stored in a sorted order (natural ordering or a custom comparator) instead of FIFO.  
+- By default, it sorts elements in ascending order (min-heap).  
+- Does not allow `null` elements.  
+- Time complexity for `add()` and `poll()` is O(log n) because it uses a heap data structure.  
+
+Example:  
+```java
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+pq.add(30);
+pq.add(10);
+pq.add(20);
+System.out.println(pq.poll()); // Outputs 10 (smallest element)
+```
+
+💡 Use PriorityQueue when you need automatic sorting while inserting elements.  
+
+---
+
+ 6. How does the LinkedList class implement both List and Queue interfaces?  
+`LinkedList` in Java implements both `List` and `Queue` interfaces, meaning it can function as both:  
+- As a List (`List<Integer> list = new LinkedList<>()`): Supports index-based operations (`add(index, e)`, `remove(index)`, etc.).  
+- As a Queue (`Queue<Integer> queue = new LinkedList<>()`): Supports FIFO operations (`offer()`, `poll()`, `peek()`).  
+
+Example:  
+```java
+List<Integer> list = new LinkedList<>();  // Works like an ArrayList
+Queue<Integer> queue = new LinkedList<>();  // Works like a FIFO queue
+```
+
+💡 Use LinkedList as a List when you need dynamic resizing, and as a Queue when you need FIFO operations.  
+
+---
+
+6. Iterator
+
+ 1. What is the role of the Iterator interface in Java Collections?  
+The `Iterator` interface in Java provides a way to traverse elements in a collection one by one. 
+It is part of the Java Collection Framework and is mainly used with `List`, `Set`, and `Queue`. 
+Using an iterator ensures safe removal of elements during iteration.  
+
+The main methods of an `Iterator` are:  
+- `hasNext()`: Returns `true` if more elements are available.  
+- `next()`: Returns the next element in the iteration.  
+- `remove()`: Removes the last retrieved element from the collection.  
+
+Example usage:  
+```java
+Iterator<Integer> iterator = list.iterator();
+while (iterator.hasNext()) {
+    System.out.println(iterator.next());
+}
+```
+The advantage of an iterator is that it hides the underlying collection structure and provides a consistent way to traverse collections.  
+
+---
+
+ 2. What is the difference between an Iterator and a ListIterator?  
+The `Iterator` interface allows only forward traversal of a collection, whereas `ListIterator` provides bi-directional traversal (both forward and backward).  
+
+A `ListIterator` is available only for Lists, whereas `Iterator` works for all collection types like `List`, `Set`, and `Queue`.  
+
+Additionally, `ListIterator` allows modification of elements using the `set()` method and supports `add()` to insert new elements while iterating.  
+
+Example of `ListIterator`:  
+```java
+ListIterator<Integer> listIterator = list.listIterator();
+while (listIterator.hasNext()) {
+    System.out.println(listIterator.next()); // Forward traversal
+}
+while (listIterator.hasPrevious()) {
+    System.out.println(listIterator.previous()); // Backward traversal
+}
+```
+Use `Iterator` when only forward traversal is needed, and `ListIterator` when you need both forward and backward traversal with modifications.  
+
+---
+
+ 3. How can you iterate over a Map using an Iterator?  
+Since `Map` does not implement the `Iterable` interface, you cannot use an iterator directly on it. 
+Instead, you can use an iterator on `keySet()`, `values()`, or `entrySet()`.  
+
+To iterate over the keys:  
+```java
+Iterator<Integer> keyIterator = map.keySet().iterator();
+while (keyIterator.hasNext()) {
+    System.out.println(keyIterator.next());
+}
+```
+To iterate over the values:  
+```java
+Iterator<String> valueIterator = map.values().iterator();
+while (valueIterator.hasNext()) {
+    System.out.println(valueIterator.next());
+}
+```
+To iterate over key-value pairs:  
+```java
+Iterator<Map.Entry<Integer, String>> entryIterator = map.entrySet().iterator();
+while (entryIterator.hasNext()) {
+    Map.Entry<Integer, String> entry = entryIterator.next();
+    System.out.println(entry.getKey() + " = " + entry.getValue());
+}
+```
+Use `entrySet()` when you need both keys and values together.  
+
+---
+
+ 4. What is the fail-fast behavior in Java Collections?  
+The fail-fast mechanism in Java Collections occurs when a collection is modified while it is being iterated, resulting in a `ConcurrentModificationException`.  
+
+This happens because iterators maintain an internal modification count. 
+If a collection is modified outside of the iterator's remove() method, the modification count becomes inconsistent, and the iterator fails immediately.  
+
+Example of fail-fast behavior:  
+```java
+List<Integer> list = new ArrayList<>();
+list.add(1);
+list.add(2);
+
+Iterator<Integer> it = list.iterator();
+while (it.hasNext()) {
+    list.add(3);  // Throws ConcurrentModificationException
+}
+```
+To avoid this, you should use `Iterator.remove()` instead of modifying the collection directly:  
+```java
+Iterator<Integer> it = list.iterator();
+while (it.hasNext()) {
+    if (it.next() == 2) {
+        it.remove(); // Safe removal
+    }
+}
+```
+Alternatively, you can use CopyOnWriteArrayList to avoid fail-fast behavior.  
+
+Fail-fast helps detect unexpected modifications early and prevents inconsistent behavior in multi-threaded environments.  
+
+---
+
+ 5. What is the for-each loop and how does it relate to the Iterator?  
+The for-each loop, also known as the enhanced for loop, is a simplified way to iterate over collections and arrays. 
+It internally uses an iterator but does not expose it directly.  
+
+Example of for-each loop:  
+```java
+for (Integer num : list) {
+    System.out.println(num);
+}
+```
+Although for-each makes code more readable, it does not allow modification of elements while iterating.  
+
+Example of an issue with for-each:  
+```java
+for (Integer num : list) {
+    list.remove(num); // Throws ConcurrentModificationException
+}
+```
+To modify elements while iterating, you must use an explicit `Iterator` or `ListIterator`.  
+
+For-each is recommended when you only need to read elements, and `Iterator` should be used when modifications are required during iteration.  
+
+---
+
+
+7. Sorting and Searching
+
+ 1. How do you sort a List in Java?  
+In Java, you can sort a `List` using the Collections.sort() method or by using List.sort() if you want to use a custom sorting order.  
+
+- Using Collections.sort():  
+This method sorts the list in natural order (based on the element's `Comparable` implementation).  
+Example:  
+```java
+List<Integer> list = new ArrayList<>();
+list.add(3);
+list.add(1);
+list.add(2);
+Collections.sort(list);
+System.out.println(list); // Output: [1, 2, 3]
+```
+
+- Using List.sort():  
+This method sorts the list using a Comparator, which allows custom sorting logic.  
+Example:  
+```java
+list.sort((a, b) -> b - a);  // Custom descending order
+System.out.println(list);  // Output: [3, 2, 1]
+```
+
+---
+
+ 2. What is the role of the Comparator and Comparable interfaces in sorting?  
+- Comparable interface: It is implemented by the elements of a collection to define their natural ordering. 
+The `compareTo()` method is used to compare objects for sorting.  
+Example:  
+```java
+class Person implements Comparable<Person> {
+    String name;
+    int age;
+
+    public int compareTo(Person other) {
+        return this.age - other.age; // Sort by age
+    }
+}
+```
+
+- Comparator interface: It is used for custom sorting when the objects do not implement `Comparable` or 
+when you want to sort in a different way than the natural order. The `compare()` method is used to compare two objects.  
+Example:  
+```java
+class NameComparator implements Comparator<Person> {
+    public int compare(Person p1, Person p2) {
+        return p1.name.compareTo(p2.name);  // Sort by name
+    }
+}
+```
+---
+
+ 3. What is the difference between compareTo() and compare() methods?  
+- compareTo() method: This method is defined in the `Comparable` interface and is used to compare the current object with another object of the same type. 
+It returns a negative, zero, or positive value based on whether the current object is less than, equal to, or greater than the other object.  
+
+- compare() method: This method is defined in the `Comparator` interface and is used to compare two objects. 
+It is often used when implementing custom sorting logic. It returns a negative, zero, or positive value based on the comparison of the two objects.  
+
+---
+
+ 4. How do you perform a binary search on a List in Java?  
+To perform a binary search, the list must be sorted. You can use the `Collections.binarySearch()` method to search for an element in a sorted list. 
+The method returns the index of the element if found, or `-(insertion point) - 1` if not found.
+
+Example:  
+```java
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+int index = Collections.binarySearch(list, 3);  // Returns index 2
+System.out.println(index);  // Output: 2
+```
+If the list is not sorted, you need to sort it first before applying `binarySearch()`.
+
+---
+
+ 5. What is the difference between a natural ordering and a custom ordering in Collections?  
+- Natural ordering: This is the default ordering for objects that implement the `Comparable` interface. 
+					The elements are ordered based on the logic defined in the `compareTo()` method of the class. 
+					For example, integers are ordered numerically, and strings are ordered lexicographically.
+
+- Custom ordering: This is used when you need to sort objects differently from their natural ordering. 
+				   You can use the `Comparator` interface to define a custom sorting order. 
+				   You can either create a separate comparator or use a lambda expression for custom sorting logic.
+
+Example of custom ordering:  
+```java
+List<Person> list = new ArrayList<>();
+list.add(new Person("Alice", 30));
+list.add(new Person("Bob", 25));
+list.sort((p1, p2) -> p1.name.compareTo(p2.name));  // Custom sort by name
+```
+---
+
+
+8. Concurrency
+
+ 1. What is the difference between Collections.synchronizedList() and CopyOnWriteArrayList?  
+- Collections.synchronizedList(): This method returns a synchronized (thread-safe) version of any given `List`. 
+It synchronizes all the methods of the list, ensuring thread safety but at the cost of performance due to the overhead of synchronization.  
+Example:  
+```java
+List<Integer> list = Collections.synchronizedList(new ArrayList<>());
+```
+- CopyOnWriteArrayList: This is a thread-safe `List` where all mutative operations (like `add()`, `remove()`, etc.) are done on a copy of the underlying array. 
+This ensures that the collection can be safely read by multiple threads without synchronization but can cause high memory overhead during frequent writes. 
+It's ideal for cases with more reads than writes.  
+Example:  
+```java
+CopyOnWriteArrayList<Integer> list = new CopyOnWriteArrayList<>();
+```
+The key difference is that `synchronizedList` locks the entire list for any operation, while `CopyOnWriteArrayList` allows 
+concurrent reads without locking and isolates writes by copying the data.
+
+---
+
+ 2. How do you make a collection thread-safe?  
+There are several ways to make a collection thread-safe:  
+1. Using synchronized wrappers: You can use `Collections.synchronizedList()`, `Collections.synchronizedMap()`, etc., 
+								to wrap a collection and ensure thread safety by synchronizing each operation.
+  
+2. Using concurrent collections: Java provides built-in thread-safe collections in the `java.util.concurrent` package like `CopyOnWriteArrayList`, 
+								 `ConcurrentHashMap`, `BlockingQueue`, etc., which are optimized for concurrent access.
+
+3. Manual synchronization: You can manually synchronize blocks of code that modify or access shared collections using the `synchronized` keyword.
+
+4. Using thread-safe collections like `Vector`, `Hashtable`, `ConcurrentLinkedQueue`, etc., which are designed for concurrent use.
+
+---
+
+ 3. What is a concurrent collection in Java?  
+A concurrent collection in Java is a set of classes that are designed to be used safely by multiple threads. 
+These collections are implemented in a way that ensures thread safety without locking the entire collection during read or write operations. 
+The `java.util.concurrent` package provides several concurrent collections like:  
+- `ConcurrentHashMap`
+- `CopyOnWriteArrayList`
+- `BlockingQueue`
+- `ConcurrentLinkedQueue`
+- `LinkedBlockingQueue`
+
+These collections are optimized for high concurrency and can efficiently handle scenarios 
+where multiple threads are accessing or modifying the collection concurrently.
+
+---
+
+ 4. What is a BlockingQueue, and where is it used?  
+A BlockingQueue is an interface that represents a thread-safe queue with blocking operations. 
+It is mainly used in producer-consumer scenarios where one thread is producing data, and another is consuming it.
+  
+BlockingQueue operations are blocking:
+- put(): If the queue is full, the producer thread is blocked until space is available.
+- take(): If the queue is empty, the consumer thread is blocked until an element is available.
+  
+Some implementations of `BlockingQueue` are `ArrayBlockingQueue`, `LinkedBlockingQueue`, and `PriorityBlockingQueue`.  
+It is used in scenarios like thread pooling, task scheduling, and pipeline processing.
+
+---
+
+ 5. What is the difference between ConcurrentHashMap and HashMap?  
+- HashMap: `HashMap` is not thread-safe. If multiple threads try to modify the map concurrently, it can lead to inconsistent or corrupt data. 
+			Synchronization needs to be handled externally (using `synchronizedMap()` or manually).
+
+- ConcurrentHashMap: `ConcurrentHashMap` is thread-safe and designed for high concurrency. 
+					  It allows multiple threads to read and write to different parts of the map simultaneously without blocking each other. 
+					  It achieves this by dividing the map into segments and allowing thread-safe access to individual segments. 
+					  It does not lock the entire map during a write operation, unlike `HashMap`, ensuring better performance in multi-threaded environments.
+
+---
+
+ 6. ConcurrentHashMap internal working and how it will manage to store the same key-value pair by multiple threads?  
+`ConcurrentHashMap` is designed for high concurrency by dividing the map into several segments. 
+Each segment can be accessed independently by different threads, which reduces contention and increases throughput.  
+
+- Internal structure: The map is internally divided into buckets (or segments) to allow multiple threads to work on different sections simultaneously. 
+					  Each segment uses its own locking mechanism (e.g., locks, CAS (Compare-And-Swap)) for individual operations, 
+					  so threads can read and write to different segments concurrently without blocking each other.
+
+- Handling same key-value pair: If multiple threads try to insert the same key-value pair, `ConcurrentHashMap` ensures that the insertion is atomic using 
+								locking mechanisms, and if the key already exists, the thread will update the value atomically. 
+								However, it allows a thread to read values without locking, making it efficient for concurrent reads.
+
+In simple terms, `ConcurrentHashMap` allows high concurrency by dividing the data into segments, lock striping to reduce contention, 
+and atomic operations to manage updates and retrievals safely in multi-threaded environments.
+
+---
+
+
+9. Utility Methods
+
+ 1. What is the role of the Collections class in Java?  
+The `Collections` class in Java is a utility class that provides static methods for operating on or returning collections. 
+It is part of the `java.util` package. It helps with common operations on collections like sorting, searching, shuffling, reversing, and more. 
+This class provides a set of algorithms that can be applied to any `Collection` type such as `List`, `Set`, and `Queue`.
+
+Some examples of methods in `Collections` class:
+- `sort()`: Sorts a list.
+- `shuffle()`: Shuffles the elements in a list randomly.
+- `reverse()`: Reverses the order of elements in a list.
+- `max()` and `min()`: Find the maximum or minimum element in a collection.
+- `synchronizedList()`: Returns a synchronized (thread-safe) list.
+
+---
+
+ 2. What is the Collections.sort() method, and how does it work?  
+The `Collections.sort()` method is used to sort the elements of a `List` in natural order (if the elements implement `Comparable`) 
+or according to a specified `Comparator`. It sorts the elements in ascending order by default.
+
+- Natural order: If the elements of the list are `Comparable` (e.g., `Integer`, `String`), they will be sorted according to the `compareTo()` method.
+- Custom order: If you provide a `Comparator`, it sorts the list according to the custom comparison logic defined in the `Comparator`.
+
+Example:  
+```java
+List<Integer> list = Arrays.asList(3, 1, 4, 1, 5, 9);
+Collections.sort(list);
+System.out.println(list);  // Output: [1, 1, 3, 4, 5, 9]
+```
+
+For custom sorting:  
+```java
+List<String> list = Arrays.asList("apple", "banana", "cherry");
+Collections.sort(list, (s1, s2) -> s2.compareTo(s1));  // Descending order
+System.out.println(list);  // Output: [cherry, banana, apple]
+```
+
+---
+
+ 3. Explain the difference between Collections.shuffle() and Collections.reverse().  
+- Collections.shuffle(): This method is used to randomly reorder the elements of a list. 
+It is typically used when you want to randomize the order of elements, such as when shuffling cards in a deck.
+
+Example:  
+```java
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+Collections.shuffle(list);
+System.out.println(list);  // Output: Random order like [3, 5, 1, 4, 2]
+```
+
+- Collections.reverse(): This method is used to reverse the order of the elements in a list. 
+It simply swaps the first element with the last, the second with the second-last, and so on.
+
+Example:  
+```java
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+Collections.reverse(list);
+System.out.println(list);  // Output: [5, 4, 3, 2, 1]
+```
+
+In summary, `shuffle()` randomizes the order of elements, whereas `reverse()` flips the order.
+
+---
+
+ 4. What does the Collections.unmodifiableList() method do?  
+The `Collections.unmodifiableList()` method returns an unmodifiable view of the given list. 
+It means that the list cannot be modified (no element can be added, removed, or changed). 
+Any attempt to modify the list will result in an `UnsupportedOperationException`.
+
+Example:  
+```java
+List<Integer> list = Arrays.asList(1, 2, 3, 4);
+List<Integer> unmodifiableList = Collections.unmodifiableList(list);
+
+unmodifiableList.add(5);  // Throws UnsupportedOperationException
+```
+The main use of this method is to provide read-only access to a list. 
+The original list is still modifiable, but the unmodifiable view prevents external modifications.
+
+---
+
+
+10. Advanced Concepts
+
+ 1. What is the Collection.stream() method, and how do you use it?  
+The `Collection.stream()` method is used to convert a collection (like a `List`, `Set`, etc.) into a stream. 
+A stream is a sequence of elements that can be processed in parallel or sequentially. 
+It provides a more functional approach to working with data, allowing operations like filtering, mapping, and reducing in a declarative manner.
+
+You can use the `stream()` method to perform operations such as:
+- Filtering elements based on a condition
+- Mapping elements to a new form
+- Reducing elements (e.g., summing them up)
+- Sorting and grouping elements
+
+Example:
+```java
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+list.stream()
+    .filter(n -> n % 2 == 0)  // Filter even numbers
+    .forEach(System.out::println);  // Print the filtered elements
+// Output: 2 4
+```
+
+---
+
+ 2. What are the advantages of using the Java Stream API with Collections?  
+The Java Stream API provides several advantages when working with collections:
+- Declarative code: The Stream API allows you to express operations on collections in a more declarative manner, making the code more readable and concise.
+- Composability: Stream operations can be chained together, allowing for complex data processing in a single pipeline.
+- Functional programming: The Stream API allows you to use lambda expressions and functional programming constructs like `filter()`, `map()`, `reduce()`, etc.
+- Parallel processing: Streams support parallel operations with minimal changes to your code, allowing you to efficiently process large datasets across multiple threads.
+- Lazy evaluation: Stream operations are lazy, meaning they are not executed until a terminal operation (e.g., `forEach()`, `collect()`) is invoked. 
+This helps in optimizing performance by reducing unnecessary operations.
+
+---
+
+ 3. What is the difference between parallelStream() and stream() in Java?  
+- stream(): This creates a sequential stream, where the elements are processed in a single thread. 
+			The operations on the stream are performed one after the other.
+
+Example:
+```java
+list.stream().forEach(System.out::println);  // Sequential processing
+```
+
+- parallelStream(): This creates a parallel stream, where the elements are processed concurrently using multiple threads. 
+					Parallel streams can improve performance when working with large collections and CPU-bound operations, 
+					but they might not be ideal for small collections or operations that involve shared mutable state.
+Example:
+```java
+list.parallelStream().forEach(System.out::println);  // Parallel processing
+```
+
+Key Difference: `stream()` processes elements sequentially, while `parallelStream()` processes elements in parallel, 
+leveraging multiple CPU cores. However, not all tasks benefit from parallelism, and using `parallelStream()` requires careful consideration of thread safety.
+
+---
+
+ 4. What is the purpose of the Comparator interface in the sort() method?  
+The `Comparator` interface is used to define custom sorting logic when sorting elements in a collection. 
+It provides the `compare()` method, which compares two objects and returns:
+
+- A negative value if the first object is "less than" the second,
+- Zero if they are "equal",
+- A positive value if the first object is "greater than" the second.
+
+The `Comparator` interface is particularly useful when:
+- The elements do not implement the `Comparable` interface.
+- You want to define a sorting order that is different from the natural ordering of the elements.
+
+The `sort()` method in the `Collections` class or `List` interface can accept a `Comparator` to sort elements according to the custom order.
+
+Example:
+```java
+List<String> list = Arrays.asList("apple", "banana", "cherry");
+list.sort((s1, s2) -> s2.compareTo(s1));  // Custom sort (descending order)
+System.out.println(list);  // Output: [cherry, banana, apple]
+```
+
+The `Comparator` interface allows you to customize the sorting logic without modifying the underlying object class.
+
+---
+
+
+11. Hashing and Performance
+
+ 1. What is a hash code, and why is it important in a HashSet or HashMap?  
+A hash code is an integer value that is used to uniquely identify objects in hash-based collections like `HashSet` and `HashMap`. 
+It is computed using the `hashCode()` method, which is defined in the `Object` class. 
+The hash code helps to determine the bucket index where an object should be stored in a hash-based collection.
+
+- In a HashMap, the key's hash code is used to determine the bucket where the key-value pair will be placed.
+- In a HashSet, the hash code of an object determines where the object will be stored in the set.
+
+The importance of the hash code:
+- Efficient searching: Hash-based collections use the hash code to quickly locate elements, which provides fast lookup, insertion, and deletion operations.
+- Minimizing collisions: A good hash code reduces collisions, where different objects have the same hash code, improving the collection's performance.
+
+---
+
+ 2. What happens when two objects have the same hash code in a HashMap?  
+When two objects have the same hash code in a `HashMap`, a collision occurs. 
+Both objects will be placed in the same bucket. To handle collisions, the `HashMap` uses a technique called chaining, 
+where a linked list or a tree structure (in case of high collision) is used within the same bucket to store the multiple entries.
+
+- When adding a new key-value pair, `HashMap` first checks the bucket using the hash code of the key. 
+If the bucket is already occupied by another key with the same hash code, it uses the `equals()` method to check for equality.
+- If the keys are equal (i.e., they are considered the same according to the `equals()` method), the new value will replace the old value.
+- If the keys are not equal, the new entry will be added to the list/tree within the same bucket.
+
+---
+
+ 3. What is the load factor in a HashMap?  
+The load factor in a `HashMap` is a measure of how full the map can get before it needs to resize. 
+It is the ratio of the number of elements in the `HashMap` to the number of buckets.
+
+The default load factor in a `HashMap` is 0.75, which means the map will resize (rehash) when 75% of the buckets are filled. 
+The higher the load factor, the less memory will be used, but it may result in more collisions and slower performance. 
+A smaller load factor (e.g., 0.5) will lead to more frequent resizing but fewer collisions.
+
+Formula for load factor:  
+`Load Factor = (Number of elements) / (Number of buckets)`
+
+---
+
+ 4. How does the hashCode() and equals() method affect the performance of HashSet and HashMap?  
+- hashCode(): The `hashCode()` method plays a crucial role in the performance of `HashSet` and `HashMap` by determining the bucket index for storing the object. 
+			  If the hash code is well-distributed, it reduces the chances of collisions, which leads to faster lookup, insertion, and deletion. 
+			  A poorly implemented `hashCode()` (e.g., returning the same hash code for all objects) will cause many collisions and degrade performance.
+
+- equals(): The `equals()` method is used to check if two objects are equal when they have the same hash code. 
+			If two objects are placed in the same bucket (due to a hash collision), the `equals()` method is used to determine if they are actually the same object. 
+			If the `equals()` method is not properly implemented, it can lead to incorrect results, 
+			such as failing to find the correct object, even though it is present in the collection.
+
+Together, these two methods are critical for the correct functioning and performance of `HashSet` and `HashMap`. 
+A bad implementation of `hashCode()` and `equals()` can significantly degrade the performance of hash-based collections.
+
+---
+
+ 5. What is the internal working of HashMap when the bucket is full?  
+When the bucket in a `HashMap` becomes full, it triggers a rehashing process, where the `HashMap` is resized. The rehash operation involves:
+1. Doubling the number of buckets: The capacity of the `HashMap` is increased, typically doubled.
+2. Recomputing hash codes: The existing entries are redistributed across the new set of buckets based on their hash codes.
+3. Moving entries: Each entry is placed in a new bucket (depending on the new hash code and the increased capacity).
+
+Rehashing ensures that the `HashMap` maintains efficient performance by reducing the number of collisions. 
+However, it comes with a performance cost, as rehashing involves moving all existing entries to the new buckets, which can be time-consuming.
+
+The resizing occurs based on the load factor and threshold, which determines when the `HashMap` should be resized.
+
+---

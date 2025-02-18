@@ -1,0 +1,53 @@
+
+
+public interface Logger (){
+
+	void log(String message);
+}
+
+
+public DatabaseLogger implements Logger {
+	
+	public void log(String message){
+		System.out.println("Database logger :: " + message);
+	}
+}
+
+public FileSystemLogger implements Logger {
+	
+	public void log(String message){
+		System.out.println("FileSystemLogger logger :: " + message);
+	}
+}
+
+
+public class LoggerFactory {
+	
+	private Logger logger;
+	
+	public static Logger getLogger(Logger logger){
+		
+		return logger;
+	}
+}
+
+
+List<Vendors> vendors = new ArrayList<>();
+
+vendors.stream().filter(e.City=="Banglore").map(e -> e.setCity("Mumbai")).collect(Collectors.toList()).stream().map( e -> e.getCity).collect(Collectors.toList());
+
+
+
+How to implement caching in spring boot?
+How to remove the cached data?
+
+Concurrent HashMap internal working and how it will manage to store the same key value pair by multiple thread?
+
+How ConcurrentMap is better that synchronized map?
+
+Design Pattern(Builder, Factory)
+
+String Immutability. Does string creates new object for every modification?
+String Constant Poool
+
+How can we create a immutable object in Java?

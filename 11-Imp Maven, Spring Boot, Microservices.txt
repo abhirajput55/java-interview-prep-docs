@@ -1,0 +1,550 @@
+
+# Spring Boot
+
+Q. How you connect hibernate with project? 
+
+To connect Hibernate with a Spring Boot project, the first step is to add the spring-boot-starter-data-jpa dependency in the pom.xml or build.gradle file. 
+This starter includes Hibernate by default. Next, you configure the data source in application.properties by specifying the database URL, credentials, 
+and Hibernate-specific properties like ddl-auto and show-sql.
+
+You then create Java classes annotated with @Entity, which map to database tables. 
+These entity classes have fields representing the table columns, and the primary key is marked with @Id. 
+After that, you create a repository interface extending JpaRepository to perform CRUD operations on the entities.
+
+
+Q. What is Actuator and how it works?
+
+Spring Boot Actuator is a set of production-ready features in Spring Boot that helps you monitor and manage your application. 
+It provides useful endpoints like /health to check the application's health, /metrics for performance monitoring, and /info for exposing application information.
+
+Actuator works by exposing these endpoints over HTTP or JMX. By adding the spring-boot-starter-actuator dependency, 
+Spring Boot automatically configures and exposes a set of default endpoints, which can be customized and secured through configuration in application.properties. 
+You can use Actuator to monitor the application's internal state, troubleshoot issues, and track important metrics in a production environment. 
+Additionally, you can secure Actuator endpoints using Spring Security to restrict access to sensitive information.
+
+
+14. How does Spring Boot handle internationalization (i18n) and localization (l10n)?
+
+Spring Boot automatically resolves the appropriate message based on the user's locale, making it convenient to build multi-language applications. 
+It provides support for internationalization and localization through properties files and the use of the MessageSource interface.
+
+By defining message bundles for different locales and configuring the message source, you can easily retrieve and display localized messages in your application.
+
+
+# Microservices 
+
+Q. Microservices-based applications how different from monolithic application?
+
+Monolithic applications are typically built as a single, unified unit with all components tightly coupled, 
+making them easy to develop initially but harder to scale and maintain as they grow. 
+In contrast, microservices-based applications are decomposed into smaller, independent services that can be developed, deployed, and scaled independently.
+
+Each service in a microservices architecture is focused on a specific business capability and communicates with other services via network protocols like HTTP or messaging queues. 
+Microservices provide benefits like better scalability, faster development cycles, and more flexibility in terms of technology stack. 
+However, they also introduce challenges such as complexity in service communication, managing data consistency, and deployment overhead.
+
+For example, in an e-commerce application, in a monolithic approach, all features like user management, order processing, and payment are part of one large application. 
+In a microservices approach, each feature could be a separate service, such as a UserService, OrderService, and PaymentService, each with its own database and deployment pipeline. 
+This allows us to scale the OrderService independently if it's under heavy load, without affecting the other services.
+
+
+# Asynchronous API and Web Services
+
+In Spring Boot, you can consume event-driven/asynchronous APIs using different approaches like WebClient, Kafka, RabbitMQ, and @Async with CompletableFuture.  
+
+ 1. Using WebClient (Reactive & Non-blocking)
+Best for calling external asynchronous APIs like WebSockets or Streaming APIs.  
+```java
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+public class AsyncApiClient {
+    private static final WebClient webClient = WebClient.create();
+
+    public static void main(String[] args) {
+        webClient.get()
+            .uri("https://jsonplaceholder.typicode.com/posts/1")
+            .retrieve()
+            .bodyToMono(String.class)
+            .subscribe(response -> System.out.println("Response: " + response));
+
+        System.out.println("Request sent! (Non-blocking)");
+    }
+}
+```
+✅ Non-blocking API call  
+✅ Uses Reactive Programming (`subscribe()` handles response asynchronously)  
+
+---
+
+ 2. Using @Async with CompletableFuture (Spring Boot Async)
+Best for running tasks asynchronously in background threads.  
+Step 1: Enable Async Support in `@SpringBootApplication`  
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+@EnableAsync
+@SpringBootApplication
+public class AsyncApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(AsyncApplication.class, args);
+    }
+}
+```
+  
+Step 2: Create an Asynchronous Service  
+```java
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import java.util.concurrent.CompletableFuture;
+
+@Service
+public class AsyncService {
+
+    @Async
+    public CompletableFuture<String> fetchData() {
+        try {
+            Thread.sleep(2000); // Simulate delay
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return CompletableFuture.completedFuture("Async Data Loaded");
+    }
+}
+```
+
+Step 3: Call the Async Method in Controller  
+```java
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.concurrent.CompletableFuture;
+
+@RestController
+public class AsyncController {
+    
+    private final AsyncService asyncService;
+
+    public AsyncController(AsyncService asyncService) {
+        this.asyncService = asyncService;
+    }
+
+    @GetMapping("/async-data")
+    public CompletableFuture<String> getAsyncData() {
+        return asyncService.fetchData();
+    }
+}
+```
+✅ Runs in a separate thread  
+✅ Does not block the main thread  
+
+---
+
+ 3. Using Kafka (Event-Driven Architecture)
+Best for consuming messages from Kafka topics asynchronously.  
+Step 1: Add Kafka dependency  
+```xml
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency>
+```
+  
+Step 2: Create Kafka Consumer  
+```java
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class KafkaConsumerService {
+
+    @KafkaListener(topics = "my-topic", groupId = "my-group")
+    public void consumeMessage(ConsumerRecord<String, String> record) {
+        System.out.println("Received message: " + record.value());
+    }
+}
+```
+✅ Event-driven, suitable for microservices communication  
+✅ Handles large-scale asynchronous processing  
+
+---
+
+ 4. Using RabbitMQ (Message Queue - Asynchronous Communication)
+Step 1: Add RabbitMQ dependency  
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-amqp</artifactId>
+</dependency>
+```
+
+Step 2: Create RabbitMQ Consumer  
+```java
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RabbitMqConsumerService {
+
+    @RabbitListener(queues = "my-queue")
+    public void receiveMessage(String message) {
+        System.out.println("Received Message: " + message);
+    }
+}
+```
+✅ Best for message-driven architecture  
+✅ Works well in distributed applications  
+
+
+ Which One Should You Use?
+| Approach                   | Best For                                 |
+|----------------------------|------------------------------------------|
+| WebClient                  | Calling external async APIs              |
+| @Async + CompletableFuture | Running background tasks asynchronously  |
+| Kafka                      | Event-driven microservices communication |
+| RabbitMQ                   | Message queues for async processing      |
+
+
+# How to Use ActiveMQ for Asynchronous Messaging in Spring Boot  
+
+ActiveMQ is a message broker that allows applications to communicate asynchronously using a queue-based system. 
+Spring Boot provides built-in support for ActiveMQ using Spring Boot Starter AMQP.
+
+ 1. Add ActiveMQ Dependency
+In your `pom.xml`, add the following dependency:
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-activemq</artifactId>
+</dependency>
+```
+
+ 2. Configure ActiveMQ in `application.properties`
+If you're using local ActiveMQ, you can set up the broker URL in `src/main/resources/application.properties`:
+```properties
+spring.activemq.broker-url=tcp://localhost:61616
+spring.activemq.user=admin
+spring.activemq.password=admin
+```
+✅ Default ActiveMQ port is `61616`  
+✅ Default UI Console (for checking messages) is `http://localhost:8161/admin`  
+
+ 3. Create a Producer (Message Sender)
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ActiveMQProducer {
+    
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    private static final String QUEUE_NAME = "my-queue";
+
+    public void sendMessage(String message) {
+        jmsTemplate.convertAndSend(QUEUE_NAME, message);
+        System.out.println("Sent message: " + message);
+    }
+}
+```
+✅ Uses `JmsTemplate` to send messages to a queue  
+
+ 4. Create a Consumer (Message Receiver)
+```java
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ActiveMQConsumer {
+    
+    @JmsListener(destination = "my-queue")
+    public void receiveMessage(String message) {
+        System.out.println("Received message: " + message);
+    }
+}
+```
+✅ Uses `@JmsListener` to consume messages asynchronously from the queue  
+
+ 5. Create a REST Controller to Test Messaging
+```java
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class MessageController {
+    
+    private final ActiveMQProducer producer;
+
+    public MessageController(ActiveMQProducer producer) {
+        this.producer = producer;
+    }
+
+    @GetMapping("/send-message")
+    public String sendMessage(@RequestParam String msg) {
+        producer.sendMessage(msg);
+        return "Message sent: " + msg;
+    }
+}
+```
+✅ Now, sending a request like:  
+```
+GET http://localhost:8080/send-message?msg=HelloActiveMQ
+```
+✅ Will push the message to ActiveMQ queue, and the consumer will receive it asynchronously.  
+
+ 6. Run ActiveMQ Locally
+If you don’t have ActiveMQ installed, you can start it using Docker:
+```sh
+docker run -p 61616:61616 -p 8161:8161 rmohr/activemq
+```
+Then, access the ActiveMQ UI Console at:  
+👉 `http://localhost:8161/admin` (Username: `admin`, Password: `admin`)  
+
+ Why Use ActiveMQ?
+✅ Asynchronous processing (Decouples producer & consumer)  
+✅ Reliable messaging (Messages persist even if the consumer is down)  
+✅ Scalable (Supports clustering & multiple consumers)  
+
+
+
+
+# Microservices
+
+Q. What are microservices, its advantages, components of microservices?
+
+Microservices is an architectural style where an application is broken down into small, 
+independently deployable services, each focusing on a specific business function. 
+Each service is loosely coupled, can be developed, deployed, and scaled independently, 
+and typically communicates over HTTP, REST, or messaging systems.
+
+The advantages of microservices include:
+
+- Scalability, since services can be scaled independently.
+- Flexibility in choosing different technology stacks for different services.
+- Faster development and deployment cycles due to independent service development.
+- Improved resilience, as failures in one service don’t bring down the whole system.
+- Easier maintenance, as each service is smaller and more focused on a specific task.
+
+Components of microservices:
+
+- Microservices: Independent services, each responsible for a specific business function.
+- API Gateway: Routes requests from clients to the appropriate service.
+- Service Discovery: Helps services locate each other dynamically.
+- Database per Service: Each service has its own database, ensuring loose coupling.
+- Load Balancer: Distributes traffic across service instances for high availability.
+- Monitoring and Logging: Ensures observability and reliability of the system.
+- CI/CD: Enables fast, automated deployment and testing of services.
+
+
+Q. How communication between microservices happens?
+
+In a microservices architecture, communication between services can be achieved through both synchronous and asynchronous methods.
+
+Synchronous communication is typically done via REST APIs, where one service sends an HTTP request and waits for the response from another service. 
+gRPC is also used for low-latency, high-performance communication. Services communicate in real-time, and a response is expected immediately.
+
+Asynchronous communication is typically implemented using message queues like RabbitMQ or Apache Kafka or through event-driven architectures.
+In asynchronous communication, the client sends a request to a service but does not wait for an immediate response. 
+Instead, it proceeds with other tasks and receives the response later when the service has completed the request.
+
+
+# Common Questions
+
+Q. Maven build lifecycle
+
+Maven is built around the central concept of build lifecycle i.e. the process for building and distributing a particular artifact is clearly defined. 
+Users have to learn a small set of commands to build any Maven project and the POM file will ensure the desired results.
+
+There are three build-in build lifecycles: default, clean and site.
+
+default - lifecycle handles your project deployment
+clean   - lifecycle handles project cleaning
+site    - lifecycle handles the creation of your project's site documentation
+
+Default lifecycle - The default Maven build lifecycle comprises of below phases (VaCTPVeID):
+
+ validate - validate the project is correct and all necessary information is available / check is pom.xml is correct or not
+ compile - compile the source code of the project, converts all .java files into .class files
+ test - test the compiled source code using a suitable unit testing framework. These tests should not require the code be packaged or deployed
+ package - take the compiled code and package it in its distributable format, such as a JAR.
+ verify - run integration tests to ensure quality criteria are met
+ install - install the package into the local repository, for use as a dependency in other projects locally
+ deploy - done in the build environment, copies the final package to the remote repository for sharing with other developers and projects.
+
+When we call a phase in the default lifecycle, all the phases before this phase are executed. 
+It means if we call package phase, all the phases before the package phase validate , compile , test and the package phase itself are executed in their order.
+
+When you call mvn deploy, Maven will also execute every lifecycle phase before deploy, in order: validate, compile, test, package, verify, install.
+
+Clean Lifecycle -
+ pre-clean - execute processes needed prior to the actual project cleaning
+ clean - remove all files generated by the previous build
+ post-clean - execute processes needed to finalize the project cleaning
+
+mvn clean install
+The above Maven command executes the clean build life cycle and the install build phase in the default build life cycle.
+
+Q. What exactly does a build tool do?
+
+A build tool takes a projects' code, compiles, tests and packages into a executable such as .jar or .war file. 
+Basically it does three things -
+
+1. Dependency management - A build tool includes third party dependencies (libraries/framework such as Spring) easily into your project. 
+These dependencies are stored in the repositories (and not in the project structure) local or remote.
+
+2. Compilation - Compiling a big Java project with tons of classes is a very time consuming and tedious process. 
+Build tools make this job easy if we follow certain directory structure in the project and does compilation and build process easy.
+
+3. Everything Java - Build tool can also perform other tasks such as code quality checks, 
+execute test cases and can even deploy an application to remote servers through plugins.
+
+
+Q. What is Test Driven Development (TDD)?
+TDD is a development approach where development starts with designing and developing tests for every small functionality. 
+Entire application is divided into small functionalities and tests are written for every piece. 
+You write a test case that uses a piece of code as if it were already implemented. 
+You don't just write test cases to test your code but rather laying out a design for cleaner and better, no duplicated code.
+
+Simple rules of TDD are -
+- Write only enough of a unit test to fail.
+- Write only enough production code to make the failing unit test pass.
+
+Why use TDD? The short answer is to achieve good quality code and good test coverage.
+
+The simple concept of TDD is to write and correct the failed tests before writing new code (before development). 
+This helps to avoid duplication of code as we write a small amount of code at a time in order to pass tests. 
+(Tests are nothing but requirement conditions that we need to test to fulfill them).
+Test-Driven development is a process of developing and running automated test before actual
+development of the application. Hence, TDD sometimes also called as Test First Development.
+
+
+Q. What is UnitTesting? Which framework do you use unit testing?
+
+Unit testing is a software testing technique where individual units or components of a software application are tested in isolation 
+from the rest of the application to ensure they work as expected. A unit typically refers to a single method or function, 
+but can also include an entire class or module, depending on the scope of the test. 
+
+I typically use JUnit for unit testing, as it’s the most commonly used framework in Java applications. 
+I also use Mockito for mocking external dependencies to isolate the unit being tested. 
+
+For example, when testing a service layer, I write test cases using JUnit and mock the repository layer using Mockito 
+to verify that the service layer behaves correctly under different scenarios.
+
+
+Q. We have a project in the build jar file that wants to be configured without extracting, how can we do this?
+
+In Spring Boot, you can configure the application without extracting the JAR by externalizing the configuration. This can be done using:
+
+- External configuration files: Place application.properties or application.yml outside the JAR and specify its location using the --spring.config.location option.
+- Environment variables: Set environment variables corresponding to Spring properties to configure the application.
+- Command-line arguments: Pass configuration values directly as command-line arguments when running the JAR.
+- Profiles: Use Spring profiles to load different configurations based on the environment.
+
+
+Q. What is git and difference between git and gitlab/github?
+
+Git is a distributed version control system used to track and manage changes in the codebase, enabling efficient collaboration among developers. 
+It allows developers to work locally on their own copies of the repository, making changes, committing them, and later merging them with the main repository.
+
+GitHub is a cloud-based platform that hosts Git repositories and provides additional features for collaboration, code review, and project management. 
+It's widely used for open-source projects.
+
+GitLab, like GitHub, is also a Git repository hosting platform, but it offers more extensive built-in features like continuous integration/continuous deployment (CI/CD), 
+DevOps tools, and the ability to self-host your repositories for more control.
+
+In summary, Git is the underlying version control system, while GitHub and GitLab are platforms that provide additional functionality for hosting and managing Git repositories, 
+with GitLab offering more enterprise-level features like CI/CD integration and self-hosting.
+
+
+
+Q. How can you implement caching in a Spring Boot application?
+
+Caching in a Spring Boot application can be implemented using the @Cacheable, @CacheEvict, 
+and other cache-related annotations provided by the Spring Framework. 
+Adding these annotations to methods lets you cache the results and improve performance. 
+Spring Boot integrates with popular caching providers like Ehcache, Hazelcast, and Redis.
+
+
+Q. What is Redis how I use it in my project?
+
+Redis is an in-memory key-value store used for caching, session management, real-time data updates, and message brokering. 
+It's fast because it stores data in memory, which makes it ideal for scenarios where speed is essential. 
+
+I use Redis in my project for caching frequently accessed data, improving performance by reducing the load on the database. 
+
+In a Spring Boot application, I can integrate Redis by adding the necessary dependencies, configuring Redis connection settings in the application.properties file, 
+and using RedisTemplate for advanced operations or @Cacheable annotation for caching purposes. 
+Redis also supports Pub/Sub messaging, which I can use for real-time notifications and message queues.
+
+
+Q. How can you remove the cached data in Redis?
+
+The RedisTemplate provides methods to directly interact with Redis. You can use it to delete specific keys or all keys.
+
+	// Remove a specific key
+    public void removeCache(String key) {
+        redisTemplate.delete(key);
+    }
+
+    // Remove all keys (optional, use with caution)
+    public void clearAllCache() {
+        redisTemplate.getConnectionFactory().getConnection().flushDb();
+    }
+	
+If you're using Spring's caching abstraction with Redis as the cache provider, you can use @CacheEvict to remove cached data.
+
+	// Remove a specific cache entry
+    @CacheEvict(value = "cacheName", key = "#key")
+    public void removeCache(String key) {
+        // Additional business logic (if any)
+    }
+
+    // Remove all entries from a cache
+    @CacheEvict(value = "cacheName", allEntries = true)
+    public void clearAllCache() {
+        // Additional business logic (if any)
+    }
+	
+
+Q. What is Batch Processing and how you used it in your application?
+
+Batch processing is a technique where a system processes data in groups or batches rather than processing individual records one at a time. 
+It is designed to handle large volumes of repetitive tasks efficiently without human intervention.
+
+In one of my projects, I implemented batch processing for bulk data import/export to streamline operations 
+such as migrating seed-buying details from an external system into our database. 
+The data files were in CSV format, and we needed to process them efficiently and ensure data integrity.
+
+Design:
+I used Spring Batch to configure the batch job.
+The process involved three main steps: Reader, Processor, and Writer:
+Reader: Read records from the CSV file using FlatFileItemReader.
+Processor: Applied business logic, such as validating the fields or transforming data formats.
+Writer: Persisted the processed data into the database using JdbcBatchItemWriter.
+
+Configuration:
+Defined a Job and Step in Spring Batch.
+Configured chunk-based processing to handle records in chunks (e.g., 100 records at a time), improving memory efficiency and performance.
+Implemented error handling and retries to manage partial failures and ensure data consistency.
+
+Execution:
+Integrated the batch job with a scheduler (like @Scheduled) to automate the execution at specific intervals.
+Used job parameters to handle dynamic inputs like file paths and execution dates.
+
+Results:
+Improved processing time and reduced memory usage compared to processing the data row by row.
+Ensured scalability and resilience with transaction management and retry mechanisms.
+
+
+Q. What is the difference between MySQL and PostgresSQL?
+
+MySQL and PostgreSQL are both popular open-source relational databases but have different strengths. 
+MySQL is known for its simplicity, speed, and ease of use, making it ideal for web applications and small to medium datasets. 
+PostgreSQL, on the other hand, is highly extensible and supports advanced features like JSON/JSONB, geospatial queries, 
+and complex transactions, which make it better for large datasets, analytical workloads, and applications requiring compliance with SQL standards. 
+The choice between them often depends on the project requirements: MySQL for lightweight and fast operations, PostgreSQL for flexibility and advanced data handling.

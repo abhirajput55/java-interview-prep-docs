@@ -15,7 +15,7 @@ Java 8 introduced several important features, the most notable being:
 
 # 2. What are Lambda expressions in Java 8? Can you give an example?
 
-Lambda expressions allow you to treat functionality as a method argument, or to create a small function that can be passed around. 
+Lambda expressions allow you to treat function as a method argument, or to create a small function that can be passed around. 
 It enables functional programming in Java by providing a clear and concise way to express instances of single-method interfaces (functional interfaces).
 
 Syntax:
@@ -77,35 +77,6 @@ names.stream()
      .filter(name -> name.startsWith("J"))
      .forEach(System.out::println);  // Prints John and Jane
 ```
-
----
-
-# 5. Explain the difference between `map()` and `flatMap()` in Streams.
-
-- `map()`: Transforms each element of the stream into another object, producing a new stream where each element is transformed by the provided function.
-- `flatMap()`: Flattens the structure of the stream. If the function applied to each element produces a stream itself, 
-			   `flatMap()` merges these multiple streams into a single stream.
-
-Example of `map()`:
-```java
-List<String> words = Arrays.asList("apple", "banana", "cherry");
-List<Integer> wordLengths = words.stream()
-                                 .map(String::length)  // Converts each string to its length
-                                 .collect(Collectors.toList());
-System.out.println(wordLengths);  // [5, 6, 6]
-```
-
-Example of `flatMap()`:
-```java
-List<List<String>> listOfLists = Arrays.asList(
-    Arrays.asList("apple", "banana"),
-    Arrays.asList("cherry", "date")
-);
-List<String> flattened = listOfLists.stream()
-                                    .flatMap(List::stream)  // Flattens the list of lists
-                                    .collect(Collectors.toList());
-System.out.println(flattened);  // [apple, banana, cherry, date]
-```
 ---
 
 # 6. What is the `Optional` class in Java 8?
@@ -134,15 +105,6 @@ System.out.println(emptyName.orElse("Default Name"));  // Prints Default Name
 
 Default methods are methods in interfaces that have a body. They were introduced in Java 8 to allow backward compatibility. 
 They enable developers to add new methods to interfaces without breaking the existing implementation of classes.
-
-Syntax:
-```java
-interface MyInterface {
-    default void defaultMethod() {
-        System.out.println("This is a default method.");
-    }
-}
-```
 
 Example:
 ```java
@@ -232,19 +194,6 @@ Key Differences:
 - `Collection` stores elements, whereas `Stream` provides a way to process data in a more declarative style.
 - Streams can be processed in parallel easily, while collections don’t have such functionality out of the box.
 
-Example:
-```java
-// Collection Example
-List<String> names = Arrays.asList("John", "Jane", "Alice");
-for (String name : names) {
-    System.out.println(name);
-}
-
-// Stream Example
-names.stream()
-     .filter(name -> name.startsWith("J"))
-     .forEach(System.out::println);  // John, Jane
-```
 ---
 
 # 12. What is the use of `@FunctionalInterface` annotation in Java 8?
@@ -255,13 +204,6 @@ meaning it has exactly one abstract method and can be used as the target for lam
 This annotation is optional but helps to clearly define functional interfaces and ensures that the interface conforms 
 to the rules of functional interfaces. If you accidentally add more than one abstract method, the compiler will throw an error.
 
-Example:
-```java
-@FunctionalInterface
-interface MyFunction {
-    void apply();  // Single abstract method
-}
-```
 ---
 
 # 13. What are the advantages of using `Stream` API in Java 8?
@@ -270,18 +212,7 @@ interface MyFunction {
 - Parallel Processing: Streams provide an easy way to process data in parallel using `parallelStream()`, which improves performance for large datasets.
 - Lazy Evaluation: Intermediate operations on streams are lazily evaluated, meaning computation is only done when a terminal operation is executed, improving performance.
 - Functional Programming: The `Stream` API encourages a functional programming approach (e.g., using `map()`, `filter()`, `reduce()`), which leads to more modular and reusable code.
-  
-Example:
-```java
-List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
 
-// Summing up the numbers in a functional style
-int sum = numbers.stream()
-                  .filter(n -> n % 2 == 0)
-                  .mapToInt(Integer::intValue)
-                  .sum();
-System.out.println(sum);  // Output: 6 (2 + 4)
-```
 ---
 
 # 14. What is the difference between `map()` and `flatMap()` in Java 8 Streams?
@@ -317,11 +248,6 @@ The `Collectors.groupingBy()` method is used to group elements of a stream by a 
 This method returns a `Map`, where the keys are the result of applying the classifier function, 
 and the values are lists of items from the stream that correspond to those keys.
 
-Syntax:
-```java
-Collectors.groupingBy(Function<? super T, ? extends K> classifier)
-```
-
 Example:
 ```java
 List<String> names = Arrays.asList("John", "Jane", "David", "Diana");
@@ -331,32 +257,6 @@ Map<Character, List<String>> groupedByLetter = names.stream()
                                                     .collect(Collectors.groupingBy(name -> name.charAt(0)));
 System.out.println(groupedByLetter);
 // Output: {J=[John, Jane], D=[David, Diana]}
-```
----
-
-# 16. What is the purpose of the `default` keyword in Java 8?
-
-The `default` keyword in Java 8 is used to define methods with a body in an interface. 
-These methods can have a default implementation, which allows interfaces to evolve without breaking the existing implementing classes.
-
-Example:
-```java
-interface Animal {
-    default void speak() {
-        System.out.println("Animal is speaking");
-    }
-}
-
-class Dog implements Animal {
-    // No need to implement speak() method because it has a default implementation
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Dog dog = new Dog();
-        dog.speak();  // Output: Animal is speaking
-    }
-}
 ```
 ---
 
@@ -388,7 +288,6 @@ Syntax:
 ```java
 T reduce(T identity, BinaryOperator<T> accumulator);
 ```
-
 - `identity`: The identity value (often the initial value of the result).
 - `accumulator`: A function that combines two elements of the stream.
 
@@ -422,15 +321,71 @@ System.out.println(sum);  // Output: 15
   ```
 ---
 
-# 20. How does `java.util.function` package relate to Java 8?
+ JAVA 8 Features Interview Questions 
 
-The `java.util.function` package in Java 8 provides common functional interfaces that can be used to represent lambda expressions or method references. 
-These interfaces support functional programming constructs, allowing more flexible, reusable, and concise code.
+ 1. Can I use the `synchronized` or `final` keyword on default methods in Java 8?  
+No, default methods cannot be `final` or `synchronized` because they are meant to be overridden by implementing classes.  
 
-Key functional interfaces in this package include:
-- `Function<T, R>`
-- `Predicate<T>`
-- `Consumer<T>`
-- `Supplier<T>`
-- `UnaryOperator<T>`
-- `BinaryOperator<T>`
+
+ 2. Why were default methods introduced in Java 8?  
+Default methods were introduced to add new methods to interfaces without breaking existing implementations, 
+ensuring backward compatibility (e.g., `List.forEach()`).  
+
+
+ 3. What happens when a class implements multiple interfaces that have the same default method?  
+The class must override the conflicting default method, otherwise, it results in a compile-time error.  
+
+Example:  
+```java
+interface A { default void show() { System.out.println("A"); } }
+interface B { default void show() { System.out.println("B"); } }
+
+class C implements A, B {
+    public void show() { System.out.println("Resolved Conflict!"); }
+}
+```
+
+
+ 4. How do default methods in Java 8 solve the Diamond Problem?  
+The compiler forces the implementing class to override the method explicitly if multiple interfaces provide the same default method. This avoids ambiguity.  
+
+
+ 5. What is the `BiFunction` interface?  
+`BiFunction<T, U, R>` is a functional interface that takes two arguments (T, U) and returns a result (R).  
+
+Example:  
+```java
+BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
+System.out.println(add.apply(5, 10)); // Output: 15
+```
+
+
+ 6. What is MetaSpace? How does it differ from PermGen?  
+- MetaSpace (Java 8+) stores class metadata in native memory, dynamically growing as needed.  
+- PermGen (Before Java 8) had a fixed size and caused `OutOfMemoryError`.  
+
+✅ MetaSpace improves performance by eliminating fixed memory limitations.  
+
+
+ 7. What does the term “method reference” mean in Java 8?  
+Method reference is a shorthand notation for lambda expressions that call an existing method.  
+
+Example:  
+```java
+// Lambda
+Consumer<String> print = s -> System.out.println(s);
+
+// Method Reference
+Consumer<String> printMR = System.out::println;
+
+printMR.accept("Hello, Java 8!"); // Output: Hello, Java 8!
+```
+✅ It improves code readability and reusability.  
+
+
+Q. In a List<Employee> array find the second highest salary.
+
+Q. In a List<Product> array sort the array by its price and if price of two or more products are same sort by its ratings.
+
+Q. In a List<Product> array consisting of mobile phones I want to get the latest released version. 
+   The product object consists of following parameters `name`, `price`, `quantity` and `manufactured_date`.

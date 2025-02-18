@@ -425,24 +425,10 @@ public class Employee {
 - **Object-Centric**: HQL operates on **entities** (Java objects mapped to database tables) rather than directly working with database tables. 
                       It understands Java class names, properties, and relationships like one-to-many, many-to-one, etc.
 
-- **Syntax**: HQL syntax is similar to SQL, but instead of tables and columns, you work with Java class names and fields.
+- **Syntax**: HQL syntax is similar to SQL, but instead of tables and columns, we work with Java class names and fields.
 
 - **Automatic SQL Generation**: Hibernate converts HQL queries into the equivalent SQL statements, 
                                 making it easier to work with databases in an object-oriented way without worrying about the specifics of SQL.
-
----
-
-### **Key Differences**:
-
-| Aspect             | SQL                              | HQL                              |
-|--------------------|----------------------------------|----------------------------------|
-| **Level**          | Database level                   | Object level (Java entities)     |
-| **Focus**          | Tables, rows, and columns        | Entities, properties, relationships |
-| **Purpose**        | Direct database interaction      | Queries on Java objects mapped to the database |
-| **Portability**    | Tied to a specific database       | Database independent (Hibernate translates HQL to SQL) |
-| **Object-Oriented**| No                               | Yes                             |
-| **Example Query**  | `SELECT * FROM employees`        | `from Employee`                 |
-| **Relationship Handling**| Complex joins required manually | Automatically handles relationships via mappings |
 
 ---
 

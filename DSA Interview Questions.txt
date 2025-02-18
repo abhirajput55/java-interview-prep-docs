@@ -1,0 +1,256 @@
+### Data Structures and Algorithms (DSA) interview problem 
+
+# Arrays & Strings
+
+• Find the largest/smallest element in an array.
+
+• Reverse an array.
+
+• Check if a string is a palindrome.
+
+• Find the longest substring without repeating characters.
+
+• Find the intersection of two arrays.
+
+# Linked List
+
+• Reverse a singly linked list.
+
+• Detect a cycle in a linked list.
+
+• Find the middle element of a linked list.
+
+• Merge two sorted linked lists.
+
+• Find the intersection point of two linked lists.
+
+# Stacks & Queues
+
+• Implement a stack using two queues.
+
+• Evaluate a postfix expression.
+
+• Check for balanced parentheses in an expression.
+
+• Implement a queue using stacks.
+
+• Implement a sliding window maximum using deque.
+
+# Trees
+
+• Binary tree traversal (in-order, pre-order, post-order).
+
+• Find the height of a binary tree.
+
+• Check if a binary tree is balanced.
+
+• Find the lowest common ancestor (LCA) in a binary search tree (BST).
+
+• Level order traversal of a binary tree.
+
+# Graphs
+
+• Depth-first search (DFS) and breadth-first search (BFS) in a graph.
+
+• Detect a cycle in a directed/undirected graph.
+
+• Find the shortest path in an unweighted graph (BFS).
+
+• Find the shortest path in a weighted graph (Dijkstra’s Algorithm).
+
+• Topological sorting of a directed acyclic graph (DAG).
+
+# Hashing
+
+• Find the first non-repeating character in a string.
+
+• Group anagrams from a list of strings.
+
+• Check if two strings are anagrams of each other.
+
+• Count the frequency of characters in a string.
+
+• Find the majority element (element that appears more than n/2 times in an array).
+
+# Dynamic Programming
+
+• Find the nth Fibonacci number.
+
+• Longest common subsequence (LCS).
+
+• 0/1 Knapsack problem.
+
+• Longest increasing subsequence (LIS).
+
+• Coin change problem.
+
+# Sorting & Searching
+
+• Implement binary search on a sorted array.
+
+• Merge sort and quicksort implementation.
+
+• Find the kth smallest/largest element in an unsorted array.
+
+• Searching in a rotated sorted array.
+
+• Count inversions in an array.
+
+# Miscellaneous
+
+• Find the duplicate number in an array.
+
+• Find the intersection of two arrays.
+
+• Find the maximum product subarray.
+
+• Trapping rain water problem.
+
+• Rotate an image (matrix) 90 degrees.
+
+
+### Theoretical DSA-related questions 
+
+1. Big-O Notation and Time Complexity
+
+• What is Big-O notation?
+
+• Explain the time and space complexity of common algorithms (e.g., bubble sort, merge sort, quicksort).
+
+• How do you calculate the time complexity of nested loops?
+
+• What is the difference between O(n), O(log n), O(n^2), and O(n log n)?
+
+• What are best, worst, and average cases in terms of time complexity?
+
+2. Data Structures
+
+• What is a linked list and how does it differ from an array?
+
+• Explain the difference between a singly linked list and a doubly linked list.
+
+• When would you use a stack or a queue?
+
+• Explain the concept of a binary search tree (BST). What are its properties?
+
+• What is a hash map and how does it work?
+
+• What is the difference between a hash table and a hash map?
+
+• What are heaps, and what are their use cases?
+
+3. Algorithms
+
+• What is the difference between greedy algorithms and dynamic programming?
+
+• What is the divide and conquer approach? Give an example.
+
+• Explain the difference between BFS and DFS algorithms. When would you use one over the other?
+
+• What are the main differences between quicksort and mergesort in terms of performance and use cases?
+
+• What is dynamic programming? How is it different from memoization?
+
+• Explain the difference between depth-first search (DFS) and breadth-first search (BFS) in graph traversal.
+
+4. Sorting Algorithms
+
+• What are the different types of sorting algorithms?
+
+• What is the time complexity of bubble sort, merge sort, quicksort, and insertion sort?
+
+• What are the advantages and disadvantages of merge sort over quicksort?
+
+• How does the quicksort algorithm work, and what are its worst-case scenarios?
+
+• Can you explain the stable and unstable sorting algorithms? Which sorting algorithms are stable?
+
+5. Graph Theory
+
+• What are directed and undirected graphs?
+
+• What is a tree in terms of graph theory?
+
+• Explain the concept of a cycle in a graph.
+
+• What is a connected graph?
+
+• What are the differences between BFS and DFS in a graph?
+
+• What is Dijkstra's algorithm, and how does it work?
+
+6. Recursion
+
+• What is recursion?
+
+• What are the base case and recursive case in a recursive function?
+
+• How do you convert a recursive function into an iterative one?
+
+• What is the time complexity of a recursive function?
+
+• What is tail recursion, and how is it different from regular recursion?
+
+7. Memory Management
+
+• Explain the difference between stack and heap memory in Java.
+
+• What is garbage collection in Java? How does it work?
+
+• What are memory leaks, and how can they occur in Java?
+
+• What are the advantages of using a linked list over an array in terms of memory allocation?
+
+8. Searching Algorithms
+
+• What is the time complexity of linear search vs binary search?
+
+• What are the prerequisites for using binary search?
+
+• Explain the concept of binary search trees and how they are different from other types of trees.
+
+• How would you implement binary search on a rotated sorted array?
+
+9. Hashing and Collision Handling
+
+• What is a hash function?
+
+• What are hash collisions, and how can they be handled?
+
+• What are the different collision resolution techniques (e.g., chaining, open addressing)?
+
+• How does a hash map (or hash table) work internally?
+
+10. Concurrency and Multi-threading
+
+• What are the challenges of writing concurrent programs?
+
+• What is a race condition in multi-threading? How can it be prevented?
+
+• What is deadlock, and how can you avoid it in a multithreaded environment?
+
+• What is a semaphore and how is it used in thread synchronization?
+
+11. Design Patterns
+
+• What is the singleton design pattern, and where would you use it?
+
+• What is the observer pattern?
+
+• What is the factory design pattern and how is it different from the abstract factory?
+
+12. Databases (relevant to Java developers)
+
+• What is normalization and denormalization in databases?
+
+• What is the difference between SQL and NoSQL databases?
+
+• Explain the concept of indexing in a database. How does it improve performance?
+
+13. Complexity and Trade-offs
+
+• What is the time complexity of searching, insertion, and deletion in a binary search tree?
+
+• When would you choose a linked list over an array, and why?
+
+• What are the space-time trade-offs in different sorting algorithms?

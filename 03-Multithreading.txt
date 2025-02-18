@@ -287,3 +287,39 @@ It will print only below output and terminate.
 Before starting thread
 After starting thread
 ```
+
+# Multithreading and Concurrency
+
+Q. Can you use a HashMap in a multithreaded environment? Why or why not?
+
+No, a HashMap cannot be directly used in a multithreaded environment because it is not thread-safe. 
+Because if more than one thread is modifying the HashMap simultaneously it can lead to data corruption.
+
+To make it thread-safe, you can use Collections.synchronizedMap() method or ConcurrentHashMap, 
+which is specifically designed for concurrent access and better performance by using segment-based locking. 
+
+
+Q. What are the key differences between HashMap and ConcurrentMap?
+
+HashMap is a non-thread-safe collection designed for single-threaded environments. 
+It allows one null key and multiple null values, but concurrent modifications can lead to data corruption. 
+
+On the other hand, ConcurrentMap is an interface implemented by thread-safe classes like ConcurrentHashMap. 
+It prevents data inconsistency by using fine-grained locking, does not allow null keys or values, 
+and provides atomic methods like putIfAbsent() and remove(). 
+
+While HashMap is faster in single-threaded environments, ConcurrentMap is optimized for multi-threaded use, 
+making it the better choice for concurrent applications.
+
+
+Q. How does multithreading work with ConcurrentMap?
+
+Unlike synchronized collections that lock the entire map, ConcurrentHashMap uses fine-grained locking or lock-striping. 
+The map is divided into multiple segments, and each segment can be locked independently. 
+This allows multiple threads to operate on different segments simultaneously.
+
+Reads are performed without locking, hence threads will read the map concurrently without waiting, even while other threads are writing.
+
+Atomic Operations
+It provides atomic methods like putIfAbsent(), remove(key, value), and replace(key, oldValue, newValue) to prevent race conditions.
+For example, putIfAbsent(key, value) ensures that a value is added only if the key is not already present, avoiding potential conflicts.

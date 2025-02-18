@@ -1,0 +1,554 @@
+
+
+Q. What is SQL?
+
+SQL(Structured Query Language) is a standard language used to communicate and manage relational databases.
+It allows users to perform CRUD operations with data.
+SQL is widely used in database management systems like MySQL, PostgreSQL, Oracle, and SQL Server.
+
+
+Q. What is Relational Database? 
+
+A Relational Database is a type of database that stores and organizes data in a structured format using tables. 
+Each table consists of rows and columns, where each column represents an attribute of the data, and each row represents a unique entry. 
+The tables are related to each other through primary keys and foreign keys, which help maintain data consistency and integrity.
+
+
+Q. What is the difference between SQL and NoSQL?
+
+SQL databases are relational, storing data in structured tables with a fixed schema, ensuring ACID compliance for reliable transactions. 
+They scale vertically and are ideal for applications requiring strong data integrity, like banking and e-commerce. 
+
+NoSQL databases are non-relational, offering flexible, schema-less data models (key-value, document, column, graph) that scale horizontally. 
+They follow BASE principles, prioritizing high availability and performance, making them suitable for big data, real-time applications, 
+and unstructured data. 
+
+SQL examples include MySQL, PostgreSQL, Oracle, while NoSQL includes MongoDB, Redis, Cassandra, Neo4j.
+
+
+Q. What are commonly used data types in SQL?  
+
+1. String Data Types:  
+   - `CHAR(n)`: Fixed-length string of `n` characters.  
+   - `VARCHAR(n)`: Variable-length string up to `n` characters.  
+   - `TEXT`: Large text data (length varies by database).  
+
+2. Numeric Data Types:  
+   - `INT` / `INTEGER`: Whole numbers.  
+   - `SMALLINT`, `BIGINT`: Smaller and larger integer ranges.  
+   - `DECIMAL(p, s)`, `NUMERIC(p, s)`: Fixed precision decimal values.  
+   - `FLOAT`, `REAL`, `DOUBLE`: Approximate floating-point numbers.  
+
+3. Date and Time Data Types:  
+   - `DATE`: Stores only date (YYYY-MM-DD).  
+   - `TIME`: Stores only time (HH:MM:SS).  
+   - `DATETIME` / `TIMESTAMP`: Stores both date and time.  
+
+4. Boolean Data Type:  
+   - `BOOLEAN`: Stores `TRUE` or `FALSE` (some databases use `TINYINT(1)`).  
+
+5. Binary Data Type:  
+   - `BLOB`: Stores binary data like images and files.  
+
+
+Q. What is Primary key and Foreign Keys in SQL?
+
+A Primary Key is a column or a combination of columns in a table that uniquely identifies each row. 
+It ensures that the values in the column(s) are unique and not NULL. A table can have only one primary key.  
+
+A Foreign Key is a column or a set of columns in one table that establishes a relationship with the Primary Key of another table. 
+It enforces referential integrity, ensuring that the values in the foreign key column must match an existing value in the referenced table’s primary key.  
+
+
+Q. What are Constraints in SQL?  
+
+Constraints in SQL are rules applied to table columns to ensure data integrity and accuracy. 
+They restrict the type of data that can be stored in a table and help maintain the reliability of the database.  
+
+ Commonly Used SQL Constraints:  
+
+1. PRIMARY KEY – Ensures each row has a unique and not NULL value in a column.  
+2. FOREIGN KEY – Establishes a relationship between two tables, ensuring referential integrity.  
+3. NOT NULL – Ensures a column cannot have NULL values.  
+4. UNIQUE – Ensures all values in a column are distinct.  
+5. CHECK – Restricts the values based on a condition. 
+6. DEFAULT – Assigns a default value to a column if no value is provided.  
+   ```sql
+   CREATE TABLE Employees (
+       EmpID INT PRIMARY KEY,
+       Age INT CHECK (Age >= 18)
+	   Balance DECIMAL(10,2) DEFAULT 0.00
+	   FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+   );
+   ```
+   
+Q. What are DDL and DML statements in SQL?
+
+# 1. DDL (Data Definition Language)  
+DDL statements are used to define, modify, or delete database structures (tables, schemas, indexes, etc.). 
+They do not manipulate data but rather manage the structure. DDL changes are auto-committed, meaning they cannot be rolled back.  
+
+Common DDL Statements:  
+- `CREATE` – Creates a new table, database, or index.  
+			  `CREATE TABLE Employees (
+				  EmpID INT PRIMARY KEY,
+				  Name VARCHAR(100)
+			  );
+			  
+- `ALTER` – Modifies an existing table structure (adding/removing columns, changing data types).  
+			  ALTER TABLE Employees ADD COLUMN Age INT;
+			  
+- `DROP` – Deletes a table, database, or index.  
+			DROP TABLE Employees;
+			
+- `TRUNCATE` – Removes all records from a table but keeps its structure.  
+			TRUNCATE TABLE Employees;
+
+# 2. DML (Data Manipulation Language)  
+DML statements are used to manipulate data within existing database tables. 
+Unlike DDL, DML operations can be rolled back (they require an explicit commit).  
+
+Common DML Statements:  
+- `INSERT` – Adds new records to a table.  
+			INSERT INTO Employees (EmpID, Name) VALUES (1, 'John Doe');
+			
+- `UPDATE` – Modifies existing records in a table.  
+			UPDATE Employees SET Name = 'Jane Doe' WHERE EmpID = 1;
+			
+- `DELETE` – Removes records from a table.  
+			DELETE FROM Employees WHERE EmpID = 1;
+			
+			
+Q. Operators in SQL  
+
+ 1. Arithmetic Operators (Perform mathematical operations)  
+| Operator | Description    | Example               |
+|----------|----------------|-----------------------|
+| `+`      | Addition       | `SELECT 10 + 5;` → 15 |
+| `-`      | Subtraction    | `SELECT 10 - 5;` → 5  |
+| `*`      | Multiplication | `SELECT 10 * 5;` → 50 |
+| `/`      | Division       | `SELECT 10 / 5;` → 2  |
+| `%`      | Modulus        | `SELECT 10 % 3;` → 1  |
+
+
+ 2. Comparison Operators (Used in conditions for filtering data)  
+| Operator  | Description                 | Example                                                     |
+|-----------|-----------------------------|-------------------------------------------------------------|
+| `=`       | Equal to                    | `SELECT * FROM Employees WHERE Age = 30;`                   |
+| `!=`      | Not equal to                | `SELECT * FROM Employees WHERE Age <> 30;`                  |
+| `>`       | Greater than                | `SELECT * FROM Employees WHERE Age > 30;`                   |
+| `<`       | Less than                   | `SELECT * FROM Employees WHERE Age < 30;`                   |
+| `>=`      | Greater than equal to       | `SELECT * FROM Employees WHERE Age >= 30;`                  |
+| `<=`      | Less than or equal to       | `SELECT * FROM Employees WHERE Age <= 30;`                  |
+| `BETWEEN` | Within a range              | `SELECT * FROM Employees WHERE Age BETWEEN 25 AND 40;`      |
+| `IN`      | Matches any value in a list | `SELECT * FROM Employees WHERE Department IN ('HR', 'IT');` |
+| `LIKE`    | Pattern matching 			  | `SELECT * FROM Employees WHERE Name LIKE 'J%';`             |
+| `IS NULL` | Checks for NULL values      | `SELECT * FROM Employees WHERE Age IS NULL;`                |
+
+
+ 3. Logical Operators (Used to combine conditions)  
+| Operator | Description                         | Example                                                         |
+|----------|-------------------------------------|-----------------------------------------------------------------|
+| `AND`    | Both conditions must be true        | `SELECT * FROM Employees WHERE Age > 25 AND Department = 'IT';` |
+| `OR`     | At least one condition must be true | `SELECT * FROM Employees WHERE Age > 30 OR Department = 'HR';`  |
+| `NOT`    | Negates a condition                 | `SELECT * FROM Employees WHERE NOT Age = 30;`                   |
+
+
+ 5. Assignment Operator (Used to assign values)  
+| Operator | Description     | Example                                          |
+|----------|-----------------|--------------------------------------------------|
+| `=`      | Assigns a value | `UPDATE Employees SET Age = 30 WHERE EmpID = 1;` |
+
+
+Q. Commonly Used SQL Clauses  
+
+1. `WHERE` (Filter Records) – Filters rows based on a condition.  
+							  SELECT * FROM Employees WHERE Age > 30;
+
+2. `ORDER BY` (Sort Data) – Sorts results in ascending (`ASC`) or descending (`DESC`) order.  
+                            SELECT * FROM Employees ORDER BY Name ASC;
+
+3. `GROUP BY` (Group Data) – Groups rows with the same values for aggregation.  
+                             SELECT Department, COUNT(*) FROM Employees GROUP BY Department;
+
+4. `DISTINCT` (Remove Duplicates) – Retrieves unique values from a column.  
+									SELECT DISTINCT Department FROM Employees;
+
+5. `LIMIT` / `TOP` (Restrict Number of Rows) – Limits the number of rows returned.  
+											   SELECT * FROM Employees LIMIT 5; -- MySQL, PostgreSQL
+											   SELECT TOP 5 * FROM Employees; -- SQL Server
+
+
+
+Q. Commonly Used String Functions in SQL  
+
+ 1. `UPPER()` – Converts to Uppercase  
+				SELECT UPPER('hello world');  -- Output: HELLO WORLD
+
+ 2. `LOWER()` – Converts to Lowercase  
+				SELECT LOWER('HELLO WORLD');  -- Output: hello world
+
+ 3. `LENGTH()` or `LEN()` – Returns String Length  
+							SELECT LENGTH('Hello');  -- Output: 5 (MySQL, PostgreSQL)  
+							SELECT LEN('Hello');  -- Output: 5 (SQL Server)  
+ 
+ 4. `SUBSTRING()` – Extracts a Substring  
+					SELECT SUBSTRING('Hello World', 1, 5);  -- Output: Hello
+
+ 5. `LEFT()` and `RIGHT()` – Extracts Left/Right Part of a String  
+							 SELECT LEFT('Database', 4);   -- Output: Data
+							 SELECT RIGHT('Database', 4);  -- Output: base
+
+ 6. `CONCAT()` – Combines Strings  
+				 SELECT CONCAT('Hello', ' ', 'World');  -- Output: Hello World
+
+ 7. `TRIM()` – Removes Leading and Trailing Spaces  
+			   SELECT TRIM('   SQL   ');  -- Output: SQL
+			   SELECT LTRIM('   SQL');  -- Output: SQL
+			   SELECT RTRIM('SQL   ');  -- Output: SQL
+
+ 8. `REPLACE()` – Replaces Substring within a String  
+				  SELECT REPLACE('Hello World', 'World', 'SQL');  -- Output: Hello SQL
+
+ 9. `INSTR()` – Finds Position of Substring (MySQL, PostgreSQL)  
+				SELECT INSTR('Hello World', 'World');  -- Output: 7
+
+ 10. `CHARINDEX()` – Finds Position of Substring (SQL Server)  
+					 SELECT CHARINDEX('World', 'Hello World');  -- Output: 7
+
+ 11. `REVERSE()` – Reverses a String  
+				   SELECT REVERSE('SQL');  -- Output: LQS
+
+
+
+Q. Commonly Used Aggregate Functions in SQL  
+
+ 1. `COUNT()` – Counts Rows, Returns the number of rows that match a condition.  
+				SELECT COUNT(*) FROM Employees;	Example Output: `10` (if there are 10 employees)  
+
+ 2. `SUM()` – Calculates Total Sum, Returns the total sum of a numeric column.  
+			  SELECT SUM(Salary) FROM Employees; Example Output: `500000` (if total salary is 500,000)  
+
+ 3. `AVG()` – Calculates Average, Returns the average (mean) value of a numeric column.  
+			  SELECT AVG(Salary) FROM Employees; Example Output: `50000` (if average salary is 50,000)  
+
+ 4. `MIN()` – Finds Minimum Value, Returns the smallest value in a column.  
+			  SELECT MIN(Salary) FROM Employees; Example Output: `30000` (if the lowest salary is 30,000)  
+
+ 5. `MAX()` – Finds Maximum Value, Returns the largest value in a column.  
+			  SELECT MAX(Salary) FROM Employees; Example Output: `100000` (if the highest salary is 100,000)  
+
+ 6. `GROUP_CONCAT()` – Concatenates Values (MySQL, PostgreSQL), Joins multiple values from a group into a single string.  
+					   SELECT GROUP_CONCAT(Name) FROM Employees WHERE Department = 'IT'; Example Output: `"John, Alice, Bob"` (if these are IT employees)  
+
+
+# Using Aggregate Functions with `GROUP BY`  
+	```sql
+	SELECT Department, COUNT(*) AS EmployeeCount, AVG(Salary) AS AvgSalary
+	FROM Employees
+	GROUP BY Department;
+	```
+This groups employees by department and calculates:  
+- Number of employees  
+- Average salary per department  
+
+
+Q. `GROUP BY` and `HAVING` Clause in SQL  
+
+ 1. `GROUP BY` Clause:- The `GROUP BY` clause is used to group rows that have the same values in a specified column 
+						and apply aggregate functions like `COUNT()`, `SUM()`, `AVG()`, etc.  
+
+Example: Count the number of employees in each department.  
+```sql
+SELECT Department, COUNT(*) AS EmployeeCount
+FROM Employees
+GROUP BY Department;
+```
+- Groups employees based on `Department`  
+- Returns the count of employees in each department  
+
+
+ 2. `HAVING` Clause:- The `HAVING` clause is used to filter groups after applying `GROUP BY`. It works like `WHERE` but is used for aggregated data.  
+
+Example: Get departments where employee count is more than 5.  
+```sql
+SELECT Department, COUNT(*) AS EmployeeCount
+FROM Employees
+GROUP BY Department
+HAVING COUNT(*) > 5;
+```
+- Groups employees by `Department`  
+- Filters out departments with `EmployeeCount <= 5`  
+
+
+ Difference Between `WHERE` and `HAVING`
+| Clause   | Used for                  | Works on        |
+|----------|---------------------------|-----------------|
+| `WHERE`  | Filtering before grouping | Individual rows |
+| `HAVING` | Filtering after grouping  | Grouped results |
+
+Example:  
+```sql
+SELECT Department, COUNT(*) AS EmployeeCount
+FROM Employees
+WHERE Age > 25  -- Filters individual rows first
+GROUP BY Department
+HAVING COUNT(*) > 5;  -- Filters grouped results
+```
+
+
+Q. `TIMESTAMP` and `EXTRACT()` Functions in SQL  
+
+ 1. `TIMESTAMP` in SQL:- `YYYY-MM-DD HH:MI:SS`  
+
+Example: Creating a table with a `TIMESTAMP` column  
+```sql
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    OrderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+- `CURRENT_TIMESTAMP` stores the current date and time automatically. Ex. 2025-02-01 14:30:45
+
+Select NOW()
+Select TIMEOFDAY()  : Fri Oct 18 14:30:45
+Select CURRENT_TIME : 14:30:45
+Select CURRENT_DATE : 2025-02-01
+
+ 2. `EXTRACT()` Function in SQL  
+The `EXTRACT()` function is used to retrieve specific parts (year, month, day, etc.) from a `TIMESTAMP` or `DATE`.  
+
+Syntax:  
+```sql
+SELECT EXTRACT(part FROM timestamp_column) FROM table_name;
+```
+Common Uses:  
+
+| Extracted Part | Example Query                                    | Example Output |
+|----------------|--------------------------------------------------|----------------|
+| Year 			 | `SELECT EXTRACT(YEAR FROM CURRENT_TIMESTAMP);`   | `2025`         |
+| Month          | `SELECT EXTRACT(MONTH FROM CURRENT_TIMESTAMP);`  | `2` (February) |
+| Day            | `SELECT EXTRACT(DAY FROM CURRENT_TIMESTAMP);`    | `1`            |
+| Hour           | `SELECT EXTRACT(HOUR FROM CURRENT_TIMESTAMP);`   | `14`           |
+| Minute         | `SELECT EXTRACT(MINUTE FROM CURRENT_TIMESTAMP);` | `30`           |
+| Second         | `SELECT EXTRACT(SECOND FROM CURRENT_TIMESTAMP);` | `45`           |
+
+
+ Example: Using `EXTRACT()` in Queries
+Find orders placed in January:  SELECT * FROM Orders WHERE EXTRACT(MONTH FROM OrderDate) = 1;
+
+Find orders placed in 2024:  SELECT * FROM Orders WHERE EXTRACT(YEAR FROM OrderDate) = 2024;
+
+
+
+ Types of SQL Joins  
+
+ 1. INNER JOIN (Returns matching records from both tables)  
+```sql
+SELECT Employees.Name, Departments.DepartmentName
+FROM Employees
+INNER JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;
+```
+- Only includes records where `DepartmentID` exists in both tables.  
+
+---
+
+# 2. LEFT JOIN (LEFT OUTER JOIN) (Returns all records from the left table and matching records from the right table)  
+```sql
+SELECT Employees.Name, Departments.DepartmentName
+FROM Employees
+LEFT JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;
+```
+- Includes all employees, even if they don’t belong to a department (`NULL` for missing values).  
+
+---
+
+# 3. RIGHT JOIN (RIGHT OUTER JOIN) (Returns all records from the right table and matching records from the left table)  
+```sql
+SELECT Employees.Name, Departments.DepartmentName
+FROM Employees
+RIGHT JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;
+```
+- Includes all departments, even if there are no employees (`NULL` for missing values).  
+
+---
+
+# 4. FULL JOIN (FULL OUTER JOIN) (Returns all records from both tables, with `NULL` for non-matching rows)  
+```sql
+SELECT Employees.Name, Departments.DepartmentName
+FROM Employees
+FULL JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;
+```
+- Includes all employees and all departments, even if there’s no match.  
+
+---
+
+# 5. CROSS JOIN (Cartesian product, combines every row from one table with every row from another)  
+```sql
+SELECT Employees.Name, Departments.DepartmentName
+FROM Employees
+CROSS JOIN Departments;
+```
+- If `Employees` has 10 rows and `Departments` has 5 rows, it returns 10 × 5 = 50 rows.  
+
+---
+
+# 6. SELF JOIN (Joins a table with itself)  
+```sql
+SELECT A.Name AS Employee, B.Name AS Manager
+FROM Employees A
+INNER JOIN Employees B ON A.ManagerID = B.EmployeeID;
+```
+- Useful for hierarchical relationships like Employee-Manager.  
+
+ Summary of SQL Joins  
+
+| Join Type  | Matching Records                 | Non-Matching Records                                   |
+|------------|----------------------------------|--------------------------------------------------------|
+| INNER JOIN | ✅ Both tables                   | ❌ Not included                                       |
+| LEFT JOIN  | ✅ Both tables                   | ✅ Left table (NULLs for missing right table records) |
+| RIGHT JOIN | ✅ Both tables                   | ✅ Right table (NULLs for missing left table records) |
+| FULL JOIN  | ✅ Both tables                   | ✅ Includes all unmatched records from both tables    |
+| CROSS JOIN | ✅ Cartesian product             | ❌ No filtering                                       |
+| SELF JOIN  | ✅ Matches within the same table | ❌ Not applicable                                     |
+
+
+
+Q. `UNION` in SQL  
+
+The `UNION` operator is used to combine the result sets of two or more `SELECT` queries. 
+It removes duplicates by default and ensures that the columns in both queries have the same number and compatible data types.
+
+ Example: Using `UNION`
+# Tables:
+	EmployeesIndia					EmployeesUSA
+| ID | Name   | Country |		| ID | Name   | Country |
+|----|--------|---------|		|----|--------|---------|
+| 1  | Raj    | India   |		| 3  | John   | USA     |
+| 2  | Priya  | India   |		| 4  | Alice  | USA     |
+
+# Query:	SELECT Name, Country FROM EmployeesIndia
+			UNION
+			SELECT Name, Country FROM EmployeesUSA;
+# Output:
+| Name  | Country |
+|-------|---------|
+| Raj   | India   |
+| Priya | India   |
+| John  | USA     |
+| Alice | USA     |
+
+- Both `SELECT` statements must have the same number of columns.
+- Column data types must be compatible.
+---
+
+Q. `UNION ALL` in SQL (Keeps Duplicates)
+If you want to keep duplicates, use `UNION ALL`:  
+```sql
+SELECT Name, Country FROM EmployeesIndia
+UNION ALL
+SELECT Name, Country FROM EmployeesUSA;
+```
+- Faster than `UNION` because it does not remove duplicates.
+
+ Key Differences: `UNION` vs. `UNION ALL`
+
+| Feature       	 | `UNION`                                    | `UNION ALL`                                       |
+|--------------------|--------------------------------------------|---------------------------------------------------|
+| Removes duplicates | ✅ Yes 							 		  | ❌ No                                             |
+| Performance 		 | Slower (due to duplicate removal) 		  | Faster                                            |
+| Use case 			 | When duplicate values should be eliminated | When all values, including duplicates, are needed |
+
+ When to Use `UNION` vs. `UNION ALL`?
+- Use `UNION` when duplicates should be removed (e.g., unique customer lists).  
+- Use `UNION ALL` when you need all data (e.g., merging transaction logs).  
+
+
+ Indexing in MySQL
+Indexing in MySQL is a technique used to improve the performance of queries by allowing the database to find and retrieve data faster. 
+An index is a data structure (usually a B-Tree or Hash) that MySQL uses to quickly locate rows without scanning the entire table.
+
+ Types of Indexes in MySQL  
+1. Primary Index – Automatically created on a table’s primary key.  
+2. Unique Index – Ensures all values in a column are unique.  
+3. Composite Index – Created on multiple columns to optimize queries using those columns.  
+4. Full-text Index – Used for full-text searches (e.g., searching for words in large text fields).  
+5. Spatial Index – Used for spatial (GIS) data types.
+
+ Example of Creating an Index  
+```sql
+CREATE INDEX idx_name ON employees(name);
+```
+This creates an index on the `name` column of the `employees` table, speeding up queries like:
+```sql
+SELECT * FROM employees WHERE name = 'John';
+```
+
+ Advantages of Indexing  
+✔ Faster query execution  
+✔ Reduces I/O operations  
+✔ Optimizes JOIN operations  
+
+ Disadvantages of Indexing  
+✖ Increases storage usage  
+✖ Slows down `INSERT`, `UPDATE`, and `DELETE` operations due to index maintenance  
+
+Indexes are crucial for database optimization, but they should be used wisely to balance read and write performance.
+
+
+
+# SQL questions for query writing
+
+1. How to retrieve the second-highest salary of an employee?
+
+select max(salary) from employee where salary < (select max(salary) from employee);
+select salary from employee where salary < (select max(salary)) from employee) order by salary desc limit 1;
+
+
+2. How to get the nth highest salary in?
+
+select salary from (select salary, DENSE_RANK() OVER(order by salary desc) as rank from employee) where rank=n;
+select least(select salary from employee order by salary desc limit n);
+
+
+3. How to find duplicate records in a table?
+
+select column_name, COUNT(*) from table_name group by column_name having COUNT(*) > 1;
+Here we first group the same rows of column and then count the rows.
+
+
+4. How to get the common records from two tables?
+
+select * from table1 INTERSECT select * from table2;
+
+
+5. How to retrieve the last 10 records from a table?
+
+select * from employee order_by employee_id desc limit 10;
+
+
+6. How do you fetch the top 5 employees with the highest salaries?
+
+select * from employee order by salary desc limit 5;
+
+
+7. How to calculate the total salary of all employees?
+
+select SUM(salary) from employee;
+
+
+8. How to write a query to find all employees who joined in the year 2020?
+
+select * from employee where YEAR(joining_date) = 2020;
+select * from employee where EXTRACT(YEAR from joining_date) = 2020;
+
+
+9. Write a query to find employees whose name starts with 'A'.
+
+select * from employee where LEFT(employee_name, 1) = 'A';
+select * from employee where employee_name LIKE = 'A%';
+
+
+10. How to find the department with the highest number of employees?
+
+select department, COUNT(*) as num from employee group by department order by COUNT(*) desc limit 1;

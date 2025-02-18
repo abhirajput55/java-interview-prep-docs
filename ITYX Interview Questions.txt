@@ -1,0 +1,50 @@
+
+public class SingleTone {
+	
+	static SingleTone instance;
+
+	public SingleTone(){
+
+	}
+
+	public SingleTone getInstance(){
+
+		if(instance == null){
+			instance = new SingleTone();
+		}
+
+		return instance;
+
+	}
+
+
+	
+}
+
+
+OOPs Questions
+Class, Object
+static keyword
+
+Dependency Injection,
+Bean, Bean Scopes
+Autowired
+
+
+Event Driven Archetecture
+Microservices Communication
+Asyncronous Communication
+
+
+Java 8 and higher versions
+Spring boot, Spring Security, Spring Config, Spring data
+Mysql
+Micro-services
+Docker
+Elastic search
+Strong OO programming knowledge
+RESTful services
+Experience with TDD
+Jackson + Gson
+Maven
+Knowledge of Web development technology like AngularJs(1.5) and angular (10 and above)

@@ -1,8 +1,8 @@
 
-# 1. Java Basics and Object-Oriented Programming #
----
+# 1. Core Java & Object-Oriented Programming #
 
-# 1. Four Main Principles of Object-Oriented Programming (OOP)
+Q. What are the Object Oriented Features supported by Java?
+
    - Encapsulation: It is the process of wrapping up variables and methods into a single unit. 
 					It helps to achieve security and improves maintainability of the application.
    - Abstraction: Hide internal implementation and just highlight the set of services, is called abstraction.
@@ -12,27 +12,21 @@
    - Polymorphism: Same name with different forms is the concept of polymorphism. 
 				   We can achieve polymorphism by using Method Overloading and Method Overriding.
 
----
 
-# 2. Difference Between `==` and `equals()` in Java
-   - `==`: == operator applicable for both primitives and object references.
-			  In the case of primitives == meant for content compression, 
-			  but in the case of object references == operator meant for reference compression.
-			   
-   - `equals()`: equals() method applicable only for object references but not for primitives.
-				 equals() method present in object class is also meant for reference compression.
-				 We can override equals() method for content compression like in String class.
+Q. What are the different access specifiers used in Java?
 
----
+• Public Can be accessed by any class or method
+• Protected Can be accessed by the class of the same package, or by the sub-class of this class, or within the same class
+• Default Are accessible only within the package, is the default option for all classes, methods and variables.
+• Private Can be accessed only within the class
 
-# 3. Inheritance in Java
-   - What: Inheritance is when a child class derives from an existing parent class to reuse the functionality of parent class.
-   - How: Implemented using the `extends` keyword. 
-		  For example, `class Dog extends Animal {}` makes `Dog` a subclass of `Animal`, so it inherits all the properties and methods of `Animal`.
 
----
+Q. What is the difference between composition and inheritance?
+Composition is a "has-a" relationship, where a class contains an object of another class as a member variable. 
+Inheritance is an "is-a" relationship, where a subclass extends a superclass to inherit its attributes and methods.
 
-# 4. Method Overloading and Method Overriding
+
+Q. Method Overloading and Method Overriding
    - Method Overloading: Having multiple methods with the same name but different type of parameters. 
 						 It allows a method to perform a similar function with various input types. 
 						 In method overloading compiler is responsible for method resolution based on reference type.
@@ -43,48 +37,52 @@
 						In method overriding JVM is responsible for method resolution based on runtime object.
 						Hence it is also known as runtime polymorphism.
 
----
 
-# 5. Constructors in Java
-   - A constructor is a special method used to initialize objects when they are created. 
-     It has the same name as the class and no return type.
-   - There are two types of constructors in Java.
-     - Default Constructor: It is no argument constructor provided by the compiler.
-     - Parameterized Constructor: Defined by the programmer to initialize objects with specific values, taking parameters.
-
----
-
-# 6. The `super` and `this` Keyword in Java
-   - `super` refers to the imediate parent class current object.
-	  It is used to access Parent class Methods and Variables.
-	  
-   - `this` refers to the current class object.
-	  It is used to access current class Methods and Variables.
-	  
-	  We can use anywhere except static area.
-
----
-
-# 7. super() vs this()
-   - `super()` is used to call parent class constructor.
-	 `this()` is used to call current class constructor.
-	 
-	 We should use only inside constructors.
-
----
-
-# 8. What is the purpose of the final keyword, and how can it be applied to variables, methods, and classes?
-   - We cannot reassign a value to the final variables.
-   - We cannot override the final method.
-   - We cannot inherit the final class.
-
----
+Q. What is the purpose of an abstract class?
+An abstract class is a class that cannot be instantiated and is used as a base class for other classes to inherit from. 
+It can contain abstract methods, which are declared but not implemented in the abstract class and must be implemented in the subclasses.
 
 
-# 2. Data Types and Variables #
----
+Q. What is the difference between an abstract class and an interface?
+Abstract Class:
+- An abstract class is a class that cannot be instantiated on its own and can have both abstract methods (without a body) and concrete methods (with a body).
+- It can have instance variables and constructors.
+- It can provide default behavior that subclasses can inherit or override.
+- A class can extend only one abstract class (single inheritance).
 
-# 1. Different Data Types in Java
+Interface:
+- An interface is a reference type in Java that can contain only abstract methods (until Java 8, after which default and static methods are allowed) and constants.
+- It cannot have instance variables or constructors.
+- A class can implement multiple interfaces (multiple inheritance).
+- It is used to define a contract that classes must follow.
+
+
+Q. What are the differences between constructor and method of a class in Java?
+Constructor is used for initialising the object state whereas method is used for exposing the object's behaviour. 
+Constructors have no return type but Methods should have a return type. Even if it does not return anything, the return type is void. 
+If the constructor is not defined, then a default constructor is provided by the java compiler. The constructor name should be same as class name. 
+A constructor cannot be marked as final because whenever a class is inherited, the constructors are not inherited, marking them as final has no meaning.
+A method can be defined as final but it cannot be overridden in its subclasses.
+
+
+Q. What is constructor overloading in Java?
+Constructor overloading means a class can have multiple constructors with different parameter lists. 
+Each constructor provides a different way to initialise objects of that class.
+
+
+Q. What is the diamond problem in Java and how is it solved?
+When a class inherits from two or more classes that have a common method. 
+This can cause ambiguity in the method resolution order, leading to unpredictable behaviour. 
+In Java, multiple inheritance is not supported directly, but it can be achieved using interfaces. 
+A class can implement one or more interfaces, effectively inheriting their properties and methods.
+
+
+Q. What is a Marker interface in Java?
+Marker interfaces or tagging interfaces are those which have no methods and instance variables defined in them. 
+It can have constants. They help the compiler and JVM get run time-related object information.
+
+
+Q. Different Data Types in Java
    - Primitive Data Types: Basic types built into Java, such as:
      - byte (1 byte), short (2 bytes), int (4 bytes), long (8 bytes): For whole numbers.
      - float (4 bytes), double (8 bytes): For decimal numbers.
@@ -92,9 +90,85 @@
      - boolean (1 bit): For `true` or `false` values.
    - Non-Primitive Data Types (or Reference Types): Includes classes, arrays, and interfaces. These are objects and can store more complex data like strings, arrays, or custom objects.
 
----
 
-# 2. Autoboxing and Unboxing in Java
+Q: What are the different scopes for Java variables?
+
+The scope of a Java variable is determined by the context in which the variable is declared. 
+
+1. Instance : - These are typical object level variables, they are initialized to default
+				values at the time of creation of object, and remain accessible as long as the object accessible.
+				
+2. Local 	: - These are the variables that are defined within a method. 
+				They remain accessbile only during the body of method excecution. 
+				When the method finishes execution, these variables fall out of scope.
+				
+3. Static	: - These are the class level variables. They are initialized when the class is loaded in JVM for the first time and remain there as 
+				long as the class remains loaded. They are not tied to any particular object instance.
+
+
+Q. What is the difference between local and instance variables in Java?
+Instance variables are accessible by all the methods in the class. They are declared outside the methods and inside the class. 
+These variables describe the properties of an object and remain bound to it. 
+Local variables are those variables present within a block, function, or constructor and can be accessed only inside them. 
+The utilisation of the variable is restricted to the block scope.
+
+	 
+Q. What is the difference between static methods, static variables, and static classes in Java?
+Static Methods and Static variables are those methods and variables that belong to the class of the java program, not to the object of the class. 
+They are allocated memory when the class is loaded and can directly be called with the help of the class names. 
+A class in the java program cannot be static except if it is the inner class. 
+If it is an inner static class, then it exactly works like other static members of the class.
+
+
+Q. What is the use of super and this keyword in Java?
+   - `super` refers to the imediate parent class current object.
+	  It is used to access Parent class Methods and Variables.
+	  
+   - `this` refers to the current class object.
+	  It is used to access current class Methods and Variables.
+	  
+	  We can use this and super anywhere except static area.
+
+   - `super()` is used to call parent class constructor.
+	 `this()` is used to call current class constructor.
+	 
+	 We should use only inside constructors.
+
+
+Q. What is the purpose of the final keyword, and how can it be applied to variables, methods, and classes?
+   - We cannot reassign a value to the final variables.
+   - We cannot override the final method.
+   - We cannot inherit the final class.
+
+Q. Is final method inherited?
+Yes, final method is inherited but you cannot override it.
+Subclasses can use them without any modification.
+
+Q. What is blank or uninitialized final variable?
+A final variable that is not initialized at the time of declaration is known as blank final variable.
+
+Q. Can we initialize blank final variable?
+Yes, but only in instance block, static block or constructor.
+
+Q. What is final parameter?
+If you declare any parameter as final, you cannot change the value of it.
+
+
+Q. What is the difference between final, finally, and finalize?
+   Final:
+		Final is the modifier applicable for class, methods and variables.
+		If a class declared as the final then child class creation is not possible.
+		If a method declared as the final then overriding of that method is not possible.
+		If a variable declared as the final then reassignment is not possible.
+   Finally:
+		It is the block always associated with try catch to maintain clean up code which should
+		be executed always irrespective of whether exception raised or not raised and whether
+		handled or not handled.
+   Finalize:
+		It is a method which should be called by garbage collector always just before destroying
+		an object to perform cleanup activities.
+		
+Q. Autoboxing and Unboxing in Java
    - Autoboxing: Automatic conversion of primitive type into its corresponding wrapper class object by compiler. 
      int a = 5;
      Integer boxed = a; // Autoboxing
@@ -105,82 +179,152 @@
 	 
 	 This feature came in 1.5 version.
 
----
 
-# 3. Static Variable and Instance Variable
-   - Static Variable: Static variable belongs to the class only. 
-					  Only one copy of static variable will be created and shared across all instances of the class and it is accessed using the class name. 
-					  Crated at the time of class loading and destroyed at the time of class unloading 
-					  hence the scope of the static variable is exactly same as the scope of the .class file.
-					  Static variables will be stored in method area.
-					  JVM will always provide default values to uninitialized static variable.
-						  
-   - Instance Variable: If the value of a variable is varied from object to object such type of variables are called instance variables.
-						For every object a separate copy of instance variables will be created.
-						Created at the time of object creation and destroyed at the time of object destruction 
-						hence the scope of instance variables is exactly same as scope of objects.
-						Instance variables will be stored on the heap as the part of object.
-						JVM will always provide default values to uninitialized instance variable.
-							
----
-
-# 4. Wrapper Classes and Why We Use Them
+Q. Wrapper Classes and Why We Use Them
    - Wrapper classes are used to wrap primitive data types into objects. 
 	 All wrapper classes are final classes and also immutable in Java.
 	 
 	In all wrapper classes toString() method is overridden to return its content.
-	In all wrapper classes .equals() method is overridden for content compression.
+	In all wrapper classes .equals() method is overridden for content comparison
 	
 	Utility methods:
 	1) valueOf() method  - to create wrapper object for the given primitive or String.
 	2) XXXValue() method - to convert wrapper object to primitive.
 	3) parseXxx() method - to convert String to corresponding primitive. For every wrapper class except Character class
+	
+Q: Why do we need wrapper classes?
+It is sometimes easier to deal with primitives as objects. Moreover most of the collection classes store objects and not primitive data types. 
+And also the wrapper classes provide many utility methods also. Because of these resons we need wrapper classes. 
 
----
 
-
-# 3. Control Flow #
----
-
-# 1. if-else, switch, for, while, and do-while Statements
-   - if-else: Used to make decisions based on a condition. If the condition is true, the `if` block executes; if false, the `else` block executes.
-     
-   - switch: Used to select one of many code blocks to run, based on the value of an expression (like a variable). The `case` keyword defines possible matches, and `break` exits the switch after a match.
-     
-   - for: Loops a specific number of times, based on initialization, condition, and iteration steps.
-    
-   - while: Repeats code as long as a condition is true. Checks the condition before running each loop.
-    
-   - do-while: Similar to `while`, but it always runs the code at least once since the condition is checked after the code block.
-   
----
-
-# 2. Enhanced for Loop in Java
-   - The enhanced `for` loop (or “for-each” loop) is used to iterate over collections like arrays or lists. 
-     It’s simpler than a traditional `for` loop because it doesn’t need an index variable.
-   - It’s best used when you want to access every element in a collection without needing the index.
-
----
-
-# 3. break and continue Statements
+Q. break and continue Statements
    - break: Exits the nearest loop (or switch statement) entirely when reached. 
-                Useful when you want to stop the loop based on a specific condition.
+            Useful when you want to stop the loop based on a specific condition.
      
    - continue: Skips the current loop iteration and moves to the next one, but does not stop the loop entirely.
 
----
+
+Q. Difference Between `==` and `equals()` in Java
+   - `==`: == operator applicable for both primitives and object references.
+			  In the case of primitives == meant for content comparison, 
+			  but in the case of object references == operator meant for reference comparison.
+			   
+   - `equals()`: equals() method applicable only for object references but not for primitives.
+				 equals() method present in object class is also meant for reference comparison.
+				 We can override equals() method for content comparison like in String class.
+
+
+
+# 2. String Handling #
+
+Q. Difference Between String, StringBuilder, and StringBuffer
+   - String: Immutable, i.e. its value cannot be changed after creation. 
+			 Every time you modify a `String`, a new object is created in memory.
+
+   - StringBuilder: Mutable, i.e. its value can be changed without creating a new object. 
+					It's faster than `String` for concatenation or modification operations and 
+					It is not thread-safe.
+
+   - StringBuffer: Mutable, meaning its value can be changed without creating a new object.  
+				   It is thread-safe.
+				   This thread safety makes `StringBuffer` slower than `StringBuilder`.
+
+
+Q. Why are strings immutable in Java?
+In String Constant Pool as several references pointing to the same object, by using one
+reference if we are allowed perform the change the remaining references will be impacted. 
+To prevent this once we created a String object we can’t perform any change in the existing object that is immutability is only due to SCP.
+
+
+Q. What is the difference between creating a String using new() and as a literal?
+If we create a String using new(), then a new object is created in the heap memory even if that value is already present in the heap memory. 
+If we create a String using String literal and its value already exists in the string pool, 
+then that String variable also points to that same value in the String pool without the creation of a new String with that value.
+
+
+Q. How substring() Works and Why It’s Memory Efficient
+   - How It Works: `substring()` returns a new `String` object that references a specific part of the original string, rather than creating a completely new one.
+   - Memory Efficiency: If you call `substring()` on a large string, it references the original string in memory. 
+						Only when you make changes to the substring does Java allocate new memory, which saves space when dealing with large texts.
+
+
+Q. String Pooling in Java
+   - What: The string pool is a special memory area where Java stores `String` literals. 
+		   When you create a new `String` literal, Java checks the pool first if the same string already exists. 
+		   If it does, Java reuses the existing object instead of creating a new one.
+   - Why It’s Useful: String pooling saves memory by preventing duplicate `String` objects with the same value.
+
+
+Q. What is an Immutable Object in Java?  
+An immutable object is an object whose state cannot be changed after it is created. 
+Any modification to an immutable object results in a new object being created instead of modifying the existing one.  
+Ex.`String`, Wrapper classes (`Integer`, `Double`, `Boolean`, etc.), `java.time.LocalDate`
+
+Q. How to Create an Immutable Object in Java?  
+To create an immutable class, follow these five key rules:
+
+1. Declare the class as `final` (Prevents subclassing)  
+2. Make all fields `private` and `final` (Prevents direct modification)  
+3. Do not provide setters (Only allow values to be set via constructor)  
+4. Initialize all fields via constructor (Ensure values are assigned once)  
+5. Return deep copies of mutable fields instead of direct references  
+
+```java
+final class ImmutablePerson {
+    private final String name;
+    private final int age;
+	private final List<String> subjects;
+
+    // Constructor to initialize fields
+    public ImmutablePerson(String name, int age, List<String> subjects) {
+        this.name = name;
+        this.age = age;
+		this.subjects = new ArrayList<>(subjects);  // Defensive copy
+    }
+
+    // Getter methods (No setters provided)
+    public String getName() {
+        return name;
+    }
+    public int getAge() {
+        return age;
+    }
+	public List<String> getSubjects() {
+        return new ArrayList<>(subjects);  // Defensive copy
+    }
+}
+
+// Usage Example
+public class TestImmutable {
+    public static void main(String[] args) {
+        ImmutablePerson person = new ImmutablePerson("Abhishek", 25);
+        System.out.println(person.getName()); // Abhishek
+        System.out.println(person.getAge());  // 25
+
+        // person.name = "New Name"; // ❌ Compilation Error: Field is final
+    }
+}
+```
+ Why Use Immutable Objects?
+✅ Thread-Safe (No synchronization needed)  
+✅ Reliable Caching (Can be safely shared across multiple classes)  
+✅ Better HashCode Consistency (Useful in HashMaps and Sets)  
 
 
 # 4. Exception Handling #
----
 
-# 1. What is an Exception in Java?
+Q. What is an exception?
    - An exception is an unexpected event or error that occurs during program execution, disrupting the normal flow of the program. 
      In Java, exceptions are represented as objects and are handled to prevent program crashes and manage errors effectively.
 
----
 
-# 2. Difference Between Checked and Unchecked Exceptions
+Q. How does an exception propagate throughout the Java code?
+   - Exception propagation is the process of passing exceptions through the method call stack. 
+     If an exception is not caught in the current method, it moves to the caller method and continues until it’s caught 
+	 or reaches the main method, potentially crashing the program if unhandled.
+
+
+Q. What is the difference between checked and unchecked exceptions?
    - Checked Exceptions: The exceptions which are checked by the compiler for smooth execution of the program at runtime are called checked exceptions. 
 						 They must be either caught using a `try-catch` block or declared in the method signature with `throws`. 
 						 Examples: `IOException`, `SQLException`, `FileNotFoundException`
@@ -194,262 +338,155 @@
 	Note: Whether exception is checked or unchecked compulsory it should occur at runtime only
 		  there is no chance of occurring any exception at compile time.
 
----
 
-# 3. Purpose of try, catch, finally, and throw
+Q. What is the difference between throw and throws?
+Throw is used to explicitly throw an exception, while throws is used to declare a method that can potentially throw an exception.
+
+
+Q. What’s the base class of all exception classes?
+In Java, Java.lang.Throwable is the super class of all exception classes and all exception classes are derived from this base class.
+
+
+Q. Purpose of try, catch, finally, and throw
    - try: In try we can take code that might throw an exception. If an exception occurs, it’s passed to the corresponding `catch` block.
    - catch: Catches and handles specific exceptions thrown in the `try` block. Each `catch` block can handle a different type of exception.
    - finally: A block that always executes after `try` and `catch`, whether an exception raised or not raised and whether handled or not handled. 
 			  The main objective of finally block is to close the opened resources in try block.
    - throw: Used to explicitly throw an exception. You can use it to create a specific error message or to rethrow an existing exception.
 
----
+  
+Q. What is difference between java.lang.ClassNotFoundException and java.lang.NoClassDefFoundError?
+NoClassDefFoundError is thrown when java (runtime env?) is not able to find the .class file in your current directory or CLASSPATH. 
+The required class definition was present at compile time, but it was missing at runtime.
 
-# 4. Difference between final, finally, and finalize
-   Final:
-		Final is the modifier applicable for class, methods and variables.
-		If a class declared as the final then child class creation is not possible.
-		If a method declared as the final then overriding of that method is not possible.
-		If a variable declared as the final then reassignment is not possible.
-   Finally:
-		It is the block always associated with try catch to maintain clean up code which should
-		be executed always irrespective of whether exception raised or not raised and whether
-		handled or not handled.
-   Finalize:
-		It is a method which should be called by garbage collector always just before destroying
-		an object to perform cleanup activities.
----
+ClassNotFoundException is thrown when JVM tried to load a class at runtime with Class.forName() 
+or loadClass() or findSystemClass() methods and it is not found in the classpath.
 
-# 5. Exception Propagation
-   - Exception propagation is the process of passing exceptions up the method call stack. 
-     If an exception is not caught in the current method, it moves to the caller method and continues until it’s caught 
-	 or reaches the main method, potentially crashing the program if unhandled.
-	 
----
-
-# 5. String Handling #
----
-
-# 1. Difference Between String, StringBuilder, and StringBuffer
-   - String: Immutable, i.e. its value cannot be changed after creation. 
-			 Every time you modify a `String`, a new object is created in memory.
-
-   - StringBuilder: Mutable, i.e. its value can be changed without creating a new object. 
-					It's faster than `String` for concatenation or modification operations and 
-					It is not thread-safe.
-
-   - StringBuffer: Mutable, meaning its value can be changed without creating a new object.  
-				   It is thread-safe.
-				   This thread safety makes `StringBuffer` slower than `StringBuilder`.
-
----
-
-# 2. Why Are Strings Immutable in Java?
-    In String Constant Pool as several references pointing to the same object, by using one
-	reference if we are allowed perform the change the remaining references will be
-	impacted. To prevent this once we created a String object we can’t perform any change
-	in the existing object that is immutability is only due to SCP.
-
----
-
-# 3. How substring() Works and Why It’s Memory Efficient
-   - How It Works: `substring()` returns a new `String` object that references a specific part of the original string, rather than creating a completely new one.
-   - Memory Efficiency: If you call `substring()` on a large string, it references the original string in memory. 
-						Only when you make changes to the substring does Java allocate new memory, which saves space when dealing with large texts.
-
----
-
-# 4. String Pooling in Java
-   - What: The string pool is a special memory area where Java stores `String` literals. 
-		   When you create a new `String` literal, Java checks the pool first if the same string already exists. 
-		   If it does, Java reuses the existing object instead of creating a new one.
-   - Why It’s Useful: String pooling saves memory by preventing duplicate `String` objects with the same value. For example:
-   
----
+Exception in thread "main" java.lang.NoSuchMethodError: main: 
+This error is thrown when we try to run a program with "java HelloWorldApp.class" instead of "java HelloWorldApp" and JVM does not find the main method.
 
 
-# 7. Java Collections Framework #
----
+# 5. Miscellaneous Concepts #
 
-# Basics of Collection Framework
-1. Java Collection Framework: It’s a set of classes and interfaces for storing and managing groups of objects. 
-							  It provides common data structures like `List`, `Set`, and `Map`. 
-							  The main hierarchy starts with the `Collection` interface, which includes `List`, `Set`, and `Queue`. 
-							  `Map` is a separate interface that handles key-value pairs.
-
-2. List vs Set vs Map:
-   - List: Allows duplicates, maintains insertion order (e.g., `ArrayList`, `LinkedList`).
-   - Set: Doesn’t allow duplicates, no guaranteed order (e.g., `HashSet`, `TreeSet`).
-   - Map: Stores key-value pairs, keys must be unique (e.g., `HashMap`, `TreeMap`).
-
-3. Collections Not Synchronized: By default, Java Collections are not synchronized to improve performance 
-								 since synchronization is generally expensive and needed only in multi-threaded scenarios.
-									 
-	By using Collection class synchronizedCollection(Collection<T> c) static method we can synchronize the collections.
-
----
-
-# List Interface
-4. ArrayList vs LinkedList: `ArrayList` is an indexed collection of objects where duplicate objects are allowed and insertion order preserved. 
-							 It is faster for random access but slower for adding/removing in the middle.
-								
-							 `LinkedList` is a collection of objects where each element has address of previous and next element. 
-							 `LinkedList` is faster for adding/removing in the middle but slower for random access due to sequential access.
-
-5. Time Complexity:
-   - ArrayList: Searching is `O(1)`, while inserting/deleting in the middle is `O(n)`.
-   - LinkedList: Searching is `O(n)`, but inserting/deleting from the start or end is `O(1)`.
-
-6. Vector vs ArrayList: `Vector` is synchronized, meaning it’s thread-safe but slower than `ArrayList` for single-threaded cases.
-
-8. CopyOnWriteArrayList: This thread-safe list creates a copy of the list for each modification, suitable for cases where reads are more frequent than writes.
-
----
-
-# Set Interface
-9. HashSet vs LinkedHashSet vs TreeSet:
-   - HashSet: Unordered, fastest access. Duplicate objects are not allowed. Null insertion is possible. Based on Hashtable.
-   - LinkedHashSet: Ordered by insertion. Duplicate objects are not allowed. Null insertion is possible. Based on LinkedList and Hashtable.
-   - TreeSet: Ordered in natural or custom sorting order. Duplicate objects are not allowed. Null insertion is not possible. Based on Balanced tree.
-
-10. How HashSet Handles Duplicates: By using a `Hashtable` internally where the value is set to a constant object for each key (element), preventing duplicates.
-
-11. TreeSet Sorting: Uses a `Comparator` or `Comparable` interface to keep elements sorted.
-
-12. LinkedHashSet Use: When you need to retain insertion order without duplicates.
-
----
-
-# Map Interface
-13. HashMap Internal Working: Uses hashing to store key-value pairs. The key’s hash code determines the bucket in which it will be stored.
-
-14. HashMap vs LinkedHashMap vs TreeMap:
-    - HashMap: Unordered. Duplicate keys are not allowed but values can be duplicated.
-			   Null is allowed for keys(only once) and for values(any number). Based on Hashtable.
-    - LinkedHashMap: Maintains insertion order. Duplicate keys are not allowed but values can be duplicated. 
-	                 Null is allowed for keys(only once) and for values(any number). Based on Hashtable + LinkedList.
-    - TreeMap: Maintains insertion by sorting order of keys. Duplicate keys are not allowed but values can be duplicated.
-			   Null is not allowed for keys and for values(any number). Based on Hashtable + LinkedList.
-
-15. HashMap Collisions: Handles collisions by chaining (linked list of entries) or, from Java 8 onwards, by using balanced trees for large buckets.
-
-16. ConcurrentHashMap: Thread-safe version of `HashMap`, splits the map into segments to allow concurrent access.
-
-17. Hashtable Drawbacks: Synchronized and slower; `HashMap` is generally preferred unless thread safety is required.
-
----
-
-# Advanced Topics
-26. Fail-Fast vs Fail-Safe Iterators:
-    - Fail-Fast: Throws `ConcurrentModificationException` if the collection is modified.
-    - Fail-Safe: Works on a copy of the collection, so no exception is thrown (e.g., `CopyOnWriteArrayList`).
-
-27. Iterator vs ListIterator:
-    - Iterator: Can traverse in one direction.
-    - ListIterator: Can traverse in both directions, available only for `List`.
-
-28. Synchronizing HashMap: Use `Collections.synchronizedMap(new HashMap<>())` to make it thread-safe.
-
-29. WeakHashMap Purpose: Uses weak references for keys, allowing them to be garbage collected when not referenced elsewhere.
-
-30. Making ArrayList Read-Only: Use `Collections.unmodifiableList(arrayList)` to create a read-only version of `ArrayList`.
-
----
-
-# Performance and Optimization
-31. Optimizing HashMap Capacity: Set initial capacity if you know the approximate size, avoiding costly rehashing.
-
-32. HashMap Load Factor: Default is 0.75, meaning it resizes when 75% full, balancing memory usage and performance.
-
-33. Avoiding ConcurrentModificationException: Use `Iterator`’s `remove` method or a concurrent collection like `CopyOnWriteArrayList`.
-
-34. removeIf Method: Removes elements based on a condition in a single operation, reducing complexity and improving readability.
-
----
-
-10. Input/Output (I/O)
-What are the main classes in the java.io package?
-Explain the difference between byte streams and character streams.
-How do you read and write to a file in Java?
-What is serialization in Java?
-
-11. Miscellaneous Concepts
-
-# 1. What is the difference between an abstract class and an interface?
-
-Abstract Class:
-- An abstract class is a class that cannot be instantiated on its own and can have both abstract methods (without a body) and concrete methods (with a body).
-- It can have member variables and constructors.
-- It can provide default behavior that subclasses can inherit or override.
-- A class can extend only one abstract class (single inheritance).
-- Example:
-  ```java
-  abstract class Animal {
-      String name;
-      abstract void sound(); // Abstract method
-      void eat() { // Concrete method
-          System.out.println(name + " is eating.");
-      }
-  }
-  ```
-
-Interface:
-- An interface is a reference type in Java that can contain only abstract methods (until Java 8, after which default and static methods are allowed) and constants.
-- It cannot have instance variables or constructors.
-- A class can implement multiple interfaces (multiple inheritance).
-- It is used to define a contract that classes must follow.
-- Example:
-  ```java
-  interface Animal {
-      void sound(); // Abstract method
-      default void eat() { // Default method
-          System.out.println("Animal is eating.");
-      }
-  }
-  ```
-
-# Key Differences:
-| Feature                       | Abstract Class                         | Interface                                    |
-|-------------------------------|----------------------------------------|-----------------------------------------------|
-| Instantiation                 | Cannot be instantiated directly        | Cannot be instantiated                        |
-| Methods                       | Can have abstract and concrete methods | Can have only abstract methods (until Java 8) |
-| Member Variables              | Can have member variables              | Cannot have instance variables                |
-| Constructors                  | Can have constructors                  | Cannot have constructors                      |
-| Inheritance                   | Single inheritance                     | Multiple inheritance                          |
-| Use Case                      | Used when classes share common behavior| Used to define a contract or capability       |
-
----
-
-# 2. Explain type casting and its types in Java.
-
+Q. Explain type casting and its types in Java.
 Type Casting:
-
 - Implicit Casting: Smaller type to larger type (automatic).
 - Explicit Casting: Larger type to smaller type (manual and can lose data).
 - Object Casting: Upcasting and downcasting in inheritance hierarchies.
 
-What is Upcasting and downcasting
 
-	Process of converting a subclass reference to a superclass reference. 
-	
-	Process of converting a superclass reference back to a subclass reference. 
-	
-	This type of casting requires explicit casting and should be done with caution because 
-	it can lead to a ClassCastException if the object being cast is not an instance of the subclass.
+Q. What is Upcasting and downcasting?
 
----
+ 1. Upcasting (Implicit Casting)
+	- Converting a subclass reference into a superclass reference.
+	- This happens automatically in Java (implicit casting).
+	- The parent class reference can only access inherited methods and properties (not subclass-specific ones).
+
+ 2. Downcasting (Explicit Casting)
+	- Converting a superclass reference back to a subclass reference.
+	- If the object was originally not of the subclass type, downcasting will throw a `ClassCastException`.
+
+# Example:
+```java
+class Parent {
+    void show() {
+        System.out.println("Parent class method");
+    }
+}
+
+class Child extends Parent {
+    void display() {
+        System.out.println("Child class method");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Parent obj = new Child();  // Upcasting (Implicit)
+        obj.show();  // Allowed (inherited from Parent)
+        // obj.display();  // Not allowed (specific to Child)
+		
+		Parent obj = new Child();
+        Child childObj = (Child) obj;  // Downcasting (Explicit)
+        childObj.display(); 
+		
+		// Example of Unsafe Downcasting:
+		Parent obj = new Parent();
+		Child childObj = (Child) obj;  // Runtime error: ClassCastException
+		
+		// For Safe Downcasting use instanceof operator
+		if (obj instanceof Child) {
+			Child childObj = (Child) obj;
+			childObj.display();
+		}
+    }
+}
+```
+
 
 # 12. Inner Classes #
 
-   - Inner Classes: Classes defined inside other classes. Useful to logically group classes that will only be used in one place.
-   - Anonymous Inner Class: A class without a name, usually used to make an instance of a class for one time use.
-   - Static Nested vs. Inner Class: Static nested classes don’t need an instance of the outer class, while inner classes do.
+Nested level classes, Member classes, Local classes, Anonymous classes
+
+Nested level classes - If you declare a class within a class and specify the static modifier, 
+					   the compiler treats the class just like any other level class.
+					   Any class outside the declaring class accesses the nested class with the declaring class
+					   name acting similarly to a package. eg, outer.inner. Nested level inner classes implicitly
+					   have access only to static variables. There can also be inner interfaces. 
+					   All of these are of the nested level variety.
+						
+Member classes - Member inner classes are just like other member methods and
+				 member variables and access to the member class is restricted, just like methods and
+				 variables. This means a public member class acts similarly to a nested level class.
+				 The primary difference between member classes and nested level classes is that
+				 member classes have access to the specific instance of the enclosing class.
+					
+Local classes - Local classes are like local variables, specific to a block of code. Their
+				visibility is only within the block of their declaration. In order for the class to be useful
+				beyond the declaration block, it would need to implement a
+				more publicly available interface.Because local classes are not members, the modifiers
+				public, protected, private, and static are not usable.
+				
+Anonymous classes - Anonymous inner classes extend local inner classes one level further. 
+					As anonymous classes have no name, you cannot provide a constructor.
 
 # 14. Object Cloning #
 
    - Cloning: Creating a copy of an object by using clone() method. Clonable interface must be implemented.
    - Shallow Copy vs. Deep Copy: Shallow copy duplicates only the object’s fields, while deep copy duplicates all nested objects too.
    - Deep Cloning: Can be achieved by manually cloning all referenced objects.
+   
+   
+Q. What is Cloneable interface?
+A class implements java.lang.Cloneable interface to indicate to the Object.clone() method 
+that it is legal for that method to make a field-to field copy of instances of that class.
+
+When a class that does not implement the Cloneable interface invokes Object's clone method, results in CloneNotSupportedException being thrown.
+	class CloneClass implements Cloneable {
+		public static void main(String[] args) {
+			try {
+				new CloneClass().clone();
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+//Console output
+java.lang.CloneNotSupportedException: com.designPatterns.singleton.CloneClass at java.lang.Object.clone(Native Method)
+
+By convention, classes that implement this interface should override Object.clone() method (which is protected) with a public method. 
+Note that this interface does not contain any method it is a marker interface.
+
+
+Q. What is object cloning?
+
+Cloning is a way of creating object from an already existing object by copying all the data from this existing object into the new object.
+In order to create a clone of an object of a class, we generally design the class in such a way that:
+
+i. Class should implement java.lang.Cloneable interface
+ii. Class should have a clone method (not necessarily override clone method from Object class) which should handle the CloneNotSupportedException exception
+iii. Call the clone method of the superclass which will call it's super's clone() and so on till it reaches clone method of Object class.
+
 
 # 15. Serialization #
 
@@ -458,24 +495,56 @@ What is Upcasting and downcasting
    - Transient Keyword: Fields marked as `transient` won’t be serialized.
    - Preventing Serialization: Define `writeObject()` and `readObject()` methods or mark fields as `transient`.
 
-# 17. Comparable vs. Comparator #
+Q: What is serialization?
+Serialization is a mechanism by which you can save the state of an object by converting it to a byte stream.
 
-   - Comparable: Used to define a natural sorting order; implement `compareTo` within the class itself.
-   - Comparator: Defines custom sorting order; implemented outside of the class.
-   - Usage: Use `Comparator` when you need different sorting orders without modifying the class.
+Q: How do I serialize an object to a file?
+The class whose instances are to be serialized should implement an interface Serializable. 
+Then you pass the instance to the ObjectOutputStream which is connected to a fileoutputstream. This will save the object to a file.
+
+Q: What is significance of serialVersionUID ?
+
+Simply put serialVersionUID is an unique identifier for Serializable classes.
+It is assigned by serialization runtime to every serializable class.
+It is used during the deserialization of object to ensure that loaded class is compatible with the serialized object, 
+otherwise InvalidClassException will be thrown.
+If a serializable class does not declare serialVersionUID, then the serialization runtime will calculate a 
+default serialVersionUID for that class based on various aspects of the class as per Java Object Serialization Specification.
+
+Q: How can I customize the seralization process? i.e. how can one have a control over the serialization process?
+Yes it is possible to have control over serialization process. 
+The class should implement Externalizable interface. This interface contains two methods namely readExternal and writeExternal. 
+You should implement these methods and write the logic for customizing the serialization process.
+
+Q: What is the common usage of serialization?
+Whenever an object is to be sent over the network, objects need to be serialized.
+Moreover if the state of an object is to be saved, objects need to be serilazed.
+
+Q: What is Externalizable interface?
+Externalizable is an interface which contains two methods readExternal and writeExternal. 
+These methods give you a control over the serialization mechanism.
+Thus if your class implements this interface, you can customize the serialization process by implementing these methods.
+
+Q: When you serialize an object, what happens to the object references included in the object?
+It determines whether the included object references are serializable or not. This is a recursive process. 
+Thus when an object is serialized, all the included objects are also serialized alongwith the original object.
+
+Q: What one should take care of while serializing the object?
+One should make sure that all the included objects are also serializable. 
+If any of the objects is not serializable then it throws a NotSerializableException.
+
+Q: What happens to the static fields of a class during serialization?
+There are three exceptions in which serialization does not necessarily read and write to the stream. 
+These are
+1. Serialization ignores static fields, because they are not part of any particular object state.
+2. Base class fields are only hendled if the base class itself is serializable.
+3. Transient fields.
+
 
 # 18. Enums #
 
-   - Enums: Is a apecial Java class where we can use fixed sets of constants.
-   - Constructors and Methods: Can have constructors and methods.
-   - Difference from Classes: Enums are type-safe and have predefined constants.
-
-# 19. Thread Safety and Synchronization #
-
-   - Thread Safety: Ensures data consistency across threads.
-   - `synchronized` Keyword: Prevents multiple threads from accessing code blocks or methods simultaneously.
-   - Limitations: Can slow down performance due to locking.
-   - Atomic Classes: For lock-free, thread-safe operations (like `AtomicInteger`).
+   - Enums: Is a special type of Java class where we can use fixed sets of constants.
+   - Enums can have constructors and methods. Enums are type-safe and have predefined constants.
 
 # 20. Java Time API #
 
@@ -488,13 +557,51 @@ What is Upcasting and downcasting
 
 ---
 
-# 12. JVM and Memory Management #
----
+# 6. Java Internal and Memory Management #
 
-# Java Class Loaders
+Q. What is the difference between JDK, JRE and JVM?  
 
+| Component | Full Form 			   | Purpose 														      |
+|-----------|--------------------------|----------------------------------------------------------------------|
+| JDK 		| Java Development Kit     | Provides tools for developing, compiling, and running Java programs. |
+| JRE 		| Java Runtime Environment | Provides libraries and JVM to run Java applications.                 |
+| JVM 		| Java Virtual Machine     | Converts bytecode into machine code and executes Java programs.      |
+
+
+ 1. JDK (Java Development Kit)
+- JDK is a full-fledged package required to develop Java applications.
+- It includes:
+  - JRE (Java Runtime Environment) → To run Java programs.
+  - Compiler (`javac`) → Converts Java source code to bytecode.
+  - Debugger (`jdb`) → Helps in debugging programs.
+  - JavaDoc, JavaFX, and other development tools.
+- Without JDK, you cannot develop Java applications.  
+- Example: To compile a Java file:
+  ```sh
+  javac MyProgram.java  # Compiles Java code into bytecode (.class file)
+  java MyProgram        # Runs the Java program
+  ```
+
+ 2. JRE (Java Runtime Environment)
+- JRE is responsible for running Java applications but does not contain development tools.
+- It includes:
+  - JVM (Java Virtual Machine) → Executes bytecode.
+  - Java libraries (rt.jar) → Essential Java class files.
+  - Other runtime components like class loaders and security managers.
+- If you only want to run Java programs (not develop them), JRE is enough.
+
+ 3. JVM (Java Virtual Machine)
+- JVM is a part of JRE responsible for executing Java bytecode.
+- It performs:
+  - Class Loading → Loads `.class` files into memory.
+  - Bytecode Verification → Ensures code does not break security rules.
+  - Just-In-Time (JIT) Compilation → Converts bytecode into native machine code for execution.
+- JVM is platform-dependent (Windows, Linux, etc.), but Java bytecode is platform-independent.
+
+
+Q. Java Class Loaders
    - ClassLoader: 
-		Loads .class files generated by the compiler and stores corresponding class data into method area.
+		Loads .class files generated by the compiler and stores corresponding class metadata into method area.
    - Parent Delegation Model: Each ClassLoader delegates loading to its parent first to avoid loading the same class multiple times.
    
    - Types: 
@@ -507,26 +614,76 @@ What is Upcasting and downcasting
 	3) Application Class Loader -
 		It is responsible to load classes from application classpath.
    
-# Memory Management
+ 
+Q. Memory Management
 
-   - Method Area: Class Metadata and static variables are stored in method area.
+- Method Area: Class Metadata and static variables are stored in method area.
 
-   - Java Heap: Objects and corresponding instance variables will be stored in the heap area.
-					Heap is not thread safe.
-   - Stack: For every thread JVM will create a seperate stack at the time of thread creation.
-				Each and every method call performned by that thread will be stored in the stack including local variables also.
-				Stack is thread safe.
-				Stack follows FIFO principle.
-				
-   - Stack vs Heap: Stack memory is for method calls and local variables, while the heap is for objects and instance variable.
-   
-# What is garbage collection, and how does it work in Java?
-	
-	Garbage collection is the automatic memory management process of removing 
-	unused objects from heap memory to free up space for new objects.
-	
-# What is Young Generation, Old Generation, and Metaspace?
+- Heap Memory:
+When you create an object in Java, it is stored in the Heap. The Heap is a part of memory dedicated to objects and class instances. 
+It's shared among all threads, which means thread-safety mechanisms are necessary when multiple threads interact with the same object.
 
-	Young Generation: Holds new objects, and is quickly garbage-collected (Minor GC).
-	Old Generation: Holds longer-living objects, garbage-collected less frequently (Major/Full GC).
-	Metaspace: Stores metadata about loaded classes, grows dynamically, and replaces the old PermGen space.
+- Stack Memory:
+The Stack is used to store references, method calls, and local variables. 
+It's organized in a Last-In-First-Out (LIFO) manner and operates on a per-thread basis, making it faster but limited in size compared to the Heap.
+
+Quick Tip: Stack memory is automatically cleared when a method exits, while the Heap relies on Garbage Collection.
+
+- Object Layout in Heap:
+A Java object in the Heap is more than just its fields. It typically includes:
+Header: Metadata like the object's class type, hash code, and synchronization status.
+Instance Data: The actual fields (primitive types and references).
+Padding: Aligns objects to fit memory boundaries for better performance.
+
+
+Q. What is the difference between stack and heap memory?
+Stack memory is used for storing local variables and function call, while heap memory is used for storing objects and their instance variables.
+
+
+Q. What exactly is System.out.println in Java?
+System.out.println() is a method to print a message on the console. System - It is a class present in java.lang package. 
+Out is the static variable of type PrintStream class present in the System class. println() is the method present in the PrintStream class.
+
+
+Q. What is garbage collection, and how does it work in Java?
+Garbage collection is the automatic memory management process of removing unused objects from heap memory to free up space for new objects.
+Objects with no references pointing to them are eligible for garbage collection.
+
+How Does It Work?
+When objects are created, they are allocated memory in the Heap.
+GC identifies objects that are no longer used by any active thread.
+It reclaims the memory of unused objects, making it available for future allocations.
+
+Types of Garbage Collectors in Java:
+
+1️. Serial GC:
+Uses a single thread for GC.
+Best for single-threaded applications or small heaps.
+
+2️. Parallel GC (Throughput Collector):
+Uses multiple threads for GC.
+Optimized for applications that prioritize throughput over low latency.
+
+3️. CMS (Concurrent Mark-Sweep) GC:
+Focuses on low-latency applications.
+Minimizes pause times by performing most of its work concurrently with the application threads.
+
+4️. G1 GC (Garbage First):
+Splits the heap into regions and prioritizes GC in regions with the most garbage.
+A balance between low latency and high throughput.
+
+5️. ZGC (Z Garbage Collector):
+Ultra-low latency collector designed for large heaps.
+Works concurrently with application threads to minimize pauses.
+
+
+Q. What part of memory - Stack or Heap - is cleaned in the garbage collection process?
+Garbage Collection is done on heap memory to free the memory used by objects that don't have any reference. 
+Any object created in the heap space has global access and can be referenced from anywhere in the application.
+
+
+Q. What is Young Generation, Old Generation, and Metaspace?
+
+Young Generation: Holds new objects, and is quickly garbage-collected (Minor GC).
+Old Generation: Holds longer-living objects, garbage-collected less frequently (Major/Full GC).
+Metaspace: Stores metadata about loaded classes, grows dynamically, and replaces the old PermGen space.

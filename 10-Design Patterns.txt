@@ -1,0 +1,525 @@
+
+What is SOLID principles?
+
+Single Responsibility Principle (SRP)
+- A class should do only one thing or have only one reason to change.
+
+Open/Closed Principle (OCP)
+- A class should be open for adding new features but closed for modifying existing code.
+
+Liskov Substitution Principle (LSP)
+- A subclass should be able to replace its parent class without breaking the program.
+
+Interface Segregation Principle (ISP)
+- A class should not be forced to implement methods it doesn’t need; use smaller, specific interfaces instead.
+
+Dependency Inversion Principle (DIP)
+- High-level modules should depend on abstractions (interfaces), not concrete classes.
+
+Singleton Design Pattern:
+
+What is the Singleton design pattern?
+
+	Singleton design pattern ensures that a class has only one instance throught the application 
+	and we can access that instance from a gloabl point.
+
+How can you implement it in Java?
+
+	By defining private constructor to restrict instantiation from outside of class.
+	By defining Static Instance Variable which Holds the single instance of the class. 
+	and one static factory method that contains logic of creating only one instance and if it already created return it.
+
+What are the different ways to implement Singleton?
+
+- Eager Initialization:
+
+	public EagerSingleton {
+		private static final EagerSingleton instance = new EagerSingleton();
+		
+		private EagerSingleton(){
+			
+		}
+		
+		public static EagerSingleton getInstance(){
+			return instance;
+		}
+	}
+
+- Lazy Initialization:
+
+	public LazySingleton {
+		private static LazySingleton instance;
+		
+		private LazySingleton(){
+			
+		}
+		
+		public static LazySingleton getInstance(){
+			if(instance == null){
+				instance = new LazySingleton();
+			}
+			return instance;
+		}
+	}
+
+How would you implement a thread-safe Singleton in Java?
+- Thread-safe Singleton:
+
+	public ThreadSafeSingleton {
+		private static ThreadSafeSingleton instance;
+		
+		private ThreadSafeSingleton(){
+			
+		}
+		
+		public static synchronized ThreadSafeSingleton getInstance(){
+			if(instance == null){
+				instance = new ThreadSafeSingleton();
+			}
+			return instance;
+		}
+	}
+
+What are the disadvantages of the Singleton pattern?
+
+- Singletons make unit testing challenging as they can't be replaced with mock objects easily.
+- Singleton instances can lead to tightly coupled code and hidden dependencies.
+- The Singleton instance may persist in memory for the application's lifetime, even if not used.
+
+
+##
+
+Factory Design Pattern:
+
+What is the Factory design pattern?
+
+	Factory design pattern is a creational design pattern. It allows a class to delegate 
+	the responsibility of creating objects to a factory method.
+	By using this we have a flexibility to instancetiate object at runtime on a condition.
+	
+	For Example
+	We have to implement various types of Logging in our application.
+	Then we can define one Logger interface which have one log method.
+	Then we can define its concrete classes based on types of logging and implement the log method in each class.
+	And by defining static factory method in factory class we will return object of any concrete logger class on given condition.
+	
+
+Can you explain with a real-world example?
+
+	public class FactoryDesignPattern {
+		public static void main(String[] args) {
+			
+			Logger consoleLogger = LoggerFactory.getLogger("console");
+			consoleLogger.log("logging");
+			
+			Logger fileLogger = LoggerFactory.getLogger("file");
+			fileLogger.log("logging");
+			
+			Logger databaseLogger = LoggerFactory.getLogger("database");
+			databaseLogger.log("logging");
+			
+			Logger sqlLogger = LoggerFactory.getLogger("sql");
+		}
+	}
+
+	// Product Interface
+	interface Logger {
+		
+		void log(String message);
+	}
+
+	// Concrete Product Classes
+	class ConsoleLogger implements Logger {
+		@Override
+		public void log(String message) {
+			System.out.println("Console logger :: " + message);
+		}
+	}
+
+	class FileLogger implements Logger {
+		@Override
+		public void log(String message) {
+			System.out.println("File logger :: " + message);
+		}
+	}
+
+	class DatabaseLogger implements Logger {
+		@Override
+		public void log(String message) {
+			System.out.println("Database logger :: " + message);
+		}
+	}
+
+	// Factory Class
+	class LoggerFactory {
+		public static Logger getLogger(String loggerType) {
+			
+			return switch(loggerType) {
+				case "console" -> new ConsoleLogger();
+				case "file" -> new FileLogger();
+				case "database" -> new DatabaseLogger();
+				default -> throw new IllegalArgumentException("Unkown logger type.");
+			};
+		}
+	}
+
+What is the difference between Factory and Abstract Factory patterns?
+
+Aspect			Factory Pattern									Abstract Factory Pattern
+Purpose		Creates a single type of object.				Creates families of related objects.
+Complexity	Simpler and more specific.						More complex, involves multiple factories.
+Hierarchy	Single factory produces different objects.		Factory of factories for related object groups.
+Example		A VehicleFactory that creates Cars or Bikes.	A UIFactory that creates Windows or MacOS UI.	
+
+
+Real-World Example of Abstract Factory Pattern
+Scenario: GUI Toolkit Factory
+
+You want to create GUI components (e.g., Buttons, Checkboxes) for Windows and MacOS.
+
+step1: Define common interfaces
+
+	public interface Button {
+		void render();
+	}
+
+	public interface CheckBox {
+		void render();
+	}
+
+step2: Create concrete implementation for Windows and MacOS
+
+	public class WindowsButton implements Button {
+		public void render(){
+			Sysout("Rendering Windows Button.");
+		}
+	}
+
+	public class WindowsCheckBox implements CheckBox {
+		public void render(){
+			Sysout("Rendering Windows CheckBox.");
+		}
+	}
+
+	public class MacOSButton implements Button {
+		public void render(){
+			Sysout("Rendering MacOS Button.");
+		}
+	}
+
+	public class MacOSCheckBox implements CheckBox {
+		public void render(){
+			Sysout("Rendering MacOS CheckBox.");
+		}
+	}
+
+step3: Define Abstract Factory
+
+	public interface GUIFactory {
+		Button createButton();
+		CheckBox createCheckBox();
+	}
+
+step4: Create concrete factories for Windows and MacOS
+
+	public class WindowsFactory implements GUIFactory {
+		@Override
+		public Button createButton(){
+			return new WindowsButton();
+		}
+		
+		@Override
+		public CheckBox createCheckBox(){
+			return new WindowsCheckBox();
+		}
+	}
+
+	public class MacOSFactory implements GUIFactory {
+		@Override
+		public Button createButton(){
+			return new MacOSButton();
+		}
+		
+		@Override
+		public CheckBox createCheckBox(){
+			return new MacOSCheckBox();
+		}
+	}
+
+step5: Client Code
+
+	class Application {
+		private Button button;
+		private CheckBox checkBox;
+		
+		public Application(GUIFactory guiFactory){
+			button = guiFactory.createButton();
+			checkBox = guiFactory.createCheckBox();
+		}
+		
+		public void render(){
+			button.render();
+			checkBox.render();
+		}
+		
+		public static void main(String[] args){
+			
+			GUIFactory guiFactory = new WindowsFactory();
+			Application app = new Application(guiFactory);
+			app.render();
+		}
+	}
+
+When should you use a Factory pattern in your application?
+
+Object Creation Logic Changes Frequently:
+
+#
+
+Strategy Pattern:
+What is the Strategy pattern?
+
+	The Strategy pattern is a behavioral design pattern that allows a class's behavior or its algorithm to be selected at runtime. 
+	It defines a family of algorithms, encapsulates each one, and makes them interchangeable without altering the client code that uses them.
+
+How does it promote the Open/Closed Principle?
+
+	The Open/Closed Principle states that software entities (classes, modules, functions) should be open for extension but closed for modification.
+
+	With the Strategy pattern, you can introduce new strategies (algorithms) without modifying the existing context or other strategy classes.
+	This separation ensures that new functionality can be added without risking existing code.
+
+
+Can you give an example where you used the Strategy pattern in your project?
+
+Scenario: Payment Processing System
+You need to implement multiple payment methods (e.g., Credit Card, PayPal, UPI) in an application, and the selection of the payment method should happen at runtime.
+
+ 1. Define a Strategy Interface (`PaymentStrategy`)  
+This interface defines a common method for all payment strategies.  
+```java
+public interface PaymentStrategy {
+    void pay(double amount);
+}
+```
+ 2. Implement Different Payment Strategies  
+Each concrete class implements the `PaymentStrategy` interface.  
+
+# Credit Card Payment Strategy
+```java
+public class CreditCardPayment implements PaymentStrategy {
+    private String cardNumber;
+    
+    public CreditCardPayment(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("Paid $" + amount + " using Credit Card: " + cardNumber);
+    }
+}
+```
+# PayPal Payment Strategy
+```java
+public class PayPalPayment implements PaymentStrategy {
+    private String email;
+
+    public PayPalPayment(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("Paid $" + amount + " using PayPal: " + email);
+    }
+}
+```
+# UPI Payment Strategy
+```java
+public class UPIPayment implements PaymentStrategy {
+    private String upiId;
+
+    public UPIPayment(String upiId) {
+        this.upiId = upiId;
+    }
+
+    @Override
+    public void pay(double amount) {
+        System.out.println("Paid $" + amount + " using UPI: " + upiId);
+    }
+}
+```
+ 3. Create a `PaymentContext` Class  
+This class will hold a reference to the selected `PaymentStrategy` at runtime.  
+```java
+public class PaymentContext {
+    private PaymentStrategy paymentStrategy;
+
+    public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
+    }
+
+    public void processPayment(double amount) {
+        if (paymentStrategy == null) {
+            throw new IllegalStateException("Payment strategy is not set.");
+        }
+        paymentStrategy.pay(amount);
+    }
+}
+```
+ 4. Testing the Strategy Pattern
+```java
+public class PaymentSystem {
+    public static void main(String[] args) {
+        PaymentContext paymentContext = new PaymentContext();
+
+        // Pay using Credit Card
+        paymentContext.setPaymentStrategy(new CreditCardPayment("1234-5678-9876-5432"));
+        paymentContext.processPayment(1000);
+
+        // Pay using PayPal
+        paymentContext.setPaymentStrategy(new PayPalPayment("user@example.com"));
+        paymentContext.processPayment(500);
+
+        // Pay using UPI
+        paymentContext.setPaymentStrategy(new UPIPayment("user@upi"));
+        paymentContext.processPayment(200);
+    }
+}
+```
+ Output
+```
+Paid $1000.0 using Credit Card: 1234-5678-9876-5432
+Paid $500.0 using PayPal: user@example.com
+Paid $200.0 using UPI: user@upi
+
+
+#
+
+Observer Pattern:
+What is the Observer pattern?
+
+	The Observer pattern is a behavioral design pattern where an object (called the subject) maintains a list of its dependents (called observers) 
+	and notifies them of any state changes, usually by calling one of their methods.
+
+	This pattern is useful when multiple objects need to be notified of a change in another object without creating tightly coupled dependencies.
+
+
+Can you explain how it works in Java?
+
+	Java provides built-in support for the Observer pattern using the Observable class and Observer interface in older versions (deprecated in Java 9+). 
+	However, the pattern is commonly implemented manually for better flexibility.
+
+
+
+What is the difference between Observer and Publisher-Subscriber patterns?
+
+	Aspect								Observer Pattern									Publisher-Subscriber Pattern
+Tight Coupling				Observers are tightly coupled to the subject.		   Loose coupling through an event bus or broker.
+Communication				Direct communication between subject and observers.	   Communication often mediated via a message broker.
+Synchronous/Asynchronous	Typically synchronous updates to observers.			   Supports asynchronous communication.
+Example						News publisher notifying subscribers directly.		   Message queue system (e.g., RabbitMQ, Kafka).
+
+
+Can you describe a real-world scenario where the Observer pattern is useful?
+
+Scenario: Weather Monitoring System
+
+A weather station (subject) monitors temperature, humidity, and pressure.
+Weather apps (observers) display updated information when changes occur in the weather station.
+Implementation Idea:
+The WeatherStation class acts as the subject.
+Multiple WeatherDisplay classes (e.g., MobileAppDisplay, DesktopAppDisplay) act as observers.
+
+
+ Builder Design Pattern in Java  
+
+The Builder Design Pattern is used to create complex objects step by step while ensuring immutability. 
+It helps in constructing objects with optional parameters without needing multiple constructors.
+
+ Example: Building an `Employee` Object Using Builder Pattern  
+
+# 1. Create the `Employee` Class (Immutable Object)
+```java
+public class Employee {
+    private final String name;
+    private final int age;
+    private final String department;
+    private final double salary;
+
+    // Private constructor to enforce object creation via Builder
+    private Employee(EmployeeBuilder builder) {
+        this.name = builder.name;
+        this.age = builder.age;
+        this.department = builder.department;
+        this.salary = builder.salary;
+    }
+
+    // Getters (No Setters to maintain immutability)
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    public String getDepartment() { return department; }
+    public double getSalary() { return salary; }
+
+    @Override
+    public String toString() {
+        return "Employee{name='" + name + "', age=" + age + 
+               ", department='" + department + "', salary=" + salary + "}";
+    }
+
+    // Static Builder Class
+    public static class EmployeeBuilder {
+        private String name;
+        private int age;
+        private String department;
+        private double salary;
+
+        public EmployeeBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public EmployeeBuilder setAge(int age) {
+            this.age = age;
+            return this;
+        }
+
+        public EmployeeBuilder setDepartment(String department) {
+            this.department = department;
+            return this;
+        }
+
+        public EmployeeBuilder setSalary(double salary) {
+            this.salary = salary;
+            return this;
+        }
+
+        // Build method to return the final Employee object
+        public Employee build() {
+            return new Employee(this);
+        }
+    }
+}
+```
+ 2. Using the Builder Pattern to Create an Employee Object
+```java
+public class BuilderPatternDemo {
+    public static void main(String[] args) {
+        Employee employee = new Employee.EmployeeBuilder()
+                .setName("John Doe")
+                .setAge(30)
+                .setDepartment("IT")
+                .setSalary(75000)
+                .build();
+
+        System.out.println(employee);
+    }
+}
+```
+
+ Advantages of Builder Pattern
+✅ Improves Readability – Easy to understand object creation.  
+✅ Handles Optional Parameters – No need for multiple constructors.  
+✅ Ensures Immutability – No setters, making the object thread-safe.  
+✅ Better Maintainability – Adding new fields is easier.  
